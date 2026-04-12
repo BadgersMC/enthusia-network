@@ -1,0 +1,18 @@
+[submodule "plugins/enthusia-advancements"]
+	path = plugins/enthusia-advancements
+	url = https://github.com/BadgersMC/EnthusiaAdvancements.git
+[submodule "plugins/luma-guilds"]
+	path = plugins/luma-guilds
+	url = https://github.com/BadgersMC/LumaGuilds.git
+[submodule "plugins/arm-guilds-bridge"]
+	path = plugins/arm-guilds-bridge
+	url = https://github.com/BadgersMC/ARM-Guilds-Bridge.git
+[submodule "plugins/item-shops"]
+	path = plugins/item-shops
+	url = https://github.com/BadgersMC/ItemShops.git
+[submodule "plugins/enthusia-biomes"]
+	path = plugins/enthusia-biomes
+	url = https://github.com/BadgersMC/EnthusiaBiomes.git
+[submodule "plugins/luma-sg"]
+	path = plugins/luma-sg
+	url = https://github.com/BadgersMC/LumaSG.git
