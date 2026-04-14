@@ -137,7 +137,3 @@ enthusia-network/
     ├── build-all.sh / .bat  # Build everything
     └── deploy.sh            # Copy JARs to server
 ```
-
-## License
-
-Proprietary — BadgersMC / LumaLyte
