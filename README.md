@@ -4,14 +4,29 @@ Monorepo for the **Enthusia SMP** server plugin ecosystem. Each plugin lives in 
 
 ## Plugins
 
-| Submodule | Description | Gradle |
+### Core (BadgersMC)
+
+| Submodule | Description | Author |
 |-----------|-------------|--------|
-| [enthusia-advancements](plugins/enthusia-advancements) | Config-driven custom advancement trees (guilds, economy, combat) | 8.x |
-| [luma-guilds](plugins/luma-guilds) | Guild system — claims, vaults, ranks, relations, progression | 8.x |
-| [arm-guilds-bridge](plugins/arm-guilds-bridge) | Bridge between Advanced Region Market and LumaGuilds | 8.x |
-| [item-shops](plugins/item-shops) | Chest+sign shop system with guild integration | 8.x |
-| [enthusia-biomes](plugins/enthusia-biomes) | Custom biome generation via NMS (paperweight) | 9.x |
-| [luma-sg](plugins/luma-sg) | Survival Games minigame | 8.x |
+| [enthusia-advancements](plugins/enthusia-advancements) | Config-driven custom advancement trees (guilds, economy, combat) | Badger |
+| [luma-guilds](plugins/luma-guilds) | Guild system — claims, vaults, ranks, relations, progression | Badger |
+| [arm-guilds-bridge](plugins/arm-guilds-bridge) | Bridge between Advanced Region Market and LumaGuilds | Badger |
+| [item-shops](plugins/item-shops) | Chest+sign shop system with guild integration | Badger (fork of p2wn) |
+| [enthusia-biomes](plugins/enthusia-biomes) | Custom biome generation via NMS (paperweight) | Badger |
+| [luma-sg](plugins/luma-sg) | Survival Games minigame | Badger |
+| [enthusia-currency](plugins/enthusia-currency) | Physical token economy with Vault integration | BadgersMC fork (p2wn) |
+
+### Server Plugins (p2wn)
+
+| Submodule | Description |
+|-----------|-------------|
+| [playtime-plugin](plugins/playtime-plugin) | Playtime tracking |
+| [mace-guard](plugins/mace-guard) | Mace combat restrictions |
+| [faster-sleep](plugins/faster-sleep) | Accelerated sleep mechanic |
+| [enthusia-teleport](plugins/enthusia-teleport) | Teleportation system |
+| [enthusia-tags](plugins/enthusia-tags) | Player tags / prefixes |
+| [enthusia-commend](plugins/enthusia-commend) | Player commendation system |
+| [diary-keeper](plugins/diary-keeper) | Player diary / journal system |
 
 ## Dependency Graph
 
@@ -24,11 +39,22 @@ luma-guilds (core)
   |       |--- enthusia-advancements (listens to bridge events)
   |
   |--- item-shops (guild shop ownership)
+  |       ^
+  |       |--- enthusia-advancements (listens to shop events)
+  |
+  |--- enthusia-currency (Vault economy, token items)
           ^
-          |--- enthusia-advancements (listens to shop events)
+          |--- enthusia-advancements (listens to economy events)
 
-enthusia-biomes  (independent)
-luma-sg          (independent)
+enthusia-biomes      (independent)
+luma-sg              (independent)
+playtime-plugin      (independent — advancement hook planned)
+diary-keeper         (independent — advancement hook planned)
+mace-guard           (independent)
+faster-sleep         (independent)
+enthusia-teleport    (independent)
+enthusia-tags        (independent)
+enthusia-commend     (independent)
 ```
 
 ## Quick Start
@@ -93,12 +119,20 @@ enthusia-network/
 ├── settings.gradle.kts     # Composite build config
 ├── build.gradle.kts        # Root tasks (buildAll, cleanAll)
 ├── plugins/
-│   ├── enthusia-advancements/   (submodule)
-│   ├── luma-guilds/             (submodule)
-│   ├── arm-guilds-bridge/       (submodule)
-│   ├── item-shops/              (submodule)
-│   ├── enthusia-biomes/         (submodule)
-│   └── luma-sg/                 (submodule)
+│   ├── enthusia-advancements/   (BadgersMC)
+│   ├── luma-guilds/             (BadgersMC)
+│   ├── arm-guilds-bridge/       (BadgersMC)
+│   ├── item-shops/              (BadgersMC)
+│   ├── enthusia-biomes/         (BadgersMC)
+│   ├── enthusia-currency/       (BadgersMC fork)
+│   ├── luma-sg/                 (BadgersMC)
+│   ├── playtime-plugin/         (p2wn)
+│   ├── mace-guard/              (p2wn)
+│   ├── faster-sleep/            (p2wn)
+│   ├── enthusia-teleport/       (p2wn)
+│   ├── enthusia-tags/           (p2wn)
+│   ├── enthusia-commend/        (p2wn)
+│   └── diary-keeper/            (p2wn)
 └── scripts/
     ├── build-all.sh / .bat  # Build everything
     └── deploy.sh            # Copy JARs to server

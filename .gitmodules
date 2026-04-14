@@ -16,3 +16,27 @@
 [submodule "plugins/luma-sg"]
 	path = plugins/luma-sg
 	url = https://github.com/BadgersMC/LumaSG.git
+[submodule "plugins/playtime-plugin"]
+	path = plugins/playtime-plugin
+	url = https://github.com/wsg138/PlayTimePlugin.git
+[submodule "plugins/mace-guard"]
+	path = plugins/mace-guard
+	url = https://github.com/wsg138/MaceGuard.git
+[submodule "plugins/faster-sleep"]
+	path = plugins/faster-sleep
+	url = https://github.com/wsg138/FasterSleep.git
+[submodule "plugins/enthusia-teleport"]
+	path = plugins/enthusia-teleport
+	url = https://github.com/wsg138/EnthusiaTeleport.git
+[submodule "plugins/enthusia-tags"]
+	path = plugins/enthusia-tags
+	url = https://github.com/wsg138/EnthusiaTags.git
+[submodule "plugins/enthusia-commend"]
+	path = plugins/enthusia-commend
+	url = https://github.com/wsg138/EnthusiaCommend.git
+[submodule "plugins/diary-keeper"]
+	path = plugins/diary-keeper
+	url = https://github.com/wsg138/DiaryKeeper.git
+[submodule "plugins/enthusia-currency"]
+	path = plugins/enthusia-currency
+	url = https://github.com/BadgersMC/EnthusiaCurrency.git
