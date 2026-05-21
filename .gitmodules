@@ -40,3 +40,6 @@
 [submodule "plugins/enthusia-currency"]
 	path = plugins/enthusia-currency
 	url = https://github.com/BadgersMC/EnthusiaCurrency.git
+[submodule "plugins/enthusia-donor"]
+	path = plugins/enthusia-donor
+	url = https://github.com/Hermes-Enthusia/EnthusiaDonor.git
