@@ -43,3 +43,6 @@
 [submodule "plugins/enthusia-donor"]
 	path = plugins/enthusia-donor
 	url = https://github.com/Hermes-Enthusia/EnthusiaDonor.git
+[submodule "plugins/enthusia-donor-npcs"]
+	path = plugins/enthusia-donor-npcs
+	url = https://github.com/NotBorlyn/EnthusiaDonorNPCs.git
