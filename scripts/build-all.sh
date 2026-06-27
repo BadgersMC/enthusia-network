@@ -10,6 +10,12 @@ CLEAN=false
 
 echo "=== Enthusia Network Build ==="
 
+# Bootstrap private/local deps (Nexus, RoseChat, LumaGuilds circular compileOnly)
+if [[ ! -f plugins/luma-guilds/libs/RoseChat-RC-2.jar ]] || ! ls ~/.m2/repository/net/badgersmc/nexus-core/*/nexus-core-*.jar >/dev/null 2>&1; then
+    echo ">> Running build environment setup (first-time or missing deps)..."
+    ./scripts/setup-build-env.sh
+fi
+
 if $CLEAN; then
     echo ">> Cleaning all builds..."
     ./gradlew cleanAll
