@@ -14,8 +14,7 @@ rootProject.name = "enthusia-network"
 
 includeBuild("plugins/luma-guilds")
 includeBuild("plugins/enthusia-advancements")
-includeBuild("plugins/arm-guilds-bridge")
-includeBuild("plugins/item-shops")
+includeBuild("plugins/enthusia-market")
 includeBuild("plugins/luma-sg")
 
 // enthusia-biomes is excluded from composite build — it requires Gradle 9.x

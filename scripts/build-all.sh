@@ -15,7 +15,7 @@ if $CLEAN; then
     ./gradlew cleanAll
 fi
 
-# Build composite (luma-guilds -> item-shops -> arm-guilds-bridge -> enthusia-advancements, luma-sg)
+# Build composite (luma-guilds -> enthusia-market -> enthusia-advancements, luma-sg)
 echo ">> Building composite plugins (Gradle 8.x)..."
 ./gradlew buildAll
 

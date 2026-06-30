@@ -10,8 +10,7 @@ Monorepo for the **Enthusia SMP** server plugin ecosystem. Each plugin lives in 
 |-----------|-------------|--------|
 | [enthusia-advancements](plugins/enthusia-advancements) | Config-driven custom advancement trees (guilds, economy, combat) | Badger |
 | [luma-guilds](plugins/luma-guilds) | Guild system — claims, vaults, ranks, relations, progression | Badger |
-| [arm-guilds-bridge](plugins/arm-guilds-bridge) | Bridge between Advanced Region Market and LumaGuilds | Badger |
-| [item-shops](plugins/item-shops) | Chest+sign shop system with guild integration | Badger (fork of p2wn) |
+| [enthusia-market](plugins/enthusia-market) | Market stall + shop system with guild integration (replaces ItemShops + ARM-Bridge) | Badger |
 | [enthusia-biomes](plugins/enthusia-biomes) | Custom biome generation via NMS (paperweight) | Badger |
 | [luma-sg](plugins/luma-sg) | Survival Games minigame | Badger |
 | [enthusia-currency](plugins/enthusia-currency) | Physical token economy with Vault integration | BadgersMC fork (p2wn) |
@@ -34,13 +33,9 @@ Monorepo for the **Enthusia SMP** server plugin ecosystem. Each plugin lives in 
 luma-guilds (core)
   ^
   |--- enthusia-advancements (listens to guild events)
-  |--- arm-guilds-bridge (uses guild vault, ranks, relations)
+  |--- enthusia-market (guild stall ownership via API)
   |       ^
-  |       |--- enthusia-advancements (listens to bridge events)
-  |
-  |--- item-shops (guild shop ownership)
-  |       ^
-  |       |--- enthusia-advancements (listens to shop events)
+  |       |--- enthusia-advancements (listens to market events)
   |
   |--- enthusia-currency (Vault economy, token items)
           ^
@@ -121,8 +116,7 @@ enthusia-network/
 ├── plugins/
 │   ├── enthusia-advancements/   (BadgersMC)
 │   ├── luma-guilds/             (BadgersMC)
-│   ├── arm-guilds-bridge/       (BadgersMC)
-│   ├── item-shops/              (BadgersMC)
+│   ├── enthusia-market/          (BadgersMC)
 │   ├── enthusia-biomes/         (BadgersMC)
 │   ├── enthusia-currency/       (BadgersMC fork)
 │   ├── luma-sg/                 (BadgersMC)
