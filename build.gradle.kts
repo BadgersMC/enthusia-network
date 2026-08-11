@@ -9,8 +9,7 @@ tasks.register("buildAll") {
     // enthusia-biomes excluded — requires Gradle 9.x (paperweight), build separately
     dependsOn(
         gradle.includedBuild("luma-guilds").task(":shadowJar"),
-        gradle.includedBuild("item-shops").task(":shadowJar"),
-        gradle.includedBuild("arm-guilds-bridge").task(":shadowJar"),
+        gradle.includedBuild("enthusia-market").task(":shadowJar"),
         gradle.includedBuild("enthusia-advancements").task(":shadowJar"),
         gradle.includedBuild("luma-sg").task(":shadowJar"),
     )
@@ -22,8 +21,7 @@ tasks.register("cleanAll") {
 
     dependsOn(
         gradle.includedBuild("luma-guilds").task(":clean"),
-        gradle.includedBuild("item-shops").task(":clean"),
-        gradle.includedBuild("arm-guilds-bridge").task(":clean"),
+        gradle.includedBuild("enthusia-market").task(":clean"),
         gradle.includedBuild("enthusia-advancements").task(":clean"),
         gradle.includedBuild("luma-sg").task(":clean"),
     )
