@@ -8,7 +8,7 @@ name: Upstream watch
 #
 # IMPORTANT: "true upstream" is NOT always the .gitmodules URL. Several
 # submodules point at BadgersMC forks of wsg138 repos (diary-keeper,
-# enthia-commend, enthia-currency). The matrix below is the authoritative
+# enthusia-commend, enthusia-currency). The matrix below is the authoritative
 # upstream mapping; update it when repos move.
 
 on:
@@ -35,7 +35,7 @@ jobs:
             repo: BadgersMC/LumaGuilds
             branch: main
             label: 'upstream:luma-guilds'
-          - name: enthia-advancements
+          - name: enthusia-advancements
             repo: BadgersMC/EnthusiaAdvancements
             branch: main
             label: 'upstream:enthusia-advancements'
@@ -43,7 +43,7 @@ jobs:
             repo: BadgersMC/LumaSG
             branch: main
             label: 'upstream:luma-sg'
-          - name: enthia-biomes
+          - name: enthusia-biomes
             repo: BadgersMC/EnthusiaBiomes
             branch: master
             label: 'upstream:enthusia-biomes'
@@ -59,11 +59,11 @@ jobs:
             repo: wsg138/FasterSleep
             branch: main
             label: 'upstream:faster-sleep'
-          - name: enthia-teleport
+          - name: enthusia-teleport
             repo: wsg138/EnthusiaTeleport
             branch: main
             label: 'upstream:enthusia-teleport'
-          - name: enthia-tags
+          - name: enthusia-tags
             repo: wsg138/EnthusiaTags
             branch: main
             label: 'upstream:enthusia-tags'
@@ -71,19 +71,19 @@ jobs:
             repo: wsg138/DiaryKeeper
             branch: main
             label: 'upstream:diary-keeper'
-          - name: enthia-commend
+          - name: enthusia-commend
             repo: wsg138/EnthusiaCommend
             branch: main
             label: 'upstream:enthusia-commend'
-          - name: enthia-currency
+          - name: enthusia-currency
             repo: wsg138/EnthusiaCurrency
             branch: main
             label: 'upstream:enthusia-currency'
-          - name: enthia-donor
+          - name: enthusia-donor
             repo: Hermes-Enthusia/EnthusiaDonor
             branch: main
             label: 'upstream:enthusia-donor'
-          - name: enthia-donor-npcs
+          - name: enthusia-donor-npcs
             repo: Hermes-Enthusia/EnthusiaDonorNPCs
             branch: main
             label: 'upstream:enthusia-donor-npcs'
@@ -91,6 +91,14 @@ jobs:
             repo: wsg138/WarzoneDuels
             branch: main
             label: 'upstream:warzone-duels'
+          - name: enthusia-giveaway
+            repo: BadgersMC/EnthusiaGiveaway
+            branch: main
+            label: 'upstream:enthusia-giveaway'
+          - name: enthusia-votes
+            repo: BadgersMC/EnthusiaVotes
+            branch: main
+            label: 'upstream:enthusia-votes'
           # NOTE: item-shops + arm-guilds-bridge intentionally excluded —
           # decommissioned (PR #13 replaces them with EnthusiaMarket).
     steps:

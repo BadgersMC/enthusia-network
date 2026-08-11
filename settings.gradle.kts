@@ -16,6 +16,8 @@ includeBuild("plugins/luma-guilds")
 includeBuild("plugins/enthusia-advancements")
 includeBuild("plugins/enthusia-market")
 includeBuild("plugins/luma-sg")
+includeBuild("plugins/enthusia-giveaway")
+includeBuild("plugins/enthusia-votes")
 
 // enthusia-biomes is excluded from composite build — it requires Gradle 9.x
 // (paperweight 2.0.0-beta.19) while all other plugins use Gradle 8.x.
