@@ -43,3 +43,6 @@
 [submodule "plugins/enthusia-donor-npcs"]
 	path = plugins/enthusia-donor-npcs
 	url = https://github.com/NotBorlyn/EnthusiaDonorNPCs.git
+[submodule "plugins/warzone-duels"]
+	path = plugins/warzone-duels
+	url = https://github.com/wsg138/WarzoneDuels.git
