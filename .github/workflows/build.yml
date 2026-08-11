@@ -56,6 +56,17 @@ jobs:
           done < <(git config --file .gitmodules --get-regexp '^submodule\..*\.path$' | awk '{print $2}')
           exit $missing
 
+      - name: Build Maven plugin dependencies
+        run: |
+          set -euo pipefail
+          # EA (composite) compileOnly's against these Maven-built jars.
+          # Build them first so target/ contains the exact jar names EA refs.
+          for plugin in diary-keeper enthia-currency playtime-plugin enthia-commend; do
+            echo "::group::mvn package $plugin"
+            (cd "plugins/$plugin" && mvn -q -B package -DskipTests)
+            echo "::endgroup::"
+          done
+
       - name: Build composite plugins
         run: ./gradlew buildAll
 
