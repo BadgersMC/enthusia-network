@@ -90,7 +90,7 @@ This repo uses **Gradle composite builds**. The root `settings.gradle.kts` inclu
 - A single `./gradlew buildAll` builds everything in dependency order
 - Each plugin retains its own `build.gradle.kts` and can still be built standalone
 
-### Why enthia-biomes is separate
+### Why enthusia-biomes is separate
 
 `enthusia-biomes` uses [paperweight](https://github.com/PaperMC/paperweight) 2.0.0-beta.19 which requires Gradle 9.x. All other plugins use Gradle 8.x. Mixing them in a single composite build causes plugin API version conflicts, so biomes is excluded from `includeBuild()` and built independently.
 
