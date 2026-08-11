@@ -46,3 +46,9 @@
 [submodule "plugins/enthusia-donor-npcs"]
 	path = plugins/enthusia-donor-npcs
 	url = https://github.com/Hermes-Enthusia/EnthusiaDonorNPCs.git
+[submodule "plugins/enthusia-giveaway"]
+	path = plugins/enthusia-giveaway
+	url = https://github.com/BadgersMC/EnthusiaGiveaway.git
+[submodule "plugins/enthusia-votes"]
+	path = plugins/enthusia-votes
+	url = https://github.com/BadgersMC/EnthusiaVotes.git

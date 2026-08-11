@@ -12,6 +12,8 @@ tasks.register("buildAll") {
         gradle.includedBuild("enthusia-market").task(":shadowJar"),
         gradle.includedBuild("enthusia-advancements").task(":shadowJar"),
         gradle.includedBuild("luma-sg").task(":shadowJar"),
+        gradle.includedBuild("enthusia-giveaway").task(":shadowJar"),
+        gradle.includedBuild("enthusia-votes").task(":shadowJar"),
     )
 }
 
@@ -24,5 +26,7 @@ tasks.register("cleanAll") {
         gradle.includedBuild("enthusia-market").task(":clean"),
         gradle.includedBuild("enthusia-advancements").task(":clean"),
         gradle.includedBuild("luma-sg").task(":clean"),
+        gradle.includedBuild("enthusia-giveaway").task(":clean"),
+        gradle.includedBuild("enthusia-votes").task(":clean"),
     )
 }

@@ -23,6 +23,8 @@ declare -A JARS=(
     ["enthusia-market"]="EnthusiaMarket-*.jar"
     ["enthusia-biomes"]="EnthusiaBiomes-*.jar"
     ["luma-sg"]="LumaSG-*.jar"
+    ["enthusia-giveaway"]="EnthusiaGiveaway-*.jar"
+    ["enthusia-votes"]="EnthusiaVotes-*.jar"
 )
 
 copied=0
