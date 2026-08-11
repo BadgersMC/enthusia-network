@@ -12,7 +12,9 @@
   <img src="https://img.shields.io/badge/Minecraft-1.21-F5B841" alt="Minecraft 1.21">
   <img src="https://img.shields.io/badge/Java-21-DC2626" alt="Java 21">
   <img src="https://img.shields.io/badge/status-active-0A0A0A" alt="Active">
+  <a href="https://github.com/BadgersMC"><img src="https://img.shields.io/badge/upstream-BadgersMC-F5B841" alt="Upstream: BadgersMC"></a>
   <a href="https://github.com/wsg138"><img src="https://img.shields.io/badge/upstream-wsg138-C2410C" alt="Upstream: wsg138"></a>
+  <a href="https://github.com/Hermes-Enthusia"><img src="https://img.shields.io/badge/upstream-Hermes--Enthusia-0A0A0A" alt="Upstream: Hermes-Enthusia"></a>
 </p>
 
 ---
