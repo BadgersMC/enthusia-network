@@ -1,0 +1,200 @@
+name: Upstream watch
+
+# Files a GitHub issue when any monorepo submodule pin is behind its true
+# upstream main branch (BadgersMC / wsg138 / Hermes-Enthusia). Mirrors the
+# Fuji upstream-watch pattern: existing issues with the per-submodule label
+# act as the "already seen" state, so no extra storage is needed. When a pin
+# catches up, the matching open issue is auto-closed.
+#
+# IMPORTANT: "true upstream" is NOT always the .gitmodules URL. Several
+# submodules point at BadgersMC forks of wsg138 repos (diary-keeper,
+# enthia-commend, enthia-currency). The matrix below is the authoritative
+# upstream mapping; update it when repos move.
+
+on:
+  schedule:
+    - cron: '0 * * * *'      # hourly
+  workflow_dispatch: {}        # manual run / test
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # - name: Submodule path after plugins/
+          #   repo: true upstream repo (org/name)
+          #   branch: upstream default branch
+          #   label: GitHub label used for dedupe
+          - name: luma-guilds
+            repo: BadgersMC/LumaGuilds
+            branch: main
+            label: 'upstream:luma-guilds'
+          - name: enthia-advancements
+            repo: BadgersMC/EnthusiaAdvancements
+            branch: main
+            label: 'upstream:enthusia-advancements'
+          - name: luma-sg
+            repo: BadgersMC/LumaSG
+            branch: main
+            label: 'upstream:luma-sg'
+          - name: enthia-biomes
+            repo: BadgersMC/EnthusiaBiomes
+            branch: master
+            label: 'upstream:enthusia-biomes'
+          - name: playtime-plugin
+            repo: wsg138/PlayTimePlugin
+            branch: main
+            label: 'upstream:playtime-plugin'
+          - name: mace-guard
+            repo: wsg138/MaceGuard
+            branch: main
+            label: 'upstream:mace-guard'
+          - name: faster-sleep
+            repo: wsg138/FasterSleep
+            branch: main
+            label: 'upstream:faster-sleep'
+          - name: enthia-teleport
+            repo: wsg138/EnthusiaTeleport
+            branch: main
+            label: 'upstream:enthusia-teleport'
+          - name: enthia-tags
+            repo: wsg138/EnthusiaTags
+            branch: main
+            label: 'upstream:enthusia-tags'
+          - name: diary-keeper
+            repo: wsg138/DiaryKeeper
+            branch: main
+            label: 'upstream:diary-keeper'
+          - name: enthia-commend
+            repo: wsg138/EnthusiaCommend
+            branch: main
+            label: 'upstream:enthusia-commend'
+          - name: enthia-currency
+            repo: wsg138/EnthusiaCurrency
+            branch: main
+            label: 'upstream:enthusia-currency'
+          - name: enthia-donor
+            repo: Hermes-Enthusia/EnthusiaDonor
+            branch: main
+            label: 'upstream:enthusia-donor'
+          - name: enthia-donor-npcs
+            repo: Hermes-Enthusia/EnthusiaDonorNPCs
+            branch: main
+            label: 'upstream:enthusia-donor-npcs'
+          - name: warzone-duels
+            repo: wsg138/WarzoneDuels
+            branch: main
+            label: 'upstream:warzone-duels'
+          # NOTE: item-shops + arm-guilds-bridge intentionally excluded —
+          # decommissioned (PR #13 replaces them with EnthusiaMarket).
+    steps:
+      - name: Checkout monorepo (for gitlink pins)
+        uses: actions/checkout@v4
+
+      - name: Check ${{ matrix.name }} vs ${{ matrix.repo }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ matrix.repo }}
+          BRANCH: ${{ matrix.branch }}
+          LABEL: ${{ matrix.label }}
+          NAME: ${{ matrix.name }}
+        run: |
+          set -euo pipefail
+
+          # Pinned SHA recorded in the monorepo gitlink
+          pinned=$(git ls-tree HEAD "plugins/$NAME" | awk '{print $3}')
+          if [ -z "$pinned" ]; then
+            echo "No gitlink for plugins/$NAME — skipping (submodule removed?)."
+            exit 0
+          fi
+          pshort=${pinned:0:7}
+
+          # Latest commit on the upstream branch
+          commit=$(gh api "repos/$REPO/commits/$BRANCH")
+          sha=$(jq -r '.sha' <<<"$commit")
+          short=${sha:0:7}
+          msg=$(jq -r '.commit.message' <<<"$commit" | head -1)
+          titlemsg=$(printf '%s' "$msg" | cut -c1-60)
+          author=$(jq -r '.commit.author.name' <<<"$commit")
+          date=$(jq -r '.commit.author.date' <<<"$commit")
+          url=$(jq -r '.html_url' <<<"$commit")
+
+          # Ensure the per-submodule label exists
+          gh label create "$LABEL" -R "$GITHUB_REPOSITORY" --color '1F6FEB' \
+            --description "$NAME upstream commits" 2>/dev/null || true
+
+          # Up to date? Close any stale open issue and stop.
+          if [ "$pinned" = "$sha" ]; then
+            open=$(gh issue list -R "$GITHUB_REPOSITORY" --state open --label "$LABEL" \
+                     --json number --jq '.[].number' || true)
+            for n in $open; do
+              gh issue close "$n" -R "$GITHUB_REPOSITORY" \
+                --comment "✅ Submodule pin is up to date with $REPO main (${short})." || true
+            done
+            echo "plugins/$NAME is up to date ($short)."
+            exit 0
+          fi
+
+          # Already notified for this upstream commit? (open issues = state)
+          seen=$(gh issue list -R "$GITHUB_REPOSITORY" --state open --label "$LABEL" \
+                   --search "$short in:title" --json number --jq 'length')
+          if [ "$seen" != "0" ]; then
+            echo "Already filed for $NAME upstream $short — nothing to do."
+            exit 0
+          fi
+
+          # Diff stats: pinned...upstream (may span many commits)
+          compare=""
+          stats=""
+          filelist=""
+          if [ "$pshort" != "$short" ]; then
+            compare="https://github.com/$REPO/compare/$pinned...$sha"
+            cmp=$(gh api "repos/$REPO/compare/$pinned...$sha" 2>/dev/null || echo '{}')
+            ncommits=$(jq -r '.total_commits // 0' <<<"$cmp")
+            add=$(jq -r '[.files[]?.additions] | add // 0' <<<"$cmp")
+            del=$(jq -r '[.files[]?.deletions] | add // 0' <<<"$cmp")
+            nfiles=$(jq -r '[.files[]?] | length' <<<"$cmp")
+            stats="**$ncommits** commit(s) · **$nfiles** file(s) · **+$add / -$del**"
+            filelist=$(jq -r '.files[]? | "- \`\(.status)\` \`\(.filename)\` (+\\(.additions)/-\\(.deletions))"' <<<"$cmp" | head -30)
+          fi
+
+          # Build the issue body
+          {
+            echo "The monorepo submodule \`plugins/$NAME\` is **behind** \`$REPO\` \`$BRANCH\`."
+            echo ""
+            echo "- **Pinned:** [\`$pshort\`](https://github.com/$GITHUB_REPOSITORY/tree/$GITHUB_REF_NAME) (monorepo gitlink)"
+            echo "- **Upstream:** [\`$short\`]($url) — $msg"
+            echo "- **Author:** $author"
+            echo "- **Date:** $date"
+            echo "- **Branch:** https://github.com/$REPO/tree/$BRANCH"
+            echo "- **Commits:** https://github.com/$REPO/commits/$BRANCH"
+            if [ -n "$compare" ]; then
+              echo "- **Diff since pin:** [compare]($compare) · [.diff]($compare.diff) · [.patch]($compare.patch)"
+            fi
+            if [ -n "$stats" ]; then
+              echo ""
+              echo "$stats"
+              echo ""
+              echo "<details><summary>Changed files</summary>"
+              echo ""
+              echo "$filelist"
+              echo ""
+              echo "</details>"
+            fi
+            echo ""
+            echo "---"
+            echo "_Auto-filed by \`upstream-watch\`. Bump the submodule pin to \`$short\` and close this issue._"
+          } > body.md
+
+          gh issue create -R "$GITHUB_REPOSITORY" \
+            --title "⬆️ $NAME upstream: $short — $titlemsg" \
+            --label "$LABEL" \
+            --body-file body.md
+
+          echo "Filed behind-issue for $NAME ($short)."
