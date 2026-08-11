@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="https://github.com/BadgersMC/enthusia-network/actions/workflows/upstream-watch.yml"><img src="https://github.com/BadgersMC/enthusia-network/actions/workflows/upstream-watch.yml/badge.svg" alt="Upstream watch"></a>
-  <img src="https://img.shields.io/badge/plugins-16-C2410C" alt="16 plugins">
+  <img src="https://img.shields.io/badge/plugins-18-C2410C" alt="18 plugins">
   <img src="https://img.shields.io/badge/Minecraft-1.21-F5B841" alt="Minecraft 1.21">
   <img src="https://img.shields.io/badge/Java-21-DC2626" alt="Java 21">
   <img src="https://img.shields.io/badge/status-active-0A0A0A" alt="Active">
@@ -41,6 +41,8 @@ Built on the work of **[BadgersMC](https://github.com/BadgersMC)**, **[wsg138 (p
 | [warzone-duels](plugins/warzone-duels) | 1v1 duels with WarzoneRotator integration | p2wn |
 | [enthusia-donor](plugins/enthusia-donor) | Donation perks, auto-link, SQLite-backed transactions | Hermes-Enthusia fork (upstream: NotBorlyn) |
 | [enthusia-donor-npcs](plugins/enthusia-donor-npcs) | Leaderboard donor NPCs (FancyNPCs-based) | Hermes-Enthusia fork (upstream: NotBorlyn) |
+| [enthusia-giveaway](plugins/enthusia-giveaway) | Scheduled giveaways with admin GUI and live winner announcements | Badger |
+| [enthusia-votes](plugins/enthusia-votes) | Vote rewards — streaks, vote parties, Raw Gold payouts | Badger |
 
 ## What's in it
 
@@ -50,6 +52,7 @@ Built on the work of **[BadgersMC](https://github.com/BadgersMC)**, **[wsg138 (p
 - 🌋 **World.** EnthusiaBiomes' NMS custom biome generation.
 - 🎮 **Life.** Playtime tracking, teleportation, tags, commendations, diary/journal, faster sleep — the daily-server QoL stack.
 - 🎁 **Donations.** Donor perks and leaderboard NPCs, maintained on the Hermes-Enthusia fork.
+- 🎉 **Events.** Scheduled giveaways with live winner announcements, and vote rewards (streaks, vote parties, Raw Gold payouts).
 
 ## Quick Start
 
@@ -58,10 +61,12 @@ Built on the work of **[BadgersMC](https://github.com/BadgersMC)**, **[wsg138 (p
 git clone --recurse-submodules https://github.com/BadgersMC/enthusia-network.git
 cd enthusia-network
 
-# Build all plugins (except enthusia-biomes which needs Gradle 9.x)
+# Build the composite plugins (luma-guilds, market, advancements, luma-sg,
+# giveaway, votes) in dependency order
 ./gradlew buildAll
 
-# Build enthusia-biomes separately
+# Build the standalone plugins individually (biomes needs Gradle 9.x;
+# the p2wn/wsg138 and donor plugins build from their own repos)
 cd plugins/enthusia-biomes && ./gradlew shadowJar && cd ../..
 
 # Or use the build script for everything
@@ -114,7 +119,7 @@ git commit -m "chore: bump luma-guilds to latest"
 
 ## Repository Layout
 
-```
+```text
 enthusia-network/
 ├── settings.gradle.kts     # Composite build config
 ├── build.gradle.kts        # Root tasks (buildAll, cleanAll)
@@ -135,8 +140,10 @@ enthusia-network/
 │   ├── enthusia-commend/
 │   ├── diary-keeper/
 │   ├── warzone-duels/
-│   ├── enthia-donor/
-│   └── enthia-donor-npcs/
+│   ├── enthusia-donor/
+│   ├── enthusia-donor-npcs/
+│   ├── enthusia-giveaway/
+│   └── enthusia-votes/
 └── scripts/
     ├── build-all.sh / .bat  # Build everything
     └── deploy.sh            # Copy JARs to server
