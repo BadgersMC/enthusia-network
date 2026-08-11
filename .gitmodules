@@ -4,12 +4,9 @@
 [submodule "plugins/luma-guilds"]
 	path = plugins/luma-guilds
 	url = https://github.com/BadgersMC/LumaGuilds.git
-[submodule "plugins/arm-guilds-bridge"]
-	path = plugins/arm-guilds-bridge
-	url = https://github.com/BadgersMC/ARM-Guilds-Bridge.git
-[submodule "plugins/item-shops"]
-	path = plugins/item-shops
-	url = https://github.com/BadgersMC/ItemShops.git
+[submodule "plugins/enthusia-market"]
+	path = plugins/enthusia-market
+	url = https://github.com/BadgersMC/EnthusiaMarket.git
 [submodule "plugins/enthusia-biomes"]
 	path = plugins/enthusia-biomes
 	url = https://github.com/BadgersMC/EnthusiaBiomes.git
@@ -52,3 +49,6 @@
 [submodule "plugins/enthusia-votes"]
 	path = plugins/enthusia-votes
 	url = https://github.com/BadgersMC/EnthusiaVotes.git
+[submodule "plugins/warzone-duels"]
+	path = plugins/warzone-duels
+	url = https://github.com/wsg138/WarzoneDuels.git
