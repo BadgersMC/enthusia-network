@@ -2,55 +2,26 @@
 
 Monorepo for the **Enthusia SMP** server plugin ecosystem. Each plugin lives in its own git submodule with independent history — this repo pins them together and provides a unified build.
 
-## Plugins
+## Server Plugins
 
-### Core (BadgersMC)
-
-| Submodule | Description | Author |
-|-----------|-------------|--------|
+| Plugin | Description | Author |
+|--------|-------------|--------|
 | [enthusia-advancements](plugins/enthusia-advancements) | Config-driven custom advancement trees (guilds, economy, combat) | Badger |
 | [luma-guilds](plugins/luma-guilds) | Guild system — claims, vaults, ranks, relations, progression | Badger |
 | [enthusia-market](plugins/enthusia-market) | Market stall + shop system with guild integration (replaces ItemShops + ARM-Bridge) | Badger |
 | [enthusia-biomes](plugins/enthusia-biomes) | Custom biome generation via NMS (paperweight) | Badger |
 | [luma-sg](plugins/luma-sg) | Survival Games minigame | Badger |
 | [enthusia-currency](plugins/enthusia-currency) | Physical token economy with Vault integration | BadgersMC fork (p2wn) |
-
-### Server Plugins (p2wn)
-
-| Submodule | Description |
-|-----------|-------------|
-| [playtime-plugin](plugins/playtime-plugin) | Playtime tracking |
-| [mace-guard](plugins/mace-guard) | Mace combat restrictions |
-| [faster-sleep](plugins/faster-sleep) | Accelerated sleep mechanic |
-| [enthusia-teleport](plugins/enthusia-teleport) | Teleportation system |
-| [enthusia-tags](plugins/enthusia-tags) | Player tags / prefixes |
-| [enthusia-commend](plugins/enthusia-commend) | Player commendation system |
-| [diary-keeper](plugins/diary-keeper) | Player diary / journal system |
-
-## Dependency Graph
-
-```
-luma-guilds (core)
-  ^
-  |--- enthusia-advancements (listens to guild events)
-  |--- enthusia-market (guild stall ownership via API)
-  |       ^
-  |       |--- enthusia-advancements (listens to market events)
-  |
-  |--- enthusia-currency (Vault economy, token items)
-          ^
-          |--- enthusia-advancements (listens to economy events)
-
-enthusia-biomes      (independent)
-luma-sg              (independent)
-playtime-plugin      (independent — advancement hook planned)
-diary-keeper         (independent — advancement hook planned)
-mace-guard           (independent)
-faster-sleep         (independent)
-enthusia-teleport    (independent)
-enthusia-tags        (independent)
-enthusia-commend     (independent)
-```
+| [playtime-plugin](plugins/playtime-plugin) | Playtime tracking | p2wn |
+| [mace-guard](plugins/mace-guard) | Mace combat restrictions | p2wn |
+| [faster-sleep](plugins/faster-sleep) | Accelerated sleep mechanic | p2wn |
+| [enthusia-teleport](plugins/enthusia-teleport) | Teleportation system | p2wn |
+| [enthusia-tags](plugins/enthusia-tags) | Player tags / prefixes | p2wn |
+| [enthusia-commend](plugins/enthusia-commend) | Player commendation system | p2wn |
+| [diary-keeper](plugins/diary-keeper) | Player diary / journal system | p2wn |
+| [warzone-duels](plugins/warzone-duels) | 1v1 duels with WarzoneRotator integration | p2wn |
+| [enthusia-donor](plugins/enthusia-donor) | Donation perks, auto-link, SQLite-backed transactions | Hermes-Enthusia fork (upstream: NotBorlyn) |
+| [enthusia-donor-npcs](plugins/enthusia-donor-npcs) | Leaderboard donor NPCs (FancyNPCs-based) | Hermes-Enthusia fork (upstream: NotBorlyn) |
 
 ## Quick Start
 
@@ -90,6 +61,10 @@ This repo uses **Gradle composite builds**. The root `settings.gradle.kts` inclu
 
 `enthusia-biomes` uses [paperweight](https://github.com/PaperMC/paperweight) 2.0.0-beta.19 which requires Gradle 9.x. All other plugins use Gradle 8.x. Mixing them in a single composite build causes plugin API version conflicts, so biomes is excluded from `includeBuild()` and built independently.
 
+## Upstream Watch
+
+`.github/workflows/upstream-watch.yml` runs hourly and compares every submodule pin against its **true upstream main** (BadgersMC / wsg138 / Hermes-Enthusia — note some `.gitmodules` URLs point at BadgersMC forks of wsg138 repos). When a pin falls behind, it auto-files a `⬆️ <name> upstream:` issue with a diff summary; when a pin catches up, the issue auto-closes. Existing issues act as the "already seen" state (same pattern as the Fuji upstream watch).
+
 ## Working with Submodules
 
 ```bash
@@ -107,26 +82,33 @@ git add plugins/luma-guilds
 git commit -m "chore: bump luma-guilds to latest"
 ```
 
+> The upstream-watch CI will flag stale pins automatically — prefer bumping pins via a PR rather than pushing to `main` directly.
+
 ## Repository Layout
 
 ```
 enthusia-network/
 ├── settings.gradle.kts     # Composite build config
 ├── build.gradle.kts        # Root tasks (buildAll, cleanAll)
+├── .github/workflows/
+│   └── upstream-watch.yml  # Auto-files issues when submodule pins fall behind
 ├── plugins/
-│   ├── enthusia-advancements/   (BadgersMC)
-│   ├── luma-guilds/             (BadgersMC)
-│   ├── enthusia-market/          (BadgersMC)
-│   ├── enthusia-biomes/         (BadgersMC)
-│   ├── enthusia-currency/       (BadgersMC fork)
-│   ├── luma-sg/                 (BadgersMC)
-│   ├── playtime-plugin/         (p2wn)
-│   ├── mace-guard/              (p2wn)
-│   ├── faster-sleep/            (p2wn)
-│   ├── enthusia-teleport/       (p2wn)
-│   ├── enthusia-tags/           (p2wn)
-│   ├── enthusia-commend/        (p2wn)
-│   └── diary-keeper/            (p2wn)
+│   ├── enthusia-advancements/
+│   ├── luma-guilds/
+│   ├── enthusia-market/
+│   ├── enthusia-biomes/
+│   ├── enthusia-currency/
+│   ├── luma-sg/
+│   ├── playtime-plugin/
+│   ├── mace-guard/
+│   ├── faster-sleep/
+│   ├── enthusia-teleport/
+│   ├── enthusia-tags/
+│   ├── enthusia-commend/
+│   ├── diary-keeper/
+│   ├── warzone-duels/
+│   ├── enthia-donor/
+│   └── enthia-donor-npcs/
 └── scripts/
     ├── build-all.sh / .bat  # Build everything
     └── deploy.sh            # Copy JARs to server
