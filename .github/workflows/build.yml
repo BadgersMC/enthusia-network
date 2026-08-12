@@ -56,6 +56,33 @@ jobs:
           done < <(git config --file .gitmodules --get-regexp '^submodule\..*\.path$' | awk '{print $2}')
           exit $missing
 
+      - name: Build Maven plugin dependencies
+        run: |
+          set -euo pipefail
+          # EA (composite) compileOnly's against these Maven-built jars.
+          # Build them first so target/ contains the exact jar names EA refs.
+          for plugin in diary-keeper enthusia-currency playtime-plugin enthusia-commend; do
+            echo "::group::mvn package $plugin"
+            (cd "plugins/$plugin" && mvn -q -B package -DskipTests)
+            echo "::endgroup::"
+          done
+
+      - name: Stage local compile-only jars
+        run: |
+          set -euo pipefail
+          # luma-guilds compileOnly's against a gitignored RoseChat jar that
+          # ships via SpigotMC only (no GitHub releases/tags; SpigotMC 403s
+          # anonymous downloads; not on Modrinth). The committed copy in
+          # ci/rosechat is the CI distribution path — verify it exists on the
+          # fresh runner BEFORE staging, so a missing jar fails loudly here
+          # instead of as a confusing compile error downstream.
+          test -f ci/rosechat/RoseChat-RC-2.jar || {
+            echo "::error::ci/rosechat/RoseChat-RC-2.jar missing on fresh runner — restore the committed file (it is tracked in this repo; a shallow/missing checkout is the only way it can be absent)"
+            exit 1
+          }
+          mkdir -p plugins/luma-guilds/libs
+          cp ci/rosechat/RoseChat-RC-2.jar plugins/luma-guilds/libs/RoseChat-RC-2.jar
+
       - name: Build composite plugins
         run: ./gradlew buildAll
 
