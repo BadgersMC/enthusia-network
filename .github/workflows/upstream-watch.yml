@@ -169,7 +169,7 @@ jobs:
             del=$(jq -r '[.files[]?.deletions] | add // 0' <<<"$cmp")
             nfiles=$(jq -r '[.files[]?] | length' <<<"$cmp")
             stats="**$ncommits** commit(s) · **$nfiles** file(s) · **+$add / -$del**"
-            filelist=$(jq -r '[.files[]? | "- `\(.status)` `\(.filename)` (+\(.additions)/-\(.deletions))"] | .[:30] | join("\n")' <<<"$cmp")
+            filelist=$(jq -r '[.files[]? | "- `\(.status)` <code>\(.filename | @html)</code> (+\(.additions)/-\(.deletions))"] | .[:30] | join("\n")' <<<"$cmp")
           fi
 
           # Build the issue body
