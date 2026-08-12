@@ -67,6 +67,16 @@ jobs:
             echo "::endgroup::"
           done
 
+      - name: Stage local compile-only jars
+        run: |
+          set -euo pipefail
+          # luma-guilds compileOnly's against a gitignored RoseChat jar that
+          # ships via SpigotMC only (no releases/tags on GitHub, SpigotMC 403s
+          # anonymous downloads). ci/rosechat holds a copy for CI; stage it
+          # into the submodule's libs/ exactly like the dev box does.
+          mkdir -p plugins/luma-guilds/libs
+          cp ci/rosechat/RoseChat-RC-2.jar plugins/luma-guilds/libs/RoseChat-RC-2.jar
+
       - name: Build composite plugins
         run: ./gradlew buildAll
 
