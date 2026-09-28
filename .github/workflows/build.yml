@@ -43,6 +43,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
+      NEXUS_REF: 057836befb9e35aa252cf90104030ec86f28b33f
+      USE_MAVEN_LOCAL_NEXUS: 'true'
       COMBATLOGX_API_REF: 4812e85af1264ebb27da481b9d9cbf8de0956e53
     steps:
       - name: Checkout monorepo with submodules
@@ -120,6 +122,17 @@ jobs:
         with:
           distribution: temurin
           java-version: '25'
+
+      - name: Publish Nexus 2.3.0 dependency locally
+        run: |
+          set -euo pipefail
+          git clone https://github.com/BadgersMC/Nexus.git "$RUNNER_TEMP/nexus"
+          (
+            cd "$RUNNER_TEMP/nexus"
+            git checkout "$NEXUS_REF"
+            chmod +x gradlew
+            ./gradlew publishToMavenLocal --no-daemon --console=plain
+          )
 
       - name: Build pinned official RoseChat 26.2 API
         run: |

@@ -9,6 +9,7 @@ cd "$(dirname "$0")/.."
 CLEAN=false
 [[ "${1:-}" == "--clean" ]] && CLEAN=true
 COMBATLOGX_API_REF="4812e85af1264ebb27da481b9d9cbf8de0956e53"
+NEXUS_REF="057836befb9e35aa252cf90104030ec86f28b33f"
 DEPS_DIR="$PWD/build/deps"
 
 echo "=== Enthusia Network Build ==="
@@ -82,6 +83,20 @@ if [ -z "$lumaguilds_jar" ]; then
     exit 1
 fi
 export LUMAGUILDS_JAR="$PWD/$lumaguilds_jar"
+
+echo ">> Publishing Nexus 2.3.0 dependency locally..."
+if [ ! -d "$DEPS_DIR/nexus/.git" ]; then
+    rm -rf "$DEPS_DIR/nexus"
+    git clone https://github.com/BadgersMC/Nexus.git "$DEPS_DIR/nexus"
+fi
+git -C "$DEPS_DIR/nexus" fetch origin "$NEXUS_REF"
+git -C "$DEPS_DIR/nexus" checkout --detach "$NEXUS_REF"
+(
+    cd "$DEPS_DIR/nexus"
+    chmod +x gradlew
+    ./gradlew publishToMavenLocal --no-daemon
+)
+export USE_MAVEN_LOCAL_NEXUS=true
 
 echo ">> Building composite plugins..."
 ./gradlew buildAll

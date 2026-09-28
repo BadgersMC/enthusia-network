@@ -6,6 +6,7 @@ REM Usage: scripts\build-all.bat [--clean]
 
 cd /d "%~dp0\.."
 set "COMBATLOGX_API_REF=4812e85af1264ebb27da481b9d9cbf8de0956e53"
+set "NEXUS_REF=057836befb9e35aa252cf90104030ec86f28b33f"
 set "DEPS_DIR=%CD%\build\deps"
 
 echo === Enthusia Network Build ===
@@ -90,6 +91,23 @@ if not defined LUMAGUILDS_JAR (
     echo LumaGuilds build produced no shaded jar
     goto :fail
 )
+
+echo ^>^> Publishing Nexus 2.3.0 dependency locally...
+if not exist "%DEPS_DIR%\nexus\.git" (
+    if exist "%DEPS_DIR%\nexus" rmdir /S /Q "%DEPS_DIR%\nexus"
+    git clone https://github.com/BadgersMC/Nexus.git "%DEPS_DIR%\nexus"
+    if errorlevel 1 goto :fail
+)
+git -C "%DEPS_DIR%\nexus" fetch origin %NEXUS_REF%
+if errorlevel 1 goto :fail
+git -C "%DEPS_DIR%\nexus" checkout --detach %NEXUS_REF%
+if errorlevel 1 goto :fail
+pushd "%DEPS_DIR%\nexus"
+call gradlew.bat publishToMavenLocal --no-daemon
+set "STEP_ERROR=!ERRORLEVEL!"
+popd
+if not "!STEP_ERROR!"=="0" goto :fail
+set "USE_MAVEN_LOCAL_NEXUS=true"
 
 echo ^>^> Building composite plugins...
 call gradlew.bat buildAll
