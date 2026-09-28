@@ -98,6 +98,19 @@ git -C "$DEPS_DIR/nexus" checkout --detach "$NEXUS_REF"
 )
 export USE_MAVEN_LOCAL_NEXUS=true
 
+echo ">> Building EnthusiaMarket 26.2 artifact..."
+(
+    cd plugins/enthusia-market
+    chmod +x gradlew
+    ./gradlew shadowJar -PuseMavenLocal=true --no-daemon
+)
+enthusiamarket_jar=$(find plugins/enthusia-market/build/libs -maxdepth 1 -type f -name "EnthusiaMarket-*.jar"     ! -name "*-sources.jar" ! -name "*-javadoc.jar" | head -1)
+if [ -z "$enthusiamarket_jar" ]; then
+    echo "EnthusiaMarket build produced no shaded jar" >&2
+    exit 1
+fi
+export ENTHUSIAMARKET_JAR="$PWD/$enthusiamarket_jar"
+
 echo ">> Building composite plugins..."
 ./gradlew buildAll
 

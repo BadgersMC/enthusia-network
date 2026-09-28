@@ -109,6 +109,19 @@ popd
 if not "!STEP_ERROR!"=="0" goto :fail
 set "USE_MAVEN_LOCAL_NEXUS=true"
 
+echo ^>^> Building EnthusiaMarket 26.2 artifact...
+pushd "plugins\enthusia-market"
+call gradlew.bat shadowJar -PuseMavenLocal=true --no-daemon
+set "STEP_ERROR=!ERRORLEVEL!"
+popd
+if not "!STEP_ERROR!"=="0" goto :fail
+set "ENTHUSIAMARKET_JAR="
+for /f "delims=" %%F in ('powershell -NoProfile -Command "Get-ChildItem -Path 'plugins\enthusia-market\build\libs' -Filter 'EnthusiaMarket-*.jar' ^| Where-Object { $_.Name -notlike '*-sources.jar' -and $_.Name -notlike '*-javadoc.jar' } ^| Select-Object -First 1 -ExpandProperty FullName"') do set "ENTHUSIAMARKET_JAR=%%F"
+if not defined ENTHUSIAMARKET_JAR (
+    echo EnthusiaMarket build produced no shaded jar
+    goto :fail
+)
+
 echo ^>^> Building composite plugins...
 call gradlew.bat buildAll
 if errorlevel 1 goto :fail
