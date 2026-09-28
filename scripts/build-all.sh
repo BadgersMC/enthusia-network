@@ -45,6 +45,7 @@ git -C "$DEPS_DIR/combatlogx" fetch origin "$COMBATLOGX_API_REF"
 git -C "$DEPS_DIR/combatlogx" checkout --detach "$COMBATLOGX_API_REF"
 (
     cd "$DEPS_DIR/combatlogx"
+    chmod +x gradlew
     ./gradlew :api:jar --no-daemon
 )
 combatlogx_jar=$(find "$DEPS_DIR/combatlogx/api/build/libs" -maxdepth 1 -type f -name "*.jar" \
@@ -58,6 +59,7 @@ cp "$combatlogx_jar" plugins/luma-guilds/libs/CombatLogX-api.jar
 echo ">> Building official RoseChat 26.2 compile API..."
 (
     cd plugins/rosechat
+    chmod +x gradlew
     ./gradlew -I ../../ci/rosechat/simpleclans.init.gradle shadowJar --no-daemon
 )
 rosechat_jar=$(find plugins/rosechat/build/libs -maxdepth 1 -type f -name "RoseChat-*.jar" | head -1)
@@ -70,6 +72,7 @@ cp "$rosechat_jar" plugins/luma-guilds/libs/RoseChat-RC-2.jar
 echo ">> Building LumaGuilds 3 core artifact..."
 (
     cd plugins/luma-guilds
+    chmod +x gradlew
     ./gradlew shadowJar --no-daemon
 )
 lumaguilds_jar=$(find plugins/luma-guilds/build/libs -maxdepth 1 -type f -name "LumaGuilds-*.jar" \
@@ -87,6 +90,7 @@ echo ">> Building enthusia-biomes..."
 (
     cd plugins/enthusia-biomes
     if [ -f "./gradlew" ]; then
+        chmod +x gradlew
         ./gradlew shadowJar
     else
         gradle shadowJar
