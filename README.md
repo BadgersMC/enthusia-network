@@ -8,27 +8,29 @@
 
 <p align="center">
   <a href="https://github.com/BadgersMC/enthusia-network/actions/workflows/upstream-watch.yml"><img src="https://github.com/BadgersMC/enthusia-network/actions/workflows/upstream-watch.yml/badge.svg" alt="Upstream watch"></a>
-  <img src="https://img.shields.io/badge/plugins-18-C2410C" alt="18 plugins">
-  <img src="https://img.shields.io/badge/Minecraft-1.21-F5B841" alt="Minecraft 1.21">
-  <img src="https://img.shields.io/badge/Java-21-DC2626" alt="Java 21">
+  <img src="https://img.shields.io/badge/plugins-19-C2410C" alt="19 plugins">
+  <img src="https://img.shields.io/badge/core-Paper_26.2-F5B841" alt="Core: Paper 26.2">
+  <img src="https://img.shields.io/badge/core-Java_25-DC2626" alt="Core: Java 25">
   <img src="https://img.shields.io/badge/status-active-0A0A0A" alt="Active">
   <a href="https://github.com/BadgersMC"><img src="https://img.shields.io/badge/upstream-BadgersMC-F5B841" alt="Upstream: BadgersMC"></a>
   <a href="https://github.com/wsg138"><img src="https://img.shields.io/badge/upstream-wsg138-C2410C" alt="Upstream: wsg138"></a>
   <a href="https://github.com/Hermes-Enthusia"><img src="https://img.shields.io/badge/upstream-Hermes--Enthusia-0A0A0A" alt="Upstream: Hermes-Enthusia"></a>
+  <a href="https://github.com/Rosewood-Development"><img src="https://img.shields.io/badge/upstream-Rosewood-F5B841" alt="Upstream: Rosewood Development"></a>
 </p>
 
 ---
 
 **Enthusia Network** is a monorepo for the **Enthusia SMP** server plugin ecosystem. Every plugin lives in its own git submodule with independent history — this repo pins them together and provides a unified build.
 
-Built on the work of **[BadgersMC](https://github.com/BadgersMC)**, **[wsg138 (p2wn)](https://github.com/wsg138)**, and **[NotBorlyn](https://github.com/NotBorlyn)**.
+Built on the work of **[BadgersMC](https://github.com/BadgersMC)**, **[wsg138 (p2wn)](https://github.com/wsg138)**, **[NotBorlyn](https://github.com/NotBorlyn)**, and **[Rosewood Development](https://github.com/Rosewood-Development)**.
 
 ## Server Plugins
 
 | Plugin | Description | Author |
 |--------|-------------|--------|
 | [enthusia-advancements](plugins/enthusia-advancements) | Config-driven custom advancement trees (guilds, economy, combat) | Badger |
-| [luma-guilds](plugins/luma-guilds) | Guild system — claims, vaults, ranks, relations, progression | Badger |
+| [luma-guilds](plugins/luma-guilds) | Guild system — claims, vaults, ranks, relations, Chapter progression | Badger |
+| [rosechat](plugins/rosechat) | Chat platform - canonical Enthusia fork tracking Rosewood upstream | Rosewood Development + Enthusia |
 | [enthusia-market](plugins/enthusia-market) | Market stall + shop system with guild integration (replaces ItemShops + ARM-Bridge) | Badger |
 | [enthusia-biomes](plugins/enthusia-biomes) | Custom biome generation via NMS (paperweight) | Badger |
 | [luma-sg](plugins/luma-sg) | Survival Games minigame | Badger |
@@ -48,7 +50,8 @@ Built on the work of **[BadgersMC](https://github.com/BadgersMC)**, **[wsg138 (p
 
 ## What's in it
 
-- 🏰 **Guilds.** LumaGuilds — claims, vaults, ranks, relations, and progression, with guild-driven advancement trees listening in.
+- 🏰 **Guilds.** LumaGuilds — claims, vaults, ranks, relations, Chapter progression, weekly quests, and guild-driven advancement trees.
+- 💬 **Chat.** RoseChat - canonical `BadgersMC/Enthusia-RoseChat`, carrying EnthusiaStaff/moderation integrations while tracking Rosewood upstream.
 - 💰 **Economy.** EnthusiaCurrency's physical token economy with Vault integration, plus EnthusiaMarket's guild-integrated stall system.
 - ⚔️ **Combat & minigames.** MaceGuard's combat restrictions, WarzoneDuels' 1v1 duels, and LumaSG's Survival Games.
 - 🌋 **World.** EnthusiaBiomes' NMS custom biome generation.
@@ -63,9 +66,9 @@ Built on the work of **[BadgersMC](https://github.com/BadgersMC)**, **[wsg138 (p
 git clone --recurse-submodules https://github.com/BadgersMC/enthusia-network.git
 cd enthusia-network
 
-# Build the composite plugins (luma-guilds, market, advancements, luma-sg,
-# giveaway, votes) in dependency order
-./gradlew buildAll
+# Build everything through the repo helper. It builds the pinned canonical
+# Enthusia RoseChat artifact first, then the composite plugins and biomes.
+./scripts/build-all.sh
 
 # Build the standalone plugins individually (biomes needs Gradle 9.x;
 # the p2wn/wsg138 and donor plugins build from their own repos)
@@ -80,7 +83,6 @@ cd plugins/enthusia-biomes && ./gradlew shadowJar && cd ../..
 
 On Windows:
 ```cmd
-gradlew.bat buildAll
 scripts\build-all.bat
 ```
 
@@ -92,13 +94,23 @@ This repo uses **Gradle composite builds**. The root `settings.gradle.kts` inclu
 - A single `./gradlew buildAll` builds everything in dependency order
 - Each plugin retains its own `build.gradle.kts` and can still be built standalone
 
-### Why enthusia-biomes is separate
+### Separate builds: RoseChat and enthusia-biomes
 
-`enthusia-biomes` uses [paperweight](https://github.com/PaperMC/paperweight) 2.0.0-beta.19 which requires Gradle 9.x. All other plugins use Gradle 8.x. Mixing them in a single composite build causes plugin API version conflicts, so biomes is excluded from `includeBuild()` and built independently.
+`plugins/rosechat` is pinned to `BadgersMC/Enthusia-RoseChat` and uses its own Gradle build. It is built first so LumaGuilds compiles against the exact RoseChat API that will be deployed. It is intentionally not an `includeBuild()` member.
+
+`enthusia-biomes` uses [paperweight](https://github.com/PaperMC/paperweight) and is also built independently from the root composite.
+
+## RoseChat lineage
+
+RoseChat has one canonical Enthusia source here: **`BadgersMC/Enthusia-RoseChat`**. The monorepo pins a reviewed commit from that repository; Rosewood Development remains the external upstream whose changes are periodically reconciled into the Enthusia fork.
+
+RoseChat remains subject to its repository license and upstream terms. This monorepo stores only the Git submodule reference and build orchestration; RoseChat source and release artifacts remain in the canonical RoseChat repository/build pipeline.
+
+See [`ci/rosechat/README.md`](ci/rosechat/README.md) for build and dependency notes.
 
 ## Upstream Watch
 
-`.github/workflows/upstream-watch.yml` runs hourly and compares every submodule pin against its **true upstream main** (BadgersMC / wsg138 / Hermes-Enthusia — note some `.gitmodules` URLs point at BadgersMC forks of wsg138 repos). When a pin falls behind, it auto-files a `⬆️ <name> upstream:` issue with a diff summary; when a pin catches up, the issue auto-closes. Existing issues act as the "already seen" state (same pattern as the [Fuji](https://github.com/BadgersMC/Fuji) upstream watch).
+`.github/workflows/upstream-watch.yml` runs hourly and compares every submodule pin against its **true upstream main** (BadgersMC / wsg138 / Hermes-Enthusia / Rosewood Development — note some `.gitmodules` URLs point at BadgersMC forks of wsg138 repos). When a pin falls behind, it auto-files a `⬆️ <name> upstream:` issue with a diff summary; when a pin catches up, the issue auto-closes. Existing issues act as the "already seen" state (same pattern as the [Fuji](https://github.com/BadgersMC/Fuji) upstream watch).
 
 ## Working with Submodules
 
@@ -130,6 +142,7 @@ enthusia-network/
 ├── plugins/
 │   ├── enthusia-advancements/
 │   ├── luma-guilds/
+│   ├── rosechat/            # canonical Enthusia RoseChat pin
 │   ├── enthusia-market/
 │   ├── enthusia-biomes/
 │   ├── enthusia-currency/
@@ -158,6 +171,7 @@ Enthusia Network is a monorepo — every plugin stands on its original author's 
 - **[wsg138 (p2wn)](https://github.com/wsg138)** — author of the bulk of the server stack: EnthusiaCurrency, PlayTimePlugin, MaceGuard, FasterSleep, EnthusiaTeleport, EnthusiaTags, EnthusiaCommend, DiaryKeeper, WarzoneDuels, and the original EnthusiaAdvancements work. Most of the "fork" pins in this repo point at BadgersMC forks of p2wn's upstream repos.
 - **[NotBorlyn](https://github.com/NotBorlyn)** — author of EnthusiaDonor and EnthusiaDonorNPCs, now maintained on the [Hermes-Enthusia fork](https://github.com/Hermes-Enthusia).
 - **[BadgersMC](https://github.com/BadgersMC)** — LumaGuilds, EnthusiaMarket, EnthusiaBiomes, LumaSG, and the ongoing EnthusiaAdvancements development.
+- **[Rosewood Development](https://github.com/Rosewood-Development)** — RoseChat and RoseGarden, including the official Paper 26.2/Java 25 migration used as our canonical chat base.
 - The **PaperMC** ecosystem — [Paper](https://github.com/PaperMC/Paper), [Gradle](https://gradle.org/), [paperweight](https://github.com/PaperMC/paperweight), and every dependency the plugins build against.
 
 If you run a server on this stack, credit the plugin authors — they did the hard parts.

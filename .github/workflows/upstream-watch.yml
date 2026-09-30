@@ -1,7 +1,7 @@
 name: Upstream watch
 
 # Files a GitHub issue when any monorepo submodule pin is behind its true
-# upstream main branch (BadgersMC / wsg138 / Hermes-Enthusia). Mirrors the
+# upstream main branch (BadgersMC / wsg138 / Hermes-Enthusia / Rosewood). Mirrors the
 # Fuji upstream-watch pattern: existing issues with the per-submodule label
 # act as the "already seen" state, so no extra storage is needed. When a pin
 # catches up, the matching open issue is auto-closed.
@@ -35,6 +35,10 @@ jobs:
             repo: BadgersMC/LumaGuilds
             branch: main
             label: 'upstream:luma-guilds'
+          - name: rosechat
+            repo: BadgersMC/Enthusia-RoseChat
+            branch: master
+            label: 'upstream:rosechat'
           - name: enthusia-advancements
             repo: BadgersMC/EnthusiaAdvancements
             branch: main

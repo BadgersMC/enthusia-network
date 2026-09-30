@@ -19,3 +19,6 @@ _*.ps1
 
 # Claude
 .claude/
+
+# RoseChat license: do not commit redistributed binaries.
+ci/rosechat/*.jar
