@@ -117,23 +117,6 @@ jobs:
           mkdir -p plugins/luma-guilds/libs
           cp "$combatlogx_jar" plugins/luma-guilds/libs/CombatLogX-api.jar
 
-      - name: Set up JDK 25 for Paper 26.2 core
-        uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
-        with:
-          distribution: temurin
-          java-version: '25'
-
-      - name: Publish Nexus 2.3.0 dependency locally
-        run: |
-          set -euo pipefail
-          git clone https://github.com/BadgersMC/Nexus.git "$RUNNER_TEMP/nexus"
-          (
-            cd "$RUNNER_TEMP/nexus"
-            git checkout "$NEXUS_REF"
-            chmod +x gradlew
-            ./gradlew publishToMavenLocal --no-daemon --console=plain
-          )
-
       - name: Build pinned Enthusia RoseChat
         run: |
           set -euo pipefail
@@ -150,6 +133,23 @@ jobs:
           mkdir -p plugins/luma-guilds/libs
           # LumaGuilds still uses this legacy local filename for compileOnly resolution.
           cp "$rosechat_jar" plugins/luma-guilds/libs/RoseChat-RC-2.jar
+
+      - name: Set up JDK 25 for Paper 26.2 core
+        uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - name: Publish Nexus 2.3.0 dependency locally
+        run: |
+          set -euo pipefail
+          git clone https://github.com/BadgersMC/Nexus.git "$RUNNER_TEMP/nexus"
+          (
+            cd "$RUNNER_TEMP/nexus"
+            git checkout "$NEXUS_REF"
+            chmod +x gradlew
+            ./gradlew publishToMavenLocal --no-daemon --console=plain
+          )
 
       - name: Build LumaGuilds 3.0 core artifact
         run: |
