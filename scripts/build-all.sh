@@ -57,11 +57,11 @@ if [ -z "$combatlogx_jar" ]; then
 fi
 cp "$combatlogx_jar" plugins/luma-guilds/libs/CombatLogX-api.jar
 
-echo ">> Building official RoseChat 26.2 compile API..."
+echo ">> Building canonical Enthusia RoseChat..."
 (
     cd plugins/rosechat
     chmod +x gradlew
-    ./gradlew -I ../../ci/rosechat/simpleclans.init.gradle shadowJar --no-daemon
+    ./gradlew shadowJar --no-daemon
 )
 rosechat_jar=$(find plugins/rosechat/build/libs -maxdepth 1 -type f -name "RoseChat-*.jar" | head -1)
 if [ -z "$rosechat_jar" ]; then

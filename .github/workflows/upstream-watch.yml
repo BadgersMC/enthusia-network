@@ -36,7 +36,7 @@ jobs:
             branch: main
             label: 'upstream:luma-guilds'
           - name: rosechat
-            repo: Rosewood-Development/RoseChat
+            repo: BadgersMC/Enthusia-RoseChat
             branch: master
             label: 'upstream:rosechat'
           - name: enthusia-advancements

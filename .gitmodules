@@ -54,4 +54,4 @@
 	url = https://github.com/wsg138/WarzoneDuels.git
 [submodule "plugins/rosechat"]
 	path = plugins/rosechat
-	url = https://github.com/Rosewood-Development/RoseChat.git
+	url = https://github.com/BadgersMC/Enthusia-RoseChat.git

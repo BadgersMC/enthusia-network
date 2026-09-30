@@ -1,13 +1,9 @@
-# RoseChat upstream tracking
+# RoseChat source tracking
 
-`plugins/rosechat` points directly at `Rosewood-Development/RoseChat`, not an Enthusia fork.
+`plugins/rosechat` points to the canonical Enthusia source, `BadgersMC/Enthusia-RoseChat`.
 
-Current baseline: `179483128fa2020f3ad8b0e4192ada3d0a251c49` (`Add 26.2 support`). It builds against Paper 26.2 with Java 25.
+The pinned commit is the exact RoseChat source built by monorepo CI and staged as LumaGuilds' compile API. Rosewood Development remains the external upstream; upstream changes should be reconciled into the Enthusia fork first, then the monorepo pin should be advanced.
 
-Historical Enthusia forks (`wsg138/Enthusia-RoseChat` and `FainNeito/Enthusia-RoseChat`) are migration inputs only. They are not the canonical upstream.
+LumaGuilds 3.x owns and registers its RoseChat channel provider at runtime. RoseChat must not carry a second compiled copy of LumaGuilds internals.
 
-RoseChat's license permits local use/modification/merge but forbids publishing or redistributing the software. For that reason this public monorepo does not commit modified RoseChat source, patch payloads, or built RoseChat jars.
-
-The public CI build uses the pinned official source only as a compile dependency for LumaGuilds. The Enthusia runtime build is reconciled locally/private from this exact official baseline.
-
-`simpleclans.init.gradle` substitutes the SimpleClans 2.19.2 artifact from Modrinth because the canonical Maven endpoint can fail TLS negotiation. It does not modify RoseChat source.
+The historical `RoseChat-RC-2.jar` filename under LumaGuilds is only a local compile-path alias. Monorepo CI copies the freshly built canonical RoseChat jar to that filename until LumaGuilds removes the legacy filename assumption.

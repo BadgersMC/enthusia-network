@@ -30,7 +30,7 @@ Built on the work of **[BadgersMC](https://github.com/BadgersMC)**, **[wsg138 (p
 |--------|-------------|--------|
 | [enthusia-advancements](plugins/enthusia-advancements) | Config-driven custom advancement trees (guilds, economy, combat) | Badger |
 | [luma-guilds](plugins/luma-guilds) | Guild system — claims, vaults, ranks, relations, Chapter progression | Badger |
-| [rosechat](plugins/rosechat) | Chat platform — pinned directly to official Rosewood 26.2 upstream | Rosewood Development |
+| [rosechat](plugins/rosechat) | Chat platform - canonical Enthusia fork tracking Rosewood upstream | Rosewood Development + Enthusia |
 | [enthusia-market](plugins/enthusia-market) | Market stall + shop system with guild integration (replaces ItemShops + ARM-Bridge) | Badger |
 | [enthusia-biomes](plugins/enthusia-biomes) | Custom biome generation via NMS (paperweight) | Badger |
 | [luma-sg](plugins/luma-sg) | Survival Games minigame | Badger |
@@ -51,7 +51,7 @@ Built on the work of **[BadgersMC](https://github.com/BadgersMC)**, **[wsg138 (p
 ## What's in it
 
 - 🏰 **Guilds.** LumaGuilds — claims, vaults, ranks, relations, Chapter progression, weekly quests, and guild-driven advancement trees.
-- 💬 **Chat.** RoseChat — pinned directly to the official Rosewood 26.2 source; Enthusia runtime extensions are maintained separately under the upstream license.
+- 💬 **Chat.** RoseChat - canonical `BadgersMC/Enthusia-RoseChat`, carrying EnthusiaStaff/moderation integrations while tracking Rosewood upstream.
 - 💰 **Economy.** EnthusiaCurrency's physical token economy with Vault integration, plus EnthusiaMarket's guild-integrated stall system.
 - ⚔️ **Combat & minigames.** MaceGuard's combat restrictions, WarzoneDuels' 1v1 duels, and LumaSG's Survival Games.
 - 🌋 **World.** EnthusiaBiomes' NMS custom biome generation.
@@ -66,8 +66,8 @@ Built on the work of **[BadgersMC](https://github.com/BadgersMC)**, **[wsg138 (p
 git clone --recurse-submodules https://github.com/BadgersMC/enthusia-network.git
 cd enthusia-network
 
-# Build everything through the repo helper. It builds the pinned official
-# RoseChat 26.2 compile API first, then the composite plugins and biomes.
+# Build everything through the repo helper. It builds the pinned canonical
+# Enthusia RoseChat artifact first, then the composite plugins and biomes.
 ./scripts/build-all.sh
 
 # Build the standalone plugins individually (biomes needs Gradle 9.x;
@@ -96,15 +96,15 @@ This repo uses **Gradle composite builds**. The root `settings.gradle.kts` inclu
 
 ### Separate builds: RoseChat and enthusia-biomes
 
-`plugins/rosechat` is pinned directly to official Rosewood source and uses its own Gradle 9.x build. It is built first so LumaGuilds compiles against the exact 26.2 RoseChat API. It is intentionally not an `includeBuild()` member.
+`plugins/rosechat` is pinned to `BadgersMC/Enthusia-RoseChat` and uses its own Gradle build. It is built first so LumaGuilds compiles against the exact RoseChat API that will be deployed. It is intentionally not an `includeBuild()` member.
 
 `enthusia-biomes` uses [paperweight](https://github.com/PaperMC/paperweight) and is also built independently from the root composite.
 
 ## RoseChat lineage
 
-RoseChat has one canonical upstream here: **`Rosewood-Development/RoseChat`**. The monorepo currently pins commit `1794831` (`Add 26.2 support`). Historical `wsg138/Enthusia-RoseChat` and `FainNeito/Enthusia-RoseChat` forks are migration inputs only and must not become upstreams for new work.
+RoseChat has one canonical Enthusia source here: **`BadgersMC/Enthusia-RoseChat`**. The monorepo pins a reviewed commit from that repository; Rosewood Development remains the external upstream whose changes are periodically reconciled into the Enthusia fork.
 
-RoseChat's license permits local modification and merge but restricts publishing and redistribution. Because this repository is public, it does **not** commit modified RoseChat source, patch payloads, or RoseChat binaries. The public build uses the official pin as LumaGuilds' compile API; Enthusia-specific runtime extensions are reconciled privately/local from that exact base.
+RoseChat remains subject to its repository license and upstream terms. This monorepo stores only the Git submodule reference and build orchestration; RoseChat source and release artifacts remain in the canonical RoseChat repository/build pipeline.
 
 See [`ci/rosechat/README.md`](ci/rosechat/README.md) for build and dependency notes.
 
@@ -142,7 +142,7 @@ enthusia-network/
 ├── plugins/
 │   ├── enthusia-advancements/
 │   ├── luma-guilds/
-│   ├── rosechat/            # direct official Rosewood pin
+│   ├── rosechat/            # canonical Enthusia RoseChat pin
 │   ├── enthusia-market/
 │   ├── enthusia-biomes/
 │   ├── enthusia-currency/

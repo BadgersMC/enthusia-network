@@ -19,7 +19,7 @@ includeBuild("plugins/luma-sg")
 includeBuild("plugins/enthusia-giveaway")
 includeBuild("plugins/enthusia-votes")
 
-// RoseChat is pinned directly to Rosewood-Development/RoseChat and built separately.
+// RoseChat is pinned to BadgersMC/Enthusia-RoseChat and built separately.
 // It is used as LumaGuilds' compile API but remains outside the composite build so its
 // independent Gradle 9.x toolchain and upstream lifecycle stay intact.
 //

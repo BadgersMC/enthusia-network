@@ -134,13 +134,13 @@ jobs:
             ./gradlew publishToMavenLocal --no-daemon --console=plain
           )
 
-      - name: Build pinned official RoseChat 26.2 API
+      - name: Build pinned Enthusia RoseChat
         run: |
           set -euo pipefail
           (
             cd plugins/rosechat
             chmod +x gradlew
-            ./gradlew -I ../../ci/rosechat/simpleclans.init.gradle shadowJar --no-daemon --console=plain
+            ./gradlew shadowJar --no-daemon --console=plain
           )
           rosechat_jar="$(find plugins/rosechat/build/libs -maxdepth 1 -type f -name 'RoseChat-*.jar' | head -1)"
           test -n "$rosechat_jar" || {

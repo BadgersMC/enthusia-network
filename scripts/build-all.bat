@@ -65,9 +65,9 @@ if not defined COMBATLOGX_JAR (
 )
 copy /Y "%COMBATLOGX_JAR%" "plugins\luma-guilds\libs\CombatLogX-api.jar" >nul
 
-echo ^>^> Building official RoseChat 26.2 compile API...
+echo ^>^> Building canonical Enthusia RoseChat...
 pushd "plugins\rosechat"
-call gradlew.bat -I ..\..\ci\rosechat\simpleclans.init.gradle shadowJar --no-daemon
+call gradlew.bat shadowJar --no-daemon
 set "STEP_ERROR=!ERRORLEVEL!"
 popd
 if not "!STEP_ERROR!"=="0" goto :fail
