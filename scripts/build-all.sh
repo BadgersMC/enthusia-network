@@ -25,6 +25,14 @@ for plugin in diary-keeper enthusia-currency playtime-plugin enthusia-commend; d
     (cd "plugins/$plugin" && mvn -q -B package -DskipTests)
 done
 
+mapfile -t playtime_jars < <(find plugins/playtime-plugin/target -maxdepth 1 -type f \
+    -name 'playtime-plugin-*.jar' ! -name '*-sources.jar' ! -name '*-javadoc.jar')
+if [[ "${#playtime_jars[@]}" -ne 1 ]]; then
+    echo 'Expected one current Playtime artifact; clean its target directory before building.' >&2
+    exit 1
+fi
+export ENTHUSIAPLAYTIME_JAR="$PWD/${playtime_jars[0]}"
+
 echo ">> Verifying EnthusiaTags against the network renderer..."
 bash scripts/build-tags.sh
 

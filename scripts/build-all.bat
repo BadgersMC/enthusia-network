@@ -28,6 +28,13 @@ for %%P in (diary-keeper enthusia-currency playtime-plugin enthusia-commend) do 
     if not "!STEP_ERROR!"=="0" goto :fail
 )
 
+set "ENTHUSIAPLAYTIME_JAR="
+for /f "delims=" %%F in ('powershell -NoProfile -Command "$jars=@(Get-ChildItem -LiteralPath 'plugins\playtime-plugin\target' -Filter 'playtime-plugin-*.jar' ^| Where-Object { $_.Name -notlike '*-sources.jar' -and $_.Name -notlike '*-javadoc.jar' }); if($jars.Count -ne 1){exit 1}; $jars[0].FullName"') do set "ENTHUSIAPLAYTIME_JAR=%%F"
+if not defined ENTHUSIAPLAYTIME_JAR (
+    echo Expected one current Playtime artifact; clean its target directory before building.
+    goto :fail
+)
+
 echo ^>^> Staging EnthusiaPlaytime API for LumaGuilds...
 REM Build Tags before continuing so a successful network build cannot omit it.
 where bash >nul 2>nul

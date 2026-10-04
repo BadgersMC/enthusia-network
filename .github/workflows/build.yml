@@ -93,6 +93,10 @@ jobs:
       - name: Stage EnthusiaPlaytime API for LumaGuilds
         run: |
           set -euo pipefail
+          mapfile -t playtime_jars < <(find plugins/playtime-plugin/target -maxdepth 1 -type f \
+            -name 'playtime-plugin-*.jar' ! -name '*-sources.jar' ! -name '*-javadoc.jar')
+          test "${#playtime_jars[@]}" -eq 1
+          echo "ENTHUSIAPLAYTIME_JAR=$GITHUB_WORKSPACE/${playtime_jars[0]}" >> "$GITHUB_ENV"
           mkdir -p plugins/luma-guilds/libs "$RUNNER_TEMP/playtime-api"
           javac -d "$RUNNER_TEMP/playtime-api" \
             plugins/playtime-plugin/src/main/java/org/enthusia/playtime/api/PlaytimeService.java \
