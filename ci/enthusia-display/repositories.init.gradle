@@ -1,0 +1,9 @@
+// Scoped to the standalone EnthusiaDisplay build; retain the merged source bytes.
+allprojects {
+    repositories {
+        maven {
+            url = uri('https://repo.papermc.io/repository/maven-public/')
+            content { includeGroup('io.papermc.paper') }
+        }
+    }
+}

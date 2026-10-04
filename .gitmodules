@@ -55,3 +55,6 @@
 [submodule "plugins/rosechat"]
 	path = plugins/rosechat
 	url = https://github.com/BadgersMC/Enthusia-RoseChat.git
+[submodule "plugins/enthusia-display"]
+	path = plugins/enthusia-display
+	url = https://github.com/FainNeito/EnthusiaDisplay.git

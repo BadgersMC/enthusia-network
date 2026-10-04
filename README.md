@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="https://github.com/BadgersMC/enthusia-network/actions/workflows/upstream-watch.yml"><img src="https://github.com/BadgersMC/enthusia-network/actions/workflows/upstream-watch.yml/badge.svg" alt="Upstream watch"></a>
-  <img src="https://img.shields.io/badge/plugins-19-C2410C" alt="19 plugins">
+  <img src="https://img.shields.io/badge/plugins-20-C2410C" alt="20 plugins">
   <img src="https://img.shields.io/badge/core-Paper_26.2-F5B841" alt="Core: Paper 26.2">
   <img src="https://img.shields.io/badge/core-Java_25-DC2626" alt="Core: Java 25">
   <img src="https://img.shields.io/badge/status-active-0A0A0A" alt="Active">
@@ -47,6 +47,7 @@ Built on the work of **[BadgersMC](https://github.com/BadgersMC)**, **[wsg138 (p
 | [enthusia-donor-npcs](plugins/enthusia-donor-npcs) | Leaderboard donor NPCs (FancyNPCs-based) | Hermes-Enthusia fork (upstream: NotBorlyn) |
 | [enthusia-giveaway](plugins/enthusia-giveaway) | Scheduled giveaways with admin GUI and live winner announcements | Badger |
 | [enthusia-votes](plugins/enthusia-votes) | Vote rewards — streaks, vote parties, Raw Gold payouts | Badger |
+| [enthusia-display](plugins/enthusia-display) | Kotlin per-viewer nametag, TAB and chat preferences, with a Velocity companion | Enthusia |
 
 ## What's in it
 
@@ -96,11 +97,15 @@ This repo uses **Gradle composite builds**. The root `settings.gradle.kts` inclu
 - A single `./gradlew buildAll` builds everything in dependency order
 - Each plugin retains its own `build.gradle.kts` and can still be built standalone
 
-### Separate builds: RoseChat and enthusia-biomes
+### Separate builds: RoseChat, EnthusiaDisplay and enthusia-biomes
 
 `plugins/rosechat` is pinned to `BadgersMC/Enthusia-RoseChat` and uses its own Gradle build. It is built first so LumaGuilds compiles against the exact RoseChat API that will be deployed. It is intentionally not an `includeBuild()` member.
 
 `enthusia-biomes` uses [paperweight](https://github.com/PaperMC/paperweight) and is also built independently from the root composite.
+
+`plugins/enthusia-display` pins the reviewed merged standalone source at `1734f4329ecb8cd10203fed162e4c0bc3ae27a72`. Root `buildAll` invokes its standalone backend and proxy tests/JAR tasks through `buildDisplay`, using the freshly built pinned RoseChat API. It requires Python 3 and the patched UnlimitedNameTags 2.0.2 and PlaceholderAPI 2.12.3 compile JARs; set the dependency paths before running the build helpers. CI requires approved URLs and hashes. See [the Display build contract and evidence](ci/enthusia-display/README.md).
+
+The backend deploy helper selects only `EnthusiaDisplay.jar`. Its `EnthusiaDisplayProxy-0.1.5-test.jar` belongs on Velocity and requires separate deployment authorization. Building these artifacts does not activate the plugin or restart a server.
 
 ## RoseChat lineage
 
@@ -145,6 +150,7 @@ enthusia-network/
 │   ├── enthusia-advancements/
 │   ├── luma-guilds/
 │   ├── rosechat/            # canonical Enthusia RoseChat pin
+│   ├── enthusia-display/    # backend plus proxy/ companion
 │   ├── enthusia-market/
 │   ├── enthusia-biomes/
 │   ├── enthusia-currency/

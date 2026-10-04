@@ -15,6 +15,8 @@ on:
       - '.github/workflows/build.yml'
       - 'plugins/**'
       - 'ci/rosechat/**'
+      - 'ci/enthusia-display/**'
+      - 'scripts/build-display.py'
       - 'scripts/build-all.*'
       - 'scripts/build-tags.sh'
       - 'gradle/wrapper/**'
@@ -28,6 +30,8 @@ on:
       - '.github/workflows/build.yml'
       - 'plugins/**'
       - 'ci/rosechat/**'
+      - 'ci/enthusia-display/**'
+      - 'scripts/build-display.py'
       - 'scripts/build-all.*'
       - 'scripts/build-tags.sh'
       - 'gradle/wrapper/**'
@@ -54,6 +58,8 @@ jobs:
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           submodules: recursive
+          # Display is private; supply read access to this repo and its private submodule.
+          token: ${{ secrets.ENTHUSIADISPLAY_READ_TOKEN || github.token }}
           persist-credentials: false
 
       - name: Set up JDK 21
@@ -149,6 +155,27 @@ jobs:
       - name: Verify Tags with the pinned network pilot renderer
         run: bash scripts/build-tags.sh
 
+      - name: Prepare EnthusiaDisplay compile APIs
+        env:
+          UNT_URL: ${{ vars.ENTHUSIADISPLAY_UNT_JAR_URL }}
+          UNT_SHA256: ${{ vars.ENTHUSIADISPLAY_UNT_JAR_SHA256 }}
+          PAPI_URL: ${{ vars.ENTHUSIADISPLAY_PAPI_JAR_URL }}
+          PAPI_SHA256: ${{ vars.ENTHUSIADISPLAY_PAPI_JAR_SHA256 }}
+        run: |
+          set -euo pipefail
+          if [ -z "$UNT_URL" ] || [ -z "$UNT_SHA256" ] || [ -z "$PAPI_URL" ] || [ -z "$PAPI_SHA256" ]; then
+            echo "::error::Configure approved EnthusiaDisplay API URLs and SHA-256 repository variables; see ci/enthusia-display/README.md"
+            exit 1
+          fi
+          mkdir -p "$RUNNER_TEMP/display-api"
+          curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' "$UNT_URL" -o "$RUNNER_TEMP/display-api/UnlimitedNametags.jar"
+          curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' "$PAPI_URL" -o "$RUNNER_TEMP/display-api/PlaceholderAPI.jar"
+          printf '%s  %s\n' "$UNT_SHA256" "$RUNNER_TEMP/display-api/UnlimitedNametags.jar" | sha256sum --check
+          printf '%s  %s\n' "$PAPI_SHA256" "$RUNNER_TEMP/display-api/PlaceholderAPI.jar" | sha256sum --check
+          echo "ENTHUSIADISPLAY_UNT_JAR=$RUNNER_TEMP/display-api/UnlimitedNametags.jar" >> "$GITHUB_ENV"
+          echo "ENTHUSIADISPLAY_PAPI_JAR=$RUNNER_TEMP/display-api/PlaceholderAPI.jar" >> "$GITHUB_ENV"
+          echo "ENTHUSIADISPLAY_ROSECHAT_BUILT=true" >> "$GITHUB_ENV"
+
       - name: Publish Nexus 2.3.0 dependency locally
         run: |
           set -euo pipefail
@@ -201,4 +228,4 @@ jobs:
 
       - name: List built JARs
         run: |
-          find plugins/*/build/libs -name '*.jar' -not -name '*-dev*' -not -name '*-sources*' 2>/dev/null | sort
+          find plugins/*/build/libs plugins/enthusia-display/proxy/build/libs -name '*.jar' -not -name '*-dev*' -not -name '*-sources*' 2>/dev/null | sort

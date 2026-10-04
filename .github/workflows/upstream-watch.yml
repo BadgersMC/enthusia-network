@@ -27,6 +27,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - name: enthusia-display
+            repo: FainNeito/EnthusiaDisplay
+            branch: main
+            label: 'upstream:enthusia-display'
           # - name: Submodule path after plugins/
           #   repo: true upstream repo (org/name)
           #   branch: upstream default branch
@@ -112,6 +116,7 @@ jobs:
       - name: Check ${{ matrix.name }} vs ${{ matrix.repo }}
         env:
           GH_TOKEN: ${{ github.token }}
+          DISPLAY_READ_TOKEN: ${{ secrets.ENTHUSIADISPLAY_READ_TOKEN }}
           REPO: ${{ matrix.repo }}
           BRANCH: ${{ matrix.branch }}
           LABEL: ${{ matrix.label }}
@@ -128,7 +133,15 @@ jobs:
           pshort=${pinned:0:7}
 
           # Latest commit on the upstream branch
-          commit=$(gh api "repos/$REPO/commits/$BRANCH")
+          if [ "$NAME" = "enthusia-display" ]; then
+            if [ -z "$DISPLAY_READ_TOKEN" ]; then
+              echo "::error::ENTHUSIADISPLAY_READ_TOKEN is required to inspect the private Display upstream"
+              exit 1
+            fi
+            commit=$(GH_TOKEN="$DISPLAY_READ_TOKEN" gh api "repos/$REPO/commits/$BRANCH")
+          else
+            commit=$(gh api "repos/$REPO/commits/$BRANCH")
+          fi
           sha=$(jq -r '.sha' <<<"$commit")
           short=${sha:0:7}
           msg=$(jq -r '.commit.message | split("\n")[0]' <<<"$commit")
@@ -167,7 +180,11 @@ jobs:
           filelist=""
           if [ "$pshort" != "$short" ]; then
             compare="https://github.com/$REPO/compare/$pinned...$sha"
-            cmp=$(gh api "repos/$REPO/compare/$pinned...$sha" 2>/dev/null || echo '{}')
+            if [ "$NAME" = "enthusia-display" ]; then
+              cmp=$(GH_TOKEN="$DISPLAY_READ_TOKEN" gh api "repos/$REPO/compare/$pinned...$sha" 2>/dev/null || echo '{}')
+            else
+              cmp=$(gh api "repos/$REPO/compare/$pinned...$sha" 2>/dev/null || echo '{}')
+            fi
             ncommits=$(jq -r '.total_commits // 0' <<<"$cmp")
             add=$(jq -r '[.files[]?.additions] | add // 0' <<<"$cmp")
             del=$(jq -r '[.files[]?.deletions] | add // 0' <<<"$cmp")
