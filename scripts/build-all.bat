@@ -2,6 +2,7 @@
 setlocal EnableExtensions EnableDelayedExpansion
 REM Build all Enthusia plugins in dependency order.
 REM Requires: Git, Maven, and JDK 25.
+REM Tags verification also requires Git Bash, Python 3, and Node.js.
 REM Usage: scripts\build-all.bat [--clean]
 
 cd /d "%~dp0\.."
@@ -28,6 +29,15 @@ for %%P in (diary-keeper enthusia-currency playtime-plugin enthusia-commend) do 
 )
 
 echo ^>^> Staging EnthusiaPlaytime API for LumaGuilds...
+REM Build Tags before continuing so a successful network build cannot omit it.
+where bash >nul 2>nul
+if errorlevel 1 (
+    echo Git Bash is required for scripts/build-tags.sh
+    goto :fail
+)
+call bash scripts/build-tags.sh
+if errorlevel 1 goto :fail
+
 if exist "%DEPS_DIR%\playtime-api" rmdir /S /Q "%DEPS_DIR%\playtime-api"
 mkdir "%DEPS_DIR%\playtime-api" 2>nul
 if not exist "plugins\luma-guilds\libs" mkdir "plugins\luma-guilds\libs"

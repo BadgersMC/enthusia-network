@@ -25,6 +25,9 @@ for plugin in diary-keeper enthusia-currency playtime-plugin enthusia-commend; d
     (cd "plugins/$plugin" && mvn -q -B package -DskipTests)
 done
 
+echo ">> Verifying EnthusiaTags against the network renderer..."
+bash scripts/build-tags.sh
+
 echo ">> Staging EnthusiaPlaytime API for LumaGuilds..."
 rm -rf "$DEPS_DIR/playtime-api"
 mkdir -p "$DEPS_DIR/playtime-api" plugins/luma-guilds/libs

@@ -88,6 +88,8 @@ scripts\build-all.bat
 
 ## Build System
 
+The network build verifies `enthusia-tags` through `scripts/build-tags.sh`, including its pinned dependency bootstrap and the pilot API from the network renderer submodule. Git Bash, Python 3 and Node.js are required alongside Maven and Java 25 for this verification. The resulting pilot renderer is a separate artifact from the root Gradle renderer; see [active playtime integration gates](docs/playtime-integration.md) before selecting a runtime profile.
+
 This repo uses **Gradle composite builds**. The root `settings.gradle.kts` includes each plugin via `includeBuild()`, which means:
 
 - Plugins can reference each other by GAV coordinates instead of relative JAR paths

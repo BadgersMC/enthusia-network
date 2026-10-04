@@ -16,6 +16,7 @@ on:
       - 'plugins/**'
       - 'ci/rosechat/**'
       - 'scripts/build-all.*'
+      - 'scripts/build-tags.sh'
       - 'gradle/wrapper/**'
       - 'gradlew'
   pull_request:
@@ -28,6 +29,7 @@ on:
       - 'plugins/**'
       - 'ci/rosechat/**'
       - 'scripts/build-all.*'
+      - 'scripts/build-tags.sh'
       - 'gradle/wrapper/**'
       - 'gradlew'
   workflow_dispatch: {}
@@ -139,6 +141,9 @@ jobs:
         with:
           distribution: temurin
           java-version: '25'
+
+      - name: Verify Tags with the pinned network pilot renderer
+        run: bash scripts/build-tags.sh
 
       - name: Publish Nexus 2.3.0 dependency locally
         run: |
