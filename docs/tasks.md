@@ -1,5 +1,11 @@
 # Integration tasks
 
+- [x] INFRA-002: Pin merged Halloween asset tooling and verify it in network builds.
+  References: REQ-002; docs/implementation.md, EnthusiaSignature.
+  Evidence: FainNeito/ItemSignature PR #4, merged commit `2e60f42d29d67dc610d16d6564b2251e58731a13`; tools/resourcepack/test_prepare_halloween.py; resourcepack/halloween/requirements.txt; scripts/build-all.sh; scripts/build-all.bat; .github/workflows/build.yml.
+  SPEAR: Infrastructure work skips prove/engine because no plugin behavior changes. The pinned plugin's portable state and EARS tools govern this cycle. Architecture preserves authoritative source ownership, all other gitlinks, and the separation of asset placement from runtime activation.
+  Verification: Merged pinned source passed Maven clean verify (77 tests, zero failures/errors/skips), all nine importer regression checks, EARS validation, and whitespace checks. Exact-head combined network CI remains a merge gate; this record does not claim live/client activation. No plugin JAR will be uploaded for this asset addition.
+
 - [x] INFRA-001: Add reviewed EnthusiaSignature to network builds and monitoring.
   References: REQ-001; docs/implementation.md, EnthusiaSignature.
   Evidence: .gitmodules; scripts/build-all.sh; scripts/build-all.bat; .github/workflows/build.yml; .github/workflows/upstream-watch.yml; FainNeito/ItemSignature PR #3 and main build https://github.com/FainNeito/ItemSignature/actions/runs/37249409319; plugins/enthusia-signature/pom.xml and TESTING.md.

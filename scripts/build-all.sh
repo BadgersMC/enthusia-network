@@ -28,6 +28,7 @@ done
 
 echo ">> Verifying EnthusiaSignature (including tracker regression tests)..."
 (cd plugins/enthusia-signature && mvn -B -ntp clean verify)
+(cd plugins/enthusia-signature && python -m pip install -r resourcepack/halloween/requirements.txt && python -m unittest discover -s tools/resourcepack -p 'test_*.py' -v)
 
 mapfile -t playtime_jars < <(find plugins/playtime-plugin/target -maxdepth 1 -type f \
     -name 'playtime-plugin-*.jar' ! -name '*-sources.jar' ! -name '*-javadoc.jar')
