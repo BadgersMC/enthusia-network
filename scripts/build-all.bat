@@ -2,6 +2,7 @@
 setlocal EnableExtensions EnableDelayedExpansion
 REM Build all Enthusia plugins in dependency order.
 REM Requires: Git, Maven, and JDK 25.
+REM Tags verification also requires Git Bash, Python 3, and Node.js.
 REM Usage: scripts\build-all.bat [--clean]
 
 cd /d "%~dp0\.."
@@ -27,7 +28,23 @@ for %%P in (diary-keeper enthusia-currency playtime-plugin enthusia-commend) do 
     if not "!STEP_ERROR!"=="0" goto :fail
 )
 
+set "ENTHUSIAPLAYTIME_JAR="
+for /f "delims=" %%F in ('powershell -NoProfile -Command "$jars=@(Get-ChildItem -LiteralPath 'plugins\playtime-plugin\target' -Filter 'playtime-plugin-*.jar' ^| Where-Object { $_.Name -notlike '*-sources.jar' -and $_.Name -notlike '*-javadoc.jar' }); if($jars.Count -ne 1){exit 1}; $jars[0].FullName"') do set "ENTHUSIAPLAYTIME_JAR=%%F"
+if not defined ENTHUSIAPLAYTIME_JAR (
+    echo Expected one current Playtime artifact; clean its target directory before building.
+    goto :fail
+)
+
 echo ^>^> Staging EnthusiaPlaytime API for LumaGuilds...
+REM Build Tags before continuing so a successful network build cannot omit it.
+where bash >nul 2>nul
+if errorlevel 1 (
+    echo Git Bash is required for scripts/build-tags.sh
+    goto :fail
+)
+call bash scripts/build-tags.sh
+if errorlevel 1 goto :fail
+
 if exist "%DEPS_DIR%\playtime-api" rmdir /S /Q "%DEPS_DIR%\playtime-api"
 mkdir "%DEPS_DIR%\playtime-api" 2>nul
 if not exist "plugins\luma-guilds\libs" mkdir "plugins\luma-guilds\libs"
