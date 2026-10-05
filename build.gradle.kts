@@ -1,6 +1,20 @@
 // Root build for enthusia-network monorepo.
 // This file only provides convenience tasks — each plugin builds independently.
 
+tasks.register<Exec>("buildDisplay") {
+    description = "Test and package pinned EnthusiaDisplay backend and Velocity companion"
+    group = "enthusia"
+    onlyIf { System.getenv("ENTHUSIADISPLAY_SKIP") != "true" }
+    commandLine(listOf(System.getenv("PYTHON_BIN") ?: "python", "scripts/build-display.py") +
+        if (System.getenv("ENTHUSIADISPLAY_ROSECHAT_BUILT") == "true") listOf("--rosechat-built") else emptyList())
+}
+
+tasks.register<Exec>("cleanDisplay") {
+    group = "enthusia"
+    onlyIf { System.getenv("ENTHUSIADISPLAY_SKIP") != "true" }
+    commandLine(System.getenv("PYTHON_BIN") ?: "python", "scripts/build-display.py", "--clean-only")
+}
+
 tasks.register("buildAll") {
     description = "Build all Enthusia plugins (shadowJar where available)"
     group = "enthusia"
@@ -8,6 +22,7 @@ tasks.register("buildAll") {
     // Order matters: dependencies first, dependents last
     // enthusia-biomes excluded — requires Gradle 9.x (paperweight), build separately
     dependsOn(
+        "buildDisplay",
         gradle.includedBuild("luma-guilds").task(":shadowJar"),
         gradle.includedBuild("enthusia-market").task(":shadowJar"),
         gradle.includedBuild("enthusia-advancements").task(":shadowJar"),
@@ -22,6 +37,7 @@ tasks.register("cleanAll") {
     group = "enthusia"
 
     dependsOn(
+        "cleanDisplay",
         gradle.includedBuild("luma-guilds").task(":clean"),
         gradle.includedBuild("enthusia-market").task(":clean"),
         gradle.includedBuild("enthusia-advancements").task(":clean"),

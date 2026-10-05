@@ -58,3 +58,6 @@
 [submodule "plugins/enthusia-signature"]
 	path = plugins/enthusia-signature
 	url = https://github.com/FainNeito/ItemSignature.git
+[submodule "plugins/enthusia-display"]
+	path = plugins/enthusia-display
+	url = https://github.com/FainNeito/EnthusiaDisplay.git

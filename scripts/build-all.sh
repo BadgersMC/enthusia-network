@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Build all Enthusia plugins in dependency order.
-# Requires: Git, Maven, and JDK 25.
+# Requires: Git, Maven, Python 3, and discoverable JDKs 21 and 25.
+# Display compile dependencies: see ci/enthusia-display/README.md.
 # Usage: ./scripts/build-all.sh [--clean]
 
 set -euo pipefail
@@ -83,6 +84,7 @@ if [ -z "$rosechat_jar" ]; then
     exit 1
 fi
 cp "$rosechat_jar" plugins/luma-guilds/libs/RoseChat-RC-2.jar
+export ENTHUSIADISPLAY_ROSECHAT_BUILT=true
 
 echo ">> Building LumaGuilds 3 core artifact..."
 (

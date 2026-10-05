@@ -1,8 +1,9 @@
 @echo off
 setlocal EnableExtensions EnableDelayedExpansion
 REM Build all Enthusia plugins in dependency order.
-REM Requires: Git, Maven, and JDK 25.
-REM Tags verification also requires Git Bash, Python 3, and Node.js.
+REM Requires: Git, Maven, Python 3, and discoverable JDKs 21 and 25.
+REM Tags verification also requires Git Bash and Node.js.
+REM Display compile dependencies: see ci/enthusia-display/README.md.
 REM Usage: scripts\build-all.bat [--clean]
 
 cd /d "%~dp0\.."
@@ -102,6 +103,7 @@ if not defined ROSECHAT_JAR (
     goto :fail
 )
 copy /Y "%ROSECHAT_JAR%" "plugins\luma-guilds\libs\RoseChat-RC-2.jar" >nul
+set "ENTHUSIADISPLAY_ROSECHAT_BUILT=true"
 
 echo ^>^> Building LumaGuilds 3 core artifact...
 pushd "plugins\luma-guilds"
