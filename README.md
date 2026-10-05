@@ -104,6 +104,8 @@ This repo uses **Gradle composite builds**. The root `settings.gradle.kts` inclu
 
 Tracker removal remains disabled by default. Item data, MiniMessage signing, DiaryKeeper protection, and optional Nexo integration retain the upstream defaults. Native spear lunge support is capability-gated; live player acceptance is tracked in the plugin's `TESTING.md`.
 
+The pinned source also provides the [Halloween glyph importer](plugins/enthusia-signature/resourcepack/halloween/README.md). Build helpers and CI run its nine collision/preservation checks with Python and pinned PyYAML. Licensed images remain outside Git. The generated glyphs are excluded from guild emojis and need no Signature JAR upgrade; installing their files does not regenerate or activate Nexo's pack.
+
 `plugins/rosechat` is pinned to `BadgersMC/Enthusia-RoseChat` and uses its own Gradle build. It is built first so LumaGuilds compiles against the exact RoseChat API that will be deployed. It is intentionally not an `includeBuild()` member.
 
 `enthusia-biomes` uses [paperweight](https://github.com/PaperMC/paperweight) and is also built independently from the root composite.

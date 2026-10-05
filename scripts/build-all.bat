@@ -32,6 +32,11 @@ for %%P in (diary-keeper enthusia-currency playtime-plugin enthusia-commend) do 
 echo ^>^> Verifying EnthusiaSignature (including tracker regression tests)...
 pushd "plugins\enthusia-signature"
 call mvn -B -ntp clean verify
+if errorlevel 1 goto :signature_fail
+python -m pip install -r resourcepack/halloween/requirements.txt
+if errorlevel 1 goto :signature_fail
+python -m unittest discover -s tools/resourcepack -p "test_*.py" -v
+:signature_fail
 set "STEP_ERROR=!ERRORLEVEL!"
 popd
 if not "!STEP_ERROR!"=="0" goto :fail
