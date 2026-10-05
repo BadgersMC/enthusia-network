@@ -6,6 +6,11 @@
   SPEAR: Infrastructure work skips prove/engine because no plugin behavior changes. The pinned plugin's portable state and EARS tools govern this cycle. Architecture preserves authoritative source ownership, all other gitlinks, and the separation of asset placement from runtime activation.
   Verification: Merged pinned source passed Maven clean verify (77 tests, zero failures/errors/skips), all nine importer regression checks, EARS validation, and whitespace checks. Exact-head combined network CI remains a merge gate; this record does not claim live/client activation. No plugin JAR will be uploaded for this asset addition.
 
+- [x] INFRA-003: Replace the reviewed Tags candidate pin with canonical merged source.
+  References: NET-C2-02 in docs/chapter2-release-reconciliation.md; docs/implementation.md infrastructure ownership.
+  Evidence: wsg138/EnthusiaTags PR #23 merged as 28048ca64d460534fd8bac2d6295f7283b4aa27d; fetched origin/main; identical source tree to tested aa7a7d75507f1c880d7f81167f3b158884829eca. Only gitlink and evidence change. Behavioral prove/engine do not apply to an immutable build pin; hosted combined verification remains required and private Display must not be skipped for release acceptance.
+  Verification: candidate-to-merge Git tree diff is empty; EARS and git diff whitespace checks pass. No runtime imports changed. Public combined hosted CI will run on the new PR head; this task's completed pin reconciliation is not a complete release gate.
+
 - [x] INFRA-001: Add reviewed EnthusiaSignature to network builds and monitoring.
   References: REQ-001; docs/implementation.md, EnthusiaSignature.
   Evidence: .gitmodules; scripts/build-all.sh; scripts/build-all.bat; .github/workflows/build.yml; .github/workflows/upstream-watch.yml; FainNeito/ItemSignature PR #3 and main build https://github.com/FainNeito/ItemSignature/actions/runs/37249409319; plugins/enthusia-signature/pom.xml and TESTING.md.
