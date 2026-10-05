@@ -18,6 +18,7 @@ fi
 echo "=== Deploying Enthusia plugins to $TARGET ==="
 
 declare -A JARS=(
+    ["enthusia-display"]="EnthusiaDisplay.jar"
     ["luma-guilds"]="LumaGuilds-*.jar"
     ["enthusia-advancements"]="EnthusiaAdvancements-*.jar"
     ["enthusia-market"]="EnthusiaMarket-*.jar"
