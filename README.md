@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="https://github.com/BadgersMC/enthusia-network/actions/workflows/upstream-watch.yml"><img src="https://github.com/BadgersMC/enthusia-network/actions/workflows/upstream-watch.yml/badge.svg" alt="Upstream watch"></a>
-  <img src="https://img.shields.io/badge/plugins-20-C2410C" alt="20 plugins">
+  <img src="https://img.shields.io/badge/plugins-21-C2410C" alt="21 plugins">
   <img src="https://img.shields.io/badge/core-Paper_26.2-F5B841" alt="Core: Paper 26.2">
   <img src="https://img.shields.io/badge/core-Java_25-DC2626" alt="Core: Java 25">
   <img src="https://img.shields.io/badge/status-active-0A0A0A" alt="Active">
@@ -41,6 +41,7 @@ Built on the work of **[BadgersMC](https://github.com/BadgersMC)**, **[wsg138 (p
 | [enthusia-teleport](plugins/enthusia-teleport) | Teleportation system | p2wn |
 | [enthusia-tags](plugins/enthusia-tags) | Player tags / prefixes | p2wn |
 | [enthusia-commend](plugins/enthusia-commend) | Player commendation system | p2wn |
+| [enthusia-signature](plugins/enthusia-signature) | Permanent item signatures and item-bound stat trackers | FainNeito |
 | [diary-keeper](plugins/diary-keeper) | Player diary / journal system | p2wn |
 | [warzone-duels](plugins/warzone-duels) | 1v1 duels with WarzoneRotator integration | p2wn |
 | [enthusia-donor](plugins/enthusia-donor) | Donation perks, auto-link, SQLite-backed transactions | Hermes-Enthusia fork (upstream: NotBorlyn) |
@@ -94,10 +95,14 @@ The network build verifies `enthusia-tags` through `scripts/build-tags.sh`, incl
 This repo uses **Gradle composite builds**. The root `settings.gradle.kts` includes each plugin via `includeBuild()`, which means:
 
 - Plugins can reference each other by GAV coordinates instead of relative JAR paths
-- A single `./gradlew buildAll` builds everything in dependency order
+- `./gradlew buildAll` builds the included Gradle projects; the build helpers also verify standalone Maven plugins
 - Each plugin retains its own `build.gradle.kts` and can still be built standalone
 
-### Separate builds: RoseChat, EnthusiaDisplay and enthusia-biomes
+### Separate builds: EnthusiaSignature, RoseChat, EnthusiaDisplay and enthusia-biomes
+
+`plugins/enthusia-signature` is pinned to the reviewed `FainNeito/ItemSignature` repository. Both build helpers and CI run `mvn -B -ntp clean verify`, including its tracker regression suite. The shaded artifact is `plugins/enthusia-signature/target/EnthusiaSignature-1.3.0.jar`. Its Maven build stays outside the Gradle composite; `./gradlew buildAll` alone does not build Maven plugins. [Integration requirements and evidence](docs/tasks.md) document the pin and verification boundaries.
+
+Tracker removal remains disabled by default. Item data, MiniMessage signing, DiaryKeeper protection, and optional Nexo integration retain the upstream defaults. Native spear lunge support is capability-gated; live player acceptance is tracked in the plugin's `TESTING.md`.
 
 `plugins/rosechat` is pinned to `BadgersMC/Enthusia-RoseChat` and uses its own Gradle build. It is built first so LumaGuilds compiles against the exact RoseChat API that will be deployed. It is intentionally not an `includeBuild()` member.
 
@@ -161,6 +166,7 @@ enthusia-network/
 │   ├── enthusia-teleport/
 │   ├── enthusia-tags/
 │   ├── enthusia-commend/
+│   ├── enthusia-signature/ # Maven build: target/EnthusiaSignature-1.3.0.jar
 │   ├── diary-keeper/
 │   ├── warzone-duels/
 │   ├── enthusia-donor/

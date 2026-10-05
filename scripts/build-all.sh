@@ -26,6 +26,9 @@ for plugin in diary-keeper enthusia-currency playtime-plugin enthusia-commend; d
     (cd "plugins/$plugin" && mvn -q -B package -DskipTests)
 done
 
+echo ">> Verifying EnthusiaSignature (including tracker regression tests)..."
+(cd plugins/enthusia-signature && mvn -B -ntp clean verify)
+
 mapfile -t playtime_jars < <(find plugins/playtime-plugin/target -maxdepth 1 -type f \
     -name 'playtime-plugin-*.jar' ! -name '*-sources.jar' ! -name '*-javadoc.jar')
 if [[ "${#playtime_jars[@]}" -ne 1 ]]; then
@@ -141,4 +144,5 @@ echo ">> Building enthusia-biomes..."
 echo
 echo "=== Build Complete ==="
 echo "JARs:"
-find plugins/*/build/libs -name "*.jar" -not -name "*-dev*" -not -name "*-sources*" 2>/dev/null | sort
+find plugins -type f \( -path "*/build/libs/*.jar" -o -path "*/target/*.jar" \) \
+    ! -name "*-dev*" ! -name "*-sources*" ! -name "*-javadoc*" ! -name "original-*" | sort
