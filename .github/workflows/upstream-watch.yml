@@ -31,6 +31,10 @@ jobs:
           #   repo: true upstream repo (org/name)
           #   branch: upstream default branch
           #   label: GitHub label used for dedupe
+          - name: enthusia-signature
+            repo: FainNeito/ItemSignature
+            branch: main
+            label: 'upstream:enthusia-signature'
           - name: luma-guilds
             repo: BadgersMC/LumaGuilds
             branch: main

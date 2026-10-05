@@ -28,6 +28,13 @@ for %%P in (diary-keeper enthusia-currency playtime-plugin enthusia-commend) do 
     if not "!STEP_ERROR!"=="0" goto :fail
 )
 
+echo ^>^> Verifying EnthusiaSignature (including tracker regression tests)...
+pushd "plugins\enthusia-signature"
+call mvn -B -ntp clean verify
+set "STEP_ERROR=!ERRORLEVEL!"
+popd
+if not "!STEP_ERROR!"=="0" goto :fail
+
 set "ENTHUSIAPLAYTIME_JAR="
 for /f "delims=" %%F in ('powershell -NoProfile -Command "$jars=@(Get-ChildItem -LiteralPath 'plugins\playtime-plugin\target' -Filter 'playtime-plugin-*.jar' ^| Where-Object { $_.Name -notlike '*-sources.jar' -and $_.Name -notlike '*-javadoc.jar' }); if($jars.Count -ne 1){exit 1}; $jars[0].FullName"') do set "ENTHUSIAPLAYTIME_JAR=%%F"
 if not defined ENTHUSIAPLAYTIME_JAR (

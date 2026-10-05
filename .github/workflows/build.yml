@@ -90,6 +90,10 @@ jobs:
             echo "::endgroup::"
           done
 
+      - name: Verify EnthusiaSignature and its tracker regressions
+        working-directory: plugins/enthusia-signature
+        run: mvn -B -ntp clean verify
+
       - name: Stage EnthusiaPlaytime API for LumaGuilds
         run: |
           set -euo pipefail
@@ -201,4 +205,5 @@ jobs:
 
       - name: List built JARs
         run: |
-          find plugins/*/build/libs -name '*.jar' -not -name '*-dev*' -not -name '*-sources*' 2>/dev/null | sort
+          find plugins -type f \( -path '*/build/libs/*.jar' -o -path '*/target/*.jar' \) \
+            ! -name '*-dev*' ! -name '*-sources*' ! -name '*-javadoc*' ! -name 'original-*' | sort
