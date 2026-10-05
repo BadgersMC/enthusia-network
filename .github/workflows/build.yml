@@ -52,15 +52,41 @@ jobs:
       NEXUS_REF: 057836befb9e35aa252cf90104030ec86f28b33f
       USE_MAVEN_LOCAL_NEXUS: 'true'
       COMBATLOGX_API_REF: 4812e85af1264ebb27da481b9d9cbf8de0956e53
+      # Fork PRs cannot receive the private Display read token. Build the public
+      # monorepo there and reserve full Display validation for trusted runs.
+      ENTHUSIADISPLAY_SKIP: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
     steps:
-      - name: Checkout monorepo with submodules
+      - name: Checkout monorepo
         # v4 — pinned to commit SHA
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          submodules: recursive
-          # Display is private; supply read access to this repo and its private submodule.
-          token: ${{ secrets.ENTHUSIADISPLAY_READ_TOKEN || github.token }}
+          submodules: false
           persist-credentials: false
+
+      - name: Checkout public submodules
+        run: |
+          set -euo pipefail
+          while read -r _ path; do
+            if [ "$path" = "plugins/enthusia-display" ]; then
+              continue
+            fi
+            git submodule update --init --recursive -- "$path"
+          done < <(git config --file .gitmodules --get-regexp '^submodule\..*\.path$')
+
+      - name: Checkout private EnthusiaDisplay submodule
+        if: env.ENTHUSIADISPLAY_SKIP != 'true'
+        env:
+          DISPLAY_READ_TOKEN: ${{ secrets.ENTHUSIADISPLAY_READ_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$DISPLAY_READ_TOKEN" ]; then
+            echo "::error::ENTHUSIADISPLAY_READ_TOKEN is required for trusted Display validation"
+            exit 1
+          fi
+          auth_key="url.https://x-access-token:${DISPLAY_READ_TOKEN}@github.com/.insteadOf"
+          git config --local "$auth_key" https://github.com/
+          trap 'git config --local --unset-all "$auth_key" || true' EXIT
+          git submodule update --init --recursive -- plugins/enthusia-display
 
       - name: Set up JDK 21
         # v4 — pinned to commit SHA
@@ -76,6 +102,10 @@ jobs:
           missing=0
           while read -r path; do
             if [ -z "$path" ]; then
+              continue
+            fi
+            if [ "$ENTHUSIADISPLAY_SKIP" = "true" ] && [ "$path" = "plugins/enthusia-display" ]; then
+              echo "::warning::Skipping private EnthusiaDisplay checkout/build for fork PR"
               continue
             fi
             if [ ! -f "$path/build.gradle.kts" ] && [ ! -f "$path/build.gradle" ] && [ ! -f "$path/pom.xml" ]; then
@@ -156,6 +186,7 @@ jobs:
         run: bash scripts/build-tags.sh
 
       - name: Prepare EnthusiaDisplay compile APIs
+        if: env.ENTHUSIADISPLAY_SKIP != 'true'
         env:
           UNT_URL: ${{ vars.ENTHUSIADISPLAY_UNT_JAR_URL }}
           UNT_SHA256: ${{ vars.ENTHUSIADISPLAY_UNT_JAR_SHA256 }}

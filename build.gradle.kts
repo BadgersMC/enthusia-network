@@ -4,12 +4,14 @@
 tasks.register<Exec>("buildDisplay") {
     description = "Test and package pinned EnthusiaDisplay backend and Velocity companion"
     group = "enthusia"
+    onlyIf { System.getenv("ENTHUSIADISPLAY_SKIP") != "true" }
     commandLine(listOf(System.getenv("PYTHON_BIN") ?: "python", "scripts/build-display.py") +
         if (System.getenv("ENTHUSIADISPLAY_ROSECHAT_BUILT") == "true") listOf("--rosechat-built") else emptyList())
 }
 
 tasks.register<Exec>("cleanDisplay") {
     group = "enthusia"
+    onlyIf { System.getenv("ENTHUSIADISPLAY_SKIP") != "true" }
     commandLine(System.getenv("PYTHON_BIN") ?: "python", "scripts/build-display.py", "--clean-only")
 }
 
