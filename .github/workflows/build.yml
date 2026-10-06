@@ -1,8 +1,9 @@
 name: Build
 
 # Builds the monorepo composite (luma-guilds, market, advancements, luma-sg,
-# giveaway, votes) on every push/PR. Verifies submodule pins are present and
-# the composite resolves. Mirrors the Fuji build workflow.
+# giveaway, votes) plus standalone artifacts such as EnthusiaToiletFlush on
+# every push/PR. Verifies submodule pins are present and the build graph resolves.
+# Mirrors the Fuji build workflow.
 
 on:
   push:
