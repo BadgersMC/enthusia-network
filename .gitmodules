@@ -61,3 +61,6 @@
 [submodule "plugins/enthusia-display"]
 	path = plugins/enthusia-display
 	url = https://github.com/FainNeito/EnthusiaDisplay.git
+[submodule "plugins/enthusia-toilet-flush"]
+	path = plugins/enthusia-toilet-flush
+	url = https://github.com/BadgersMC/EnthusiaToiletFlush.git

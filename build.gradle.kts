@@ -1,6 +1,32 @@
 // Root build for enthusia-network monorepo.
 // This file only provides convenience tasks — each plugin builds independently.
 
+val nestedGradle = if (System.getProperty("os.name").startsWith("Windows", ignoreCase = true)) {
+    "gradlew.bat"
+} else {
+    "./gradlew"
+}
+
+tasks.register<Exec>("buildToiletFlush") {
+    description = "Test and package EnthusiaToiletFlush Velocity and Paper companion artifacts"
+    group = "enthusia"
+    workingDir("plugins/enthusia-toilet-flush")
+    commandLine(
+        nestedGradle,
+        ":velocity:check",
+        ":velocity:shadowJar",
+        ":paper-companion:check",
+        ":paper-companion:shadowJar",
+        "--no-daemon",
+    )
+}
+
+tasks.register<Exec>("cleanToiletFlush") {
+    group = "enthusia"
+    workingDir("plugins/enthusia-toilet-flush")
+    commandLine(nestedGradle, "clean", "--no-daemon")
+}
+
 tasks.register<Exec>("buildDisplay") {
     description = "Test and package pinned EnthusiaDisplay backend and Velocity companion"
     group = "enthusia"
@@ -23,6 +49,7 @@ tasks.register("buildAll") {
     // enthusia-biomes excluded — requires Gradle 9.x (paperweight), build separately
     dependsOn(
         "buildDisplay",
+        "buildToiletFlush",
         gradle.includedBuild("luma-guilds").task(":shadowJar"),
         gradle.includedBuild("enthusia-market").task(":shadowJar"),
         gradle.includedBuild("enthusia-advancements").task(":shadowJar"),
@@ -38,6 +65,7 @@ tasks.register("cleanAll") {
 
     dependsOn(
         "cleanDisplay",
+        "cleanToiletFlush",
         gradle.includedBuild("luma-guilds").task(":clean"),
         gradle.includedBuild("enthusia-market").task(":clean"),
         gradle.includedBuild("enthusia-advancements").task(":clean"),

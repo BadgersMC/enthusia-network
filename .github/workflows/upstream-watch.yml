@@ -103,6 +103,10 @@ jobs:
             repo: wsg138/WarzoneDuels
             branch: main
             label: 'upstream:warzone-duels'
+          - name: enthusia-toilet-flush
+            repo: wsg138/EnthusiaToiletFlush
+            branch: main
+            label: 'upstream:enthusia-toilet-flush'
           - name: enthusia-giveaway
             repo: BadgersMC/EnthusiaGiveaway
             branch: main
@@ -158,15 +162,32 @@ jobs:
           gh label create "$LABEL" -R "$GITHUB_REPOSITORY" --color '1F6FEB' \
             --description "$NAME upstream commits" 2>/dev/null || true
 
-          # Up to date? Close any stale open issue and stop.
+          # Up to date? Close any stale open issue and stop. Fork-backed pins may
+          # carry Enthusia-only commits on top of true upstream, so exact SHA
+          # equality is not sufficient: if the canonical submodule repository
+          # reports upstream HEAD as an ancestor of the pinned commit, the pin
+          # already contains that upstream work.
+          pin_url=$(git config --file .gitmodules --get "submodule.plugins/$NAME.url" || true)
+          pin_repo="${pin_url#https://github.com/}"
+          pin_repo="${pin_repo%.git}"
+          contains_upstream=false
           if [ "$pinned" = "$sha" ]; then
+            contains_upstream=true
+          elif [ -n "$pin_repo" ] && [ "$pin_repo" != "$REPO" ]; then
+            relation=$(gh api "repos/$pin_repo/compare/$sha...$pinned" --jq '.status' 2>/dev/null || true)
+            if [ "$relation" = "ahead" ] || [ "$relation" = "identical" ]; then
+              contains_upstream=true
+            fi
+          fi
+
+          if [ "$contains_upstream" = "true" ]; then
             open=$(gh issue list -R "$GITHUB_REPOSITORY" --state open --label "$LABEL" \
                      --json number --jq '.[].number' || true)
             for n in $open; do
               gh issue close "$n" -R "$GITHUB_REPOSITORY" \
-                --comment "✅ Submodule pin is up to date with $REPO main (${short})." || true
+                --comment "✅ Submodule pin contains $REPO $BRANCH (${short})." || true
             done
-            echo "plugins/$NAME is up to date ($short)."
+            echo "plugins/$NAME contains current upstream $short."
             exit 0
           fi
 
