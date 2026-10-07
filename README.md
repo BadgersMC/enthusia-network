@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="https://github.com/BadgersMC/enthusia-network/actions/workflows/upstream-watch.yml"><img src="https://github.com/BadgersMC/enthusia-network/actions/workflows/upstream-watch.yml/badge.svg" alt="Upstream watch"></a>
-  <img src="https://img.shields.io/badge/plugins-22-C2410C" alt="22 plugins">
+  <img src="https://img.shields.io/badge/plugins-25-C2410C" alt="25 plugins">
   <img src="https://img.shields.io/badge/core-Paper_26.2-F5B841" alt="Core: Paper 26.2">
   <img src="https://img.shields.io/badge/core-Java_25-DC2626" alt="Core: Java 25">
   <img src="https://img.shields.io/badge/status-active-0A0A0A" alt="Active">
@@ -45,6 +45,9 @@ Built on the work of **[BadgersMC](https://github.com/BadgersMC)**, **[wsg138 (p
 | [diary-keeper](plugins/diary-keeper) | Player diary / journal system | p2wn |
 | [warzone-duels](plugins/warzone-duels) | 1v1 duels with WarzoneRotator integration | p2wn |
 | [enthusia-toilet-flush](plugins/enthusia-toilet-flush) | Graceful scheduled backend, proxy, and full-network restarts with drain/rejoin queue | BadgersMC + p2wn |
+| [enthusia-holidays](plugins/enthusia-holidays) | Reusable holiday events: collectible hunts, Advent calendar, Secret Santa and holiday guild menu themes | FainNeito |
+| [enthusia-friends](plugins/enthusia-friends) | Friends, player profiles and Block Everywhere across chat, mail, teleports and duels (Paper + Velocity) | FainNeito |
+| [enthusia-express](plugins/enthusia-express) | Player mail: packages, letters and announcements, with block lists and an event delivery API | FainNeito |
 | [enthusia-donor](plugins/enthusia-donor) | Donation perks, auto-link, SQLite-backed transactions | Hermes-Enthusia fork (upstream: NotBorlyn) |
 | [enthusia-donor-npcs](plugins/enthusia-donor-npcs) | Leaderboard donor NPCs (FancyNPCs-based) | Hermes-Enthusia fork (upstream: NotBorlyn) |
 | [enthusia-giveaway](plugins/enthusia-giveaway) | Scheduled giveaways with admin GUI and live winner announcements | Badger |
@@ -61,7 +64,8 @@ Built on the work of **[BadgersMC](https://github.com/BadgersMC)**, **[wsg138 (p
 - 🎮 **Life.** Playtime tracking, teleportation, tags, commendations, diary/journal, faster sleep — the daily-server QoL stack.
 - 🎁 **Donations.** Donor perks and leaderboard NPCs, maintained on the Hermes-Enthusia fork.
 - 🚽 **Operations.** EnthusiaToiletFlush coordinates scheduled backend, proxy, and full-network restarts with graceful draining, maintenance mode, and queued rejoin.
-- 🎉 **Events.** Scheduled giveaways with live winner announcements, and vote rewards (streaks, vote parties, Raw Gold payouts).
+- 🎉 **Events.** Scheduled giveaways with live winner announcements, vote rewards (streaks, vote parties, Raw Gold payouts), and EnthusiaHolidays' seasonal hunts, Advent calendar and Secret Santa.
+- 🤝 **Social.** EnthusiaFriends' friends list, profiles and Block Everywhere, plus EnthusiaExpress player mail.
 
 ## Quick Start
 
@@ -100,7 +104,7 @@ This repo uses **Gradle composite builds**. The root `settings.gradle.kts` inclu
 - `./gradlew buildAll` builds the included Gradle projects; the build helpers also verify standalone Maven plugins
 - Each plugin retains its own `build.gradle.kts` and can still be built standalone
 
-### Separate builds: EnthusiaSignature, RoseChat, EnthusiaDisplay, EnthusiaToiletFlush and enthusia-biomes
+### Separate builds: EnthusiaSignature, RoseChat, EnthusiaDisplay, EnthusiaToiletFlush, EnthusiaHolidays, EnthusiaFriends, EnthusiaExpress and enthusia-biomes
 
 `plugins/enthusia-signature` is pinned to the reviewed `FainNeito/ItemSignature` repository. Both build helpers and CI run `mvn -B -ntp clean verify`, including its tracker regression suite. The shaded artifact is `plugins/enthusia-signature/target/EnthusiaSignature-1.3.0.jar`. Its Maven build stays outside the Gradle composite; `./gradlew buildAll` alone does not build Maven plugins. [Integration requirements and evidence](docs/tasks.md) document the pin and verification boundaries.
 
@@ -111,6 +115,8 @@ The pinned source also provides the [Halloween glyph importer](plugins/enthusia-
 `plugins/rosechat` is pinned to `BadgersMC/Enthusia-RoseChat` and uses its own Gradle build. It is built first so LumaGuilds compiles against the exact RoseChat API that will be deployed. It is intentionally not an `includeBuild()` member.
 
 `plugins/enthusia-toilet-flush` is pinned to the canonical `BadgersMC/EnthusiaToiletFlush` repository while upstream-watch tracks p2wn's `wsg138/EnthusiaToiletFlush` as its true upstream. Root `buildAll` invokes the plugin's own wrapper through `buildToiletFlush`, running both Velocity and Paper-companion checks before packaging both shaded JARs. The Velocity artifact belongs on the proxy only; the Paper companion belongs on each managed backend. The generic backend deploy helper intentionally does not auto-deploy this dual-target pair.
+
+`plugins/enthusia-holidays`, `plugins/enthusia-friends` and `plugins/enthusia-express` are pinned to their canonical `FainNeito` repositories. Root `buildAll` runs each plugin's own wrapper through `buildHolidays`, `buildFriends` (Paper 26.2 target) and `buildExpress`, which test and package them. EnthusiaHolidays and EnthusiaFriends are private: CI checks them out with the `ENTHUSIA_PRIVATE_PLUGINS_READ_TOKEN` secret on trusted runs and skips them on fork PRs, as it does EnthusiaDisplay. EnthusiaFriends ships a Paper backend JAR and a Velocity proxy JAR, so the generic backend deploy helper leaves it to manual deployment; it deploys EnthusiaHolidays and EnthusiaExpress.
 
 `enthusia-biomes` uses [paperweight](https://github.com/PaperMC/paperweight) and is also built independently from the root composite.
 
@@ -176,6 +182,9 @@ enthusia-network/
 │   ├── diary-keeper/
 │   ├── warzone-duels/
 │   ├── enthusia-toilet-flush/ # Velocity restart coordinator + Paper companion
+│   ├── enthusia-holidays/  # private
+│   ├── enthusia-friends/   # private; Paper backend + Velocity proxy
+│   ├── enthusia-express/
 │   ├── enthusia-donor/
 │   ├── enthusia-donor-npcs/
 │   ├── enthusia-giveaway/

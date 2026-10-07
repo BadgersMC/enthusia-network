@@ -26,6 +26,8 @@ declare -A JARS=(
     ["luma-sg"]="LumaSG-*.jar"
     ["enthusia-giveaway"]="EnthusiaGiveaway-*.jar"
     ["enthusia-votes"]="EnthusiaVotes-*.jar"
+    ["enthusia-holidays"]="EnthusiaHolidays-*.jar"
+    ["enthusia-express"]="EnthusiaExpress-*.jar"
 )
 
 copied=0
@@ -33,7 +35,7 @@ for plugin in "${!JARS[@]}"; do
     pattern="plugins/$plugin/build/libs/${JARS[$plugin]}"
     # Exclude dev/sources JARs
     jar=$(find plugins/$plugin/build/libs -maxdepth 1 -name "${JARS[$plugin]}" \
-          -not -name "*-dev*" -not -name "*-sources*" -not -name "*-all*" 2>/dev/null | head -1)
+          -not -name "*-dev*" -not -name "*-sources*" -not -name "*-all*" -not -name "*-plain*" 2>/dev/null | head -1)
 
     if [ -n "$jar" ]; then
         cp "$jar" "$TARGET/"
