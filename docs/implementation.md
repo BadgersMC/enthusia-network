@@ -1,5 +1,31 @@
 # Integration architecture
 
+## Standalone operational and Discord builds
+
+The network's platform helpers and CI supply a Gradle init script that excludes
+only the org.geysermc namespace from JitPack. The plugin-declared OpenCollab
+origins and all dependency versions remain intact; unrelated Nexus/JitPack
+lookups remain enabled. The hook applies to included Gradle projects as well
+as the root. Plugin source and standalone canonical builds are not rewritten.
+
+Hosted CI installs Apache Maven 3.9.11 from Maven Central with a committed
+SHA-512 checksum before any Maven build. This reproduces the locally verified
+tool version instead of inheriting runner-image changes. StartupGuardian's
+tests, Checkstyle, PMD/CPD and SpotBugs all remain enabled. No plugin dependency
+or implementation changes are made by this infrastructure selection.
+
+`plugins/enthusia-autoclicker` pins wsg138/EnthusiaAutoClicker, but verification
+selects only `server-plugin/`, not the root client-mod Gradle build. Java 21
+Maven clean verify, PMD 3.26.0 and the canonical public API/no-Bukkit-or-JUnit
+packaging assertions run before artifact provenance is written. No client mod
+is copied to a backend. This is build ownership, not live runtime approval.
+
+The network owns immutable pins for `wsg138/StartupGuardian`, `FainNeito/DiscordSRV` and `FainNeito/InteractiveChat-DiscordSRV-Addon`. Keep all three outside the Gradle composite: StartupGuardian requires Maven on Java 21; the Discord forks use their own Gradle/Maven lifecycles on Java 25. `scripts/build-standalone.py` verifies a clean gitlink checkout, selects the actual required Java installation, invokes the canonical quality gate and records ignored artifact provenance. Root buildAll/cleanAll invoke it; both platform helpers already call those tasks. Neither plugin source nor stored player state, permissions, configuration or server processes change.
+
+DiscordSRV and the add-on are backend plugins, not Velocity replacements. The add-on pins 2026.1.2.0 and requires the corresponding real InteractiveChat dependency; no unpublished 2026.1.3.0 dependency, stub API or binary overlay is introduced. Its full reactor includes 26.2 and 26.3 adapters and executable presentation proofs. Runtime InteractiveChat backend/proxy coordination, EnthusiaStaff service compatibility, Discord notification/rendering and vanish/staffmode privacy acceptance remain deployment gates.
+
+These artifacts are intentionally excluded from the existing automatic deploy helper. A new build entry is not approval to replace production files or activate StartupGuardian's whitelist/restart policies. Preserve existing Display private access and the separate Holidays/Friends trusted-build gates in PR #168.
+
 ## Layer Dependency Rules
 
 The monorepo owns infrastructure orchestration and immutable Git submodule pins. Plugin domain/application/platform code remains in each authoritative repository. This change introduces no application imports or runtime adapters.

@@ -1,5 +1,24 @@
 # Monorepo integration requirements
 
+### REQ-003 — Standalone canonical plugin builds
+
+WHEN a network Gradle build resolves org.geysermc dependencies THE SYSTEM SHALL exclude JitPack from their lookup while retaining the plugin-declared OpenCollab repositories, dependency versions and other JitPack dependency lookups.
+
+WHEN hosted network verification runs THE SYSTEM SHALL select checksum-verified
+Apache Maven 3.9.11, matching the locally verified canonical quality gates,
+rather than inheriting an unversioned runner tool. All static checks and tests
+remain mandatory; this requirement changes build infrastructure only.
+
+WHEN the network build runs THE SYSTEM SHALL verify and package clean pinned StartupGuardian, DiscordSRV, InteractiveChat Discord add-on and EnthusiaServerAutoClicker source using each repository's canonical quality gate and required Java version.
+
+IF a required toolchain, clean source pin, artifact, or executed regression evidence is unavailable THEN THE SYSTEM SHALL fail verification without skipping quality gates or substituting binary overlays.
+
+Acceptance: preserve all existing pins and private build gates; StartupGuardian uses Java 21 and Maven clean verify, DiscordSRV uses Java 25 and Gradle clean test shadowJar spotlessCheck, and the add-on uses Java 25 and the complete Maven clean verify reactor. Record source versions, hashes and test evidence. Server operations and automatic deployment remain outside this integration.
+
+The AutoClicker repository SHALL build only its server-plugin directory on Java
+21, run Maven clean verify and PMD 3.26.0, retain both public evidence API classes,
+and reject packaged Bukkit/JUnit classes. Its client mod is not a server artifact.
+
 ### REQ-001 — EnthusiaSignature build pin
 
 WHEN the network build runs THE SYSTEM SHALL verify and package the reviewed EnthusiaSignature submodule with its tests enabled, retain all existing plugin pins, and report its shaded artifact.

@@ -64,3 +64,15 @@
 [submodule "plugins/enthusia-toilet-flush"]
 	path = plugins/enthusia-toilet-flush
 	url = https://github.com/BadgersMC/EnthusiaToiletFlush.git
+[submodule "plugins/startup-guardian"]
+	path = plugins/startup-guardian
+	url = https://github.com/wsg138/StartupGuardian.git
+[submodule "plugins/discordsrv"]
+	path = plugins/discordsrv
+	url = https://github.com/FainNeito/DiscordSRV.git
+[submodule "plugins/interactivechat-discord-addon"]
+	path = plugins/interactivechat-discord-addon
+	url = https://github.com/FainNeito/InteractiveChat-DiscordSRV-Addon.git
+[submodule "plugins/enthusia-autoclicker"]
+	path = plugins/enthusia-autoclicker
+	url = https://github.com/wsg138/EnthusiaAutoClicker.git

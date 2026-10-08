@@ -129,7 +129,7 @@ fi
 export ENTHUSIAMARKET_JAR="$PWD/$enthusiamarket_jar"
 
 echo ">> Building composite plugins..."
-./gradlew buildAll
+./gradlew -I scripts/network-repositories.init.gradle buildAll
 
 echo ">> Building enthusia-biomes..."
 (

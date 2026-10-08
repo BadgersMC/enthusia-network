@@ -27,6 +27,22 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - name: enthusia-autoclicker
+            repo: wsg138/EnthusiaAutoClicker
+            branch: main
+            label: 'upstream:enthusia-autoclicker'
+          - name: startup-guardian
+            repo: wsg138/StartupGuardian
+            branch: main
+            label: 'upstream:startup-guardian'
+          - name: discordsrv
+            repo: FainNeito/DiscordSRV
+            branch: master
+            label: 'upstream:discordsrv'
+          - name: interactivechat-discord-addon
+            repo: FainNeito/InteractiveChat-DiscordSRV-Addon
+            branch: master
+            label: 'upstream:interactivechat-discord-addon'
           - name: enthusia-display
             repo: FainNeito/EnthusiaDisplay
             branch: main

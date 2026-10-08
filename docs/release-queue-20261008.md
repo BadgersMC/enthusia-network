@@ -1,0 +1,80 @@
+# Release queue snapshot — 2026-10-08
+
+This source/check audit supersedes the earlier handoff where explicitly noted.
+It is not a refreshed production JAR inventory or runtime acceptance record.
+No upstream merges or server operations are authorized by this source task.
+
+## Monorepo
+
+- Follow-up: user-authorized owner add-on #2 merged as
+  `e04e2dbdddd8a8136c1572cf087ef89bbfc7c6c6`. Network #169 updates only that
+  add-on pin; its fresh exact-head CI remains required. This supersedes the
+  unmerged add-on gate below. Network #169 stays open; no server action.
+
+- Canonical main remains `559bfabc2187ab796a3be889f032383a8041f819`.
+- [PR #168](https://github.com/BadgersMC/enthusia-network/pull/168) remains open,
+  head `d60f4c9aa81e9bd143238d03337b07f373b66b14`. Hosted Build
+  [37662677269](https://github.com/BadgersMC/enthusia-network/actions/runs/37662677269)
+  passed, but explicitly skipped private Display, Holidays and Friends checkout
+  and Display API preparation. An authorized trusted build needs the read-only
+  private-plugin token plus existing Display inputs; secret presence was not
+  inspected and absence is not inferred from the skipped fork run.
+- Playtime remains pinned to `ffd2abaa63b259a1d3466eb16da81cf5db4b9539`, the
+  still-open upstream #27 head. A passing candidate build is not merged release
+  provenance. Do not silently roll back the API or substitute another fork.
+- RoseChat is owned by `BadgersMC/Enthusia-RoseChat` in this network; wsg138's
+  #21/#22 cannot simply be used as this gitlink without lineage reconciliation.
+
+## Pending upstream source and checks
+
+All PRs below remain open and unmerged at this snapshot.
+
+| Repository | PRs | Current gate |
+| --- | --- | --- |
+| wsg138/EnthusiaTeleport | #19, #20 | Codacy success; hosted Build/artifact workflows action_required |
+| wsg138/WarzoneDuels | #22 | latest test/verify successes; Codacy action_required; earlier failed runs also exist |
+| wsg138/WarzoneDuels | #23 | test/verify workflows and Codacy action_required; includes #22 ancestry |
+| BadgersMC/LumaGuilds | #207, #208 | current build/Codacy checks pass; review/maintainer merge remains |
+| wsg138/EnthusiaTags | #24–#29 | current verify/artifact/Codacy gates pass; review/maintainer merge remains |
+| wsg138/MaceGuard | #47 | Codacy success; Build/analysis workflows action_required |
+| BadgersMC/EnthusiaMarket | #197 | Codacy success; build/quality workflows action_required |
+| wsg138/Enthusia-RoseChat | #21, #22 | draft; hosted Build action_required |
+| wsg138/EnthusiaStaff | #339 | draft and conflicting; current hosted coverage/runtime/Codacy checks pass |
+| wsg138/PlayTimePlugin | #27 | Codacy success; hosted Build action_required |
+
+Market #197 belongs to BadgersMC, not wsg138. Newer heads include Tags #29
+`254c8f8`, LumaGuilds #208 `3933595`, Staff #339 `58fe8f3`; earlier test evidence
+must not be assigned to these heads without verification. Green automation does
+not establish human approval or permission to merge.
+
+## Missing source integrations
+
+This change adds canonical merged StartupGuardian, the explicitly selected
+owner Discord forks, and the server-only AutoClicker build. Network #169 remains
+blocked by its add-on's duplicate Maven model; owner add-on PR #2 repairs the
+source and must land before bumping the merged pin. Other names still need
+source/build reconciliation:
+
+- EnthusiaStaff: wsg138 source exists, but paired RoseChat integration and #339
+  conflict must be resolved before a release pin.
+- EnthusiaMapShields: local checkout remote is FainNeito/EnthusiaMapShields;
+  source reconciliation of the newer local build remains a separate gate.
+- EnthusiaFrontier and EnthusiaLoreItems: public wsg138 sources found; inspect
+  their independent build/asset/companion contracts before integration.
+- EnthusiaEvents: public wsg138 source found; preserve its test-only placement.
+- EnthusiaKOTH: [upstream #11](https://github.com/wsg138/EnthusiaKOTH/pull/11)
+  repairs system guild-bank dispatch on head 65ed709c. All 167 local tests pass,
+  including nine adapter regressions. Hosted upstream Build awaits maintainer
+  approval; review, merge and live guild-bank acceptance remain separate gates.
+- LumaTrivia: [upstream #56](https://github.com/BadgersMC/LumaTrivia/pull/56)
+  adds exact companion input and hosted verification on head 8b3be2bb. Actual
+  pinned network RoseChat RC-4 compilation passes all 41 tests, as do default and
+  environment-selected builds. Owner CI and upstream Codacy pass; upstream
+  workflow execution still awaits approval.
+  No feature gitlink was added; see standalone-build-verification.md.
+- EnthusiaServerAutoClicker: found inside wsg138/EnthusiaAutoClicker/server-plugin;
+  new merged a29dac93 pin verifies Maven/PMD/API packaging, with 39 tests.
+
+Production/Test/proxy inventories, loaded artifact provenance and actual client
+acceptance still require fresh read-only evidence. Filename dates and `-test`
+labels alone neither prove content nor determine whether source is merged.

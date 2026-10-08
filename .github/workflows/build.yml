@@ -18,6 +18,9 @@ on:
       - 'ci/rosechat/**'
       - 'ci/enthusia-display/**'
       - 'scripts/build-display.py'
+      - 'scripts/build-standalone.py'
+      - 'scripts/network-repositories.init.gradle'
+      - 'scripts/test_build_standalone.py'
       - 'scripts/build-all.*'
       - 'scripts/build-tags.sh'
       - 'gradle/wrapper/**'
@@ -33,6 +36,9 @@ on:
       - 'ci/rosechat/**'
       - 'ci/enthusia-display/**'
       - 'scripts/build-display.py'
+      - 'scripts/build-standalone.py'
+      - 'scripts/network-repositories.init.gradle'
+      - 'scripts/test_build_standalone.py'
       - 'scripts/build-all.*'
       - 'scripts/build-tags.sh'
       - 'gradle/wrapper/**'
@@ -109,12 +115,25 @@ jobs:
               echo "::warning::Skipping private EnthusiaDisplay checkout/build for fork PR"
               continue
             fi
-            if [ ! -f "$path/build.gradle.kts" ] && [ ! -f "$path/build.gradle" ] && [ ! -f "$path/pom.xml" ]; then
+            if [ ! -f "$path/build.gradle.kts" ] && [ ! -f "$path/build.gradle" ] && [ ! -f "$path/pom.xml" ] && [ ! -f "$path/server-plugin/pom.xml" ]; then
               echo "::error::submodule $path not checked out"
               missing=1
             fi
           done <<< "$paths"
           exit $missing
+
+      - name: Set up verified Maven 3.9.11
+        run: |
+          set -euo pipefail
+          archive="$RUNNER_TEMP/apache-maven-3.9.11-bin.tar.gz"
+          curl --fail --silent --show-error --location --retry 3 --proto '=https' --proto-redir '=https' \
+            https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.11/apache-maven-3.9.11-bin.tar.gz -o "$archive"
+          printf '%s  %s\n' \
+            bcfe4fe305c962ace56ac7b5fc7a08b87d5abd8b7e89027ab251069faebee516b0ded8961445d6d91ec1985dfe30f8153268843c89aa392733d1a3ec956c9978 \
+            "$archive" | sha512sum --check
+          tar -xzf "$archive" -C "$RUNNER_TEMP"
+          "$RUNNER_TEMP/apache-maven-3.9.11/bin/mvn" --version
+          echo "$RUNNER_TEMP/apache-maven-3.9.11/bin" >> "$GITHUB_PATH"
 
       - name: Build Maven plugin dependencies
         run: |
@@ -141,6 +160,9 @@ jobs:
         run: |
           python -m pip install -r resourcepack/halloween/requirements.txt
           python -m unittest discover -s tools/resourcepack -p 'test_*.py' -v
+
+      - name: Verify standalone build guards
+        run: python -m unittest discover -s scripts -p 'test_build_standalone.py' -v
 
       - name: Stage EnthusiaPlaytime API for LumaGuilds
         run: |
@@ -271,7 +293,7 @@ jobs:
           java-version: '21'
 
       - name: Build composite plugins
-        run: ./gradlew buildAll -Dorg.gradle.java.installations.fromEnv=JAVA_HOME_21_X64,JAVA_HOME_25_X64
+        run: ./gradlew -I scripts/network-repositories.init.gradle buildAll -Dorg.gradle.java.installations.fromEnv=JAVA_HOME_21_X64,JAVA_HOME_25_X64
 
       - name: List built JARs
         run: |

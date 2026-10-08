@@ -1,5 +1,65 @@
 # Integration tasks
 
+- [ ] INFRA-007: Route Geyser lookups away from unrelated JitPack metadata.
+  References: REQ-003; run 37804344757; scripts/network-repositories.init.gradle.
+  Spec/proof: Votes compileClasspath resolution fails on JitPack timing out for
+  org.geysermc.geyser:api:2.4.2-SNAPSHOT before task execution. Pinned Votes
+  already declares OpenCollab; preserve those origins and all versions/pins.
+  Engine: no gameplay change; network init-script content filter excludes only
+  org.geysermc groups from JitPack. CI and both platform helpers pass the script.
+  Architecture/refine: Gradle 8.10 standalone and network Gradle 9.1 included
+  resolution probes pass for unchanged Geyser/Floodgate/Cumulus dependencies.
+  Full Votes production classpath, compile and shadowJar pass in the Gradle 9.1
+  included probe. The broader test run fails compiling existing LayerRulesTest
+  against Konsist 0.17.3 (predicate/API misuse); it is not a test pass. Source
+  repair belongs in canonical Votes, separate from this unchanged network pin.
+  EARS/YAML/whitespace pass; fresh network CI remains pending.
+
+- [ ] INFRA-006: Reproduce the verified Maven toolchain in hosted builds.
+  References: REQ-003; hosted run 37800713821; standalone-build-verification.md.
+  Spec: select checksum-verified Maven 3.9.11 before any Maven invocation.
+  Proof: the retry passes all add-on modules/proofs, then fails loading
+  StartupGuardian SpotBugs with VelocityEngine.setProperties API incompatibility.
+  Runner image 20261004.327.1 supplies Maven 3.10.0; the local clean gate uses
+  Maven 3.9.11. Controlled local comparison reproduces the same API error on
+  Maven 3.10.0 and passes the identical SpotBugs goal on Maven 3.9.11; red/green
+  logs and portable SPEAR state record this result. Hosted proof remains.
+  Engine: no gameplay change; infrastructure selects the previously verified
+  Maven release without skipping or modifying static checks/tests.
+  Architecture/refine: pinned official archive SHA-512 verified; YAML/order,
+  EARS and whitespace pass. Clean Maven 3.9.11 StartupGuardian verification
+  passes locally, including SpotBugs. Hosted exact-head verification remains.
+
+- [ ] INFRA-005: Add canonical server AutoClicker build and verify remaining repository contracts.
+  References: REQ-003; docs/standalone-build-verification.md.
+  Source: wsg138/EnthusiaAutoClicker main a29dac939687ed9cac1004d1e76c80bfd2666357.
+  Local server-plugin Maven clean verify passes 39 tests and PMD 3.26.0.
+  Build integration must retain nested project selection and API packaging gates.
+  SPEAR: infrastructure-only; no gameplay engine changes. Helper regressions,
+  exact-head CI/review and Paper/client acceptance are distinct gates.
+  KOTH main f80adebb10f5be991abe20de41e505ebceb3d5a5 passes 158 tests;
+  Trivia main a293dafb3427567ed40b72f20ba706b98b463202 passes 41 tests.
+  Both canonical Java 21 clean test/shadowJar builds passed using Nexus 2.1.1,
+  not the network's 2.3.0 substitution. KOTH uses a excluded compile shim and
+  Trivia a checked-in legacy RoseChat API; real pinned companion contracts must
+  be verified before integrating their builds. No server changes.
+  Follow-up delivered: KOTH upstream #11 fixes system-bank dispatch, with nine
+  new adapter regressions and 167 total passing local tests. Trivia upstream
+  #56 verifies the actual cf8a7b04 network RoseChat artifact; explicit property,
+  environment and default builds pass 41 tests. Review/hosted checks and source
+  merge remain gates; no unmerged KOTH/Trivia gitlinks were added.
+
+- [ ] INFRA-004: Add canonical standalone operational and Discord plugin builds.
+  Follow-up: add-on owner #2 merged by explicit authorization as e04e2dbd.
+  Its clean network-helper build passes all 46 modules and 55 proof checks;
+  canonical merged hosted run 37796559490 also passes. Network 37796972150
+  clears the duplicate model but fails a legacy CraftBukkit download with
+  Connection reset. Exact-head combined and trusted/private gates remain open.
+  References: REQ-003; docs/implementation.md, Standalone operational and Discord builds.
+  Evidence: network main 559bfabc2187ab796a3be889f032383a8041f819 lacks these modules. StartupGuardian main 97e5032489f6dfa03c8878a725f6025f121a87e3 is merged PR #8 and requires Java [21,22)/Maven >=3.9. Owner DiscordSRV master 318ced607368d34d9fde7c238afea7deb6ab654d and add-on master 746cf2e33de06dc9e0dd36ebc1668fea5ce6e42f each contain merged owner PR #1. Their canonical hosted workflows prescribe full Gradle verification and the complete 46-module Maven reactor respectively. The owner explicitly selected both forks for monorepo ownership.
+  SPEAR: infrastructure routing skips plugin behavioral prove/engine because no plugin implementation changes. Verify helper failure paths, exact pins, orchestration, canonical quality gates and artifacts. Root has no independent EARS/state tools; reuse the existing Signature portable helpers. Full network/private hosted checks and live/client acceptance remain separate gates. No production access or deployment.
+  Verification: all three clean pinned canonical builds passed locally. StartupGuardian 1.1.1: 77 tests, zero failures/errors/skips, complete Maven static-analysis gates. DiscordSRV 1.30.5: 14 tests, zero failures/errors/skips, clean test/shadowJar/spotlessCheck. Add-on 2026.1.2.0: all 46 Maven reactor modules passed, executing 21 item-name, 24 plain-chat and 10 Staff visibility checks. Helper regression, EARS and whitespace validation pass; source and artifact SHA-256 evidence is recorded in docs/standalone-build-verification.md. Exact-head network CI/review and trusted private combined build remain pending; this task is not marked completed or approved for production.
+
 - [x] INFRA-002: Pin merged Halloween asset tooling and verify it in network builds.
   References: REQ-002; docs/implementation.md, EnthusiaSignature.
   Evidence: FainNeito/ItemSignature PR #4, merged commit `2e60f42d29d67dc610d16d6564b2251e58731a13`; tools/resourcepack/test_prepare_halloween.py; resourcepack/halloween/requirements.txt; scripts/build-all.sh; scripts/build-all.bat; .github/workflows/build.yml.
