@@ -2,6 +2,7 @@ import importlib.util
 from pathlib import Path
 import tempfile
 import unittest
+import zipfile
 from unittest.mock import patch
 
 SPEC = importlib.util.spec_from_file_location("standalone", Path(__file__).with_name("build-standalone.py"))
@@ -10,6 +11,31 @@ SPEC.loader.exec_module(standalone)
 
 
 class StandaloneBuildTest(unittest.TestCase):
+    def test_autoclicker_selects_server_plugin_not_client_root(self):
+        self.assertEqual(standalone.project_path("enthusia-autoclicker"),
+                         standalone.ROOT / "plugins/enthusia-autoclicker/server-plugin")
+
+    def test_autoclicker_requires_pmd_after_verify(self):
+        with patch.object(standalone.shutil, "which", return_value="mvn"):
+            self.assertEqual(standalone.followup_commands("enthusia-autoclicker"),
+                             [["mvn", "-B", "-ntp", "org.apache.maven.plugins:maven-pmd-plugin:3.26.0:check"]])
+
+    def test_autoclicker_packaging_guards(self):
+        required = {"net/enthusia/autoclicker/server/api/ClientHandshakeSnapshot.class",
+                    "net/enthusia/autoclicker/server/api/EnthusiaAutoClickerClientApi.class"}
+        with tempfile.TemporaryDirectory() as folder:
+            jar = Path(folder) / "plugin.jar"
+            for entries in (required, required | {"org/bukkit/Player.class"},
+                            required | {"org/junit/Test.class"}, set()):
+                with zipfile.ZipFile(jar, "w") as archive:
+                    for name in entries:
+                        archive.writestr(name, b"test")
+                if entries == required:
+                    standalone.verify_packaging(jar, "enthusia-autoclicker")
+                else:
+                    with self.assertRaises(ValueError):
+                        standalone.verify_packaging(jar, "enthusia-autoclicker")
+
     def test_missing_java_is_not_skipped(self):
         with patch.dict(standalone.os.environ, {}, clear=True):
             with self.assertRaisesRegex(ValueError, "JAVA_HOME_21_X64"):

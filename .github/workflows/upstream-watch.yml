@@ -27,6 +27,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - name: enthusia-autoclicker
+            repo: wsg138/EnthusiaAutoClicker
+            branch: main
+            label: 'upstream:enthusia-autoclicker'
           - name: startup-guardian
             repo: wsg138/StartupGuardian
             branch: main

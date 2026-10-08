@@ -73,3 +73,6 @@
 [submodule "plugins/interactivechat-discord-addon"]
 	path = plugins/interactivechat-discord-addon
 	url = https://github.com/FainNeito/InteractiveChat-DiscordSRV-Addon.git
+[submodule "plugins/enthusia-autoclicker"]
+	path = plugins/enthusia-autoclicker
+	url = https://github.com/wsg138/EnthusiaAutoClicker.git

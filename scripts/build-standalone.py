@@ -17,7 +17,35 @@ PLUGINS = {
     "startup-guardian": (21, "maven", "target/StartupGuardian.jar"),
     "discordsrv": (25, "gradle", "build/libs/DiscordSRV-*.jar"),
     "interactivechat-discord-addon": (25, "maven", "common/target/InteractiveChatDiscordSrvAddon-*.jar"),
+    "enthusia-autoclicker": (21, "maven", "target/EnthusiaServerAutoClicker.jar"),
 }
+
+
+def project_path(plugin):
+    path = ROOT / "plugins" / plugin
+    return path / "server-plugin" if plugin == "enthusia-autoclicker" else path
+
+
+def followup_commands(plugin):
+    if plugin == "enthusia-autoclicker":
+        executable = shutil.which("mvn.cmd" if os.name == "nt" else "mvn")
+        if not executable:
+            raise ValueError("Maven is required on PATH; do not skip verification")
+        return [[executable, "-B", "-ntp", "org.apache.maven.plugins:maven-pmd-plugin:3.26.0:check"]]
+    return []
+
+
+def verify_packaging(path, plugin):
+    if plugin != "enthusia-autoclicker":
+        return
+    with zipfile.ZipFile(path) as archive:
+        names = set(archive.namelist())
+    required = {"net/enthusia/autoclicker/server/api/ClientHandshakeSnapshot.class",
+                "net/enthusia/autoclicker/server/api/EnthusiaAutoClickerClientApi.class"}
+    if not required.issubset(names):
+        raise ValueError("AutoClicker artifact is missing public client evidence APIs")
+    if any(name.startswith(("org/bukkit/", "org/junit/")) for name in names):
+        raise ValueError("AutoClicker artifact packages provided server/test APIs")
 
 
 def git(*args):
@@ -85,11 +113,12 @@ def evidence(path, plugin, log):
     return totals
 
 
-def artifact(path, pattern):
+def artifact(path, pattern, plugin=None):
     jars = [p for p in path.glob(pattern) if not any(
         marker in p.name for marker in ("-original", "original-", "-sources", "-javadoc"))]
     if len(jars) != 1:
         raise ValueError(f"Expected one shaded artifact for {pattern}, found {len(jars)}")
+    verify_packaging(jars[0], plugin)
     with zipfile.ZipFile(jars[0]) as jar:
         descriptor = jar.read("plugin.yml").decode("utf-8")
     version = re.search(r"^version:\s*['\"]?([^\s'\"]+)", descriptor, re.MULTILINE)
@@ -100,7 +129,7 @@ def artifact(path, pattern):
 
 
 def build(plugin, clean_only=False):
-    path = ROOT / "plugins" / plugin
+    path = project_path(plugin)
     major, kind, pattern = PLUGINS[plugin]
     output = ROOT / "build" / "standalone"
     output.mkdir(parents=True, exist_ok=True)
@@ -109,20 +138,22 @@ def build(plugin, clean_only=False):
     source = pin(plugin)
     env = java_environment(major)
     args = command(path, kind, clean_only)
+    commands = [args] + ([] if clean_only else followup_commands(plugin))
     with (output / f"{plugin}.log").open("w", encoding="utf-8") as log_file:
-        with subprocess.Popen(args, cwd=path, env=env, stdout=subprocess.PIPE,
-                              stderr=subprocess.STDOUT, text=True, encoding="utf-8", errors="replace") as process:
-            for line in process.stdout:
-                print(line, end="", flush=True)
-                log_file.write(line)
-            if process.wait():
-                raise subprocess.CalledProcessError(process.returncode, args)
+        for invocation in commands:
+            with subprocess.Popen(invocation, cwd=path, env=env, stdout=subprocess.PIPE,
+                                  stderr=subprocess.STDOUT, text=True, encoding="utf-8", errors="replace") as process:
+                for line in process.stdout:
+                    print(line, end="", flush=True)
+                    log_file.write(line)
+                if process.wait():
+                    raise subprocess.CalledProcessError(process.returncode, invocation)
     if pin(plugin) != source:
         raise ValueError("Source changed during verification")
     if not clean_only:
-        result = {"source_commit": source, "java": major, "command": args,
+        result = {"source_commit": source, "java": major, "command": args, "commands": commands,
                   "evidence": evidence(path, plugin, (output / f"{plugin}.log").read_text(encoding="utf-8")),
-                  "artifact": artifact(path, pattern)}
+                  "artifact": artifact(path, pattern, plugin)}
         provenance.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
         print(json.dumps(result, indent=2))
 

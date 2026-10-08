@@ -1,5 +1,19 @@
 # Integration tasks
 
+- [ ] INFRA-005: Add canonical server AutoClicker build and verify remaining repository contracts.
+  References: REQ-003; docs/standalone-build-verification.md.
+  Source: wsg138/EnthusiaAutoClicker main a29dac939687ed9cac1004d1e76c80bfd2666357.
+  Local server-plugin Maven clean verify passes 39 tests and PMD 3.26.0.
+  Build integration must retain nested project selection and API packaging gates.
+  SPEAR: infrastructure-only; no gameplay engine changes. Helper regressions,
+  exact-head CI/review and Paper/client acceptance are distinct gates.
+  KOTH main f80adebb10f5be991abe20de41e505ebceb3d5a5 passes 158 tests;
+  Trivia main a293dafb3427567ed40b72f20ba706b98b463202 passes 41 tests.
+  Both canonical Java 21 clean test/shadowJar builds passed using Nexus 2.1.1,
+  not the network's 2.3.0 substitution. KOTH uses a excluded compile shim and
+  Trivia a checked-in legacy RoseChat API; real pinned companion contracts must
+  be verified before integrating their builds. No server changes.
+
 - [ ] INFRA-004: Add canonical standalone operational and Discord plugin builds.
   References: REQ-003; docs/implementation.md, Standalone operational and Discord builds.
   Evidence: network main 559bfabc2187ab796a3be889f032383a8041f819 lacks these modules. StartupGuardian main 97e5032489f6dfa03c8878a725f6025f121a87e3 is merged PR #8 and requires Java [21,22)/Maven >=3.9. Owner DiscordSRV master 318ced607368d34d9fde7c238afea7deb6ab654d and add-on master 746cf2e33de06dc9e0dd36ebc1668fea5ce6e42f each contain merged owner PR #1. Their canonical hosted workflows prescribe full Gradle verification and the complete 46-module Maven reactor respectively. The owner explicitly selected both forks for monorepo ownership.

@@ -31,11 +31,14 @@ Built on the work of **[BadgersMC](https://github.com/BadgersMC)**, **[wsg138 (p
 The network also pins [StartupGuardian](https://github.com/wsg138/StartupGuardian),
 [the owner DiscordSRV fork](https://github.com/FainNeito/DiscordSRV), and
 [the owner InteractiveChat Discord add-on fork](https://github.com/FainNeito/InteractiveChat-DiscordSRV-Addon).
+It also pins [EnthusiaAutoClicker](https://github.com/wsg138/EnthusiaAutoClicker)
+and builds **only `server-plugin/`**, with Java 21 Maven clean verify, PMD and
+public API packaging checks. The client mod is not a backend plugin.
 `buildAll` and both build helpers run their full canonical verification outside
 the Gradle composite. Set `JAVA_HOME_21_X64` and `JAVA_HOME_25_X64`, and provide
 Maven and Python 3.11+ on PATH. Logs and source/version/SHA-256/test evidence go
 to ignored `build/standalone/`. A single build can be run with
-`python scripts/build-standalone.py discordsrv` (or either other module name).
+`python scripts/build-standalone.py discordsrv` (or another standalone module name).
 On Windows, use a short checkout path or enable Git's `core.longpaths` for the
 recursive checkout: the add-on contains long Java package/file names.
 

@@ -1,7 +1,7 @@
 // Root build for enthusia-network monorepo.
 // This file only provides convenience tasks — each plugin builds independently.
 
-val standalonePlugins = listOf("startup-guardian", "discordsrv", "interactivechat-discord-addon")
+val standalonePlugins = listOf("startup-guardian", "discordsrv", "interactivechat-discord-addon", "enthusia-autoclicker")
 standalonePlugins.forEach { plugin ->
     tasks.register<Exec>("verify-$plugin") {
         group = "enthusia"

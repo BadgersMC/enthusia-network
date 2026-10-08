@@ -113,7 +113,7 @@ jobs:
               echo "::warning::Skipping private EnthusiaDisplay checkout/build for fork PR"
               continue
             fi
-            if [ ! -f "$path/build.gradle.kts" ] && [ ! -f "$path/build.gradle" ] && [ ! -f "$path/pom.xml" ]; then
+            if [ ! -f "$path/build.gradle.kts" ] && [ ! -f "$path/build.gradle" ] && [ ! -f "$path/pom.xml" ] && [ ! -f "$path/server-plugin/pom.xml" ]; then
               echo "::error::submodule $path not checked out"
               missing=1
             fi

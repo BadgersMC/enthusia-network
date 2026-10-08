@@ -44,8 +44,11 @@ not establish human approval or permission to merge.
 
 ## Missing source integrations
 
-This change adds canonical merged StartupGuardian plus the explicitly selected
-owner Discord forks. The remaining names still need source/build reconciliation:
+This change adds canonical merged StartupGuardian, the explicitly selected
+owner Discord forks, and the server-only AutoClicker build. Network #169 remains
+blocked by its add-on's duplicate Maven model; owner add-on PR #2 repairs the
+source and must land before bumping the merged pin. Other names still need
+source/build reconciliation:
 
 - EnthusiaStaff: wsg138 source exists, but paired RoseChat integration and #339
   conflict must be resolved before a release pin.
@@ -54,12 +57,13 @@ owner Discord forks. The remaining names still need source/build reconciliation:
 - EnthusiaFrontier and EnthusiaLoreItems: public wsg138 sources found; inspect
   their independent build/asset/companion contracts before integration.
 - EnthusiaEvents: public wsg138 source found; preserve its test-only placement.
-- EnthusiaKOTH: both wsg138 and Hermes-Enthusia repositories exist. Select the
-  authoritative production lineage before choosing a pin.
-- LumaTrivia: both BadgersMC and Hermes-Enthusia repositories exist. Select the
-  authoritative production lineage before choosing a pin.
-- EnthusiaServerAutoClicker: repository search did not identify a source;
-  this is not proof that a private or differently named repository does not exist.
+- EnthusiaKOTH: wsg138 canonical main f80adebb; Java 21 canonical build passes
+  158 tests. Reconcile bank actor semantics with the pinned real LumaGuilds API.
+- LumaTrivia: BadgersMC canonical main a293dafb; Java 21 canonical build passes
+  41 tests. Compile against the exact built network RoseChat rather than relying
+  solely on the old checked-in binary. See standalone-build-verification.md.
+- EnthusiaServerAutoClicker: found inside wsg138/EnthusiaAutoClicker/server-plugin;
+  new merged a29dac93 pin verifies Maven/PMD/API packaging, with 39 tests.
 
 Production/Test/proxy inventories, loaded artifact provenance and actual client
 acceptance still require fresh read-only evidence. Filename dates and `-test`

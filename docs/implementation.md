@@ -2,6 +2,12 @@
 
 ## Standalone operational and Discord builds
 
+`plugins/enthusia-autoclicker` pins wsg138/EnthusiaAutoClicker, but verification
+selects only `server-plugin/`, not the root client-mod Gradle build. Java 21
+Maven clean verify, PMD 3.26.0 and the canonical public API/no-Bukkit-or-JUnit
+packaging assertions run before artifact provenance is written. No client mod
+is copied to a backend. This is build ownership, not live runtime approval.
+
 The network owns immutable pins for `wsg138/StartupGuardian`, `FainNeito/DiscordSRV` and `FainNeito/InteractiveChat-DiscordSRV-Addon`. Keep all three outside the Gradle composite: StartupGuardian requires Maven on Java 21; the Discord forks use their own Gradle/Maven lifecycles on Java 25. `scripts/build-standalone.py` verifies a clean gitlink checkout, selects the actual required Java installation, invokes the canonical quality gate and records ignored artifact provenance. Root buildAll/cleanAll invoke it; both platform helpers already call those tasks. Neither plugin source nor stored player state, permissions, configuration or server processes change.
 
 DiscordSRV and the add-on are backend plugins, not Velocity replacements. The add-on pins 2026.1.2.0 and requires the corresponding real InteractiveChat dependency; no unpublished 2026.1.3.0 dependency, stub API or binary overlay is introduced. Its full reactor includes 26.2 and 26.3 adapters and executable presentation proofs. Runtime InteractiveChat backend/proxy coordination, EnthusiaStaff service compatibility, Discord notification/rendering and vanish/staffmode privacy acceptance remain deployment gates.
