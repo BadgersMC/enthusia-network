@@ -22,10 +22,13 @@ Artifact SHA-256 values from these builds (not reproducibility guarantees):
 - EnthusiaServerAutoClicker.jar: `7317144350b7be442f9dfd4cf9d4835564d88aef184d4263a7d6175dd5d1d144`
 
 AutoClicker's committed gradlew.bat is CRLF while its attributes normalize text.
-The new local submodule needed an untracked info/attributes `-text` override for
-that file to preserve its exact committed bytes during clean-source inspection.
-No tracked source was edited or dirtiness ignored; canonical server Maven gates
-run without the client Gradle wrapper. This is not a runtime compatibility claim.
+The new local submodule used an untracked info/attributes `-text` override for
+that file. On other checkouts, the verifier accepts that single normalization
+report only if the wrapper's raw Git blob hash equals HEAD exactly. Changed
+bytes or any additional dirty path fail verification. Regression tests cover
+both rejections; the full helper suite passes 16 tests. No tracked source was
+edited; server Maven gates run without the client wrapper. This is not a runtime
+compatibility claim.
 
 ## Hosted failure and canonical repair
 
@@ -38,6 +41,9 @@ and adds hosted complete-reactor uniqueness checks. The new regression first
 failed on 44 duplicates, then passed; all 46 modules and 55 presentation/privacy
 assertions pass locally after repair. The network gitlink is intentionally still
 merged 746cf2e3 until source review/CI/merge authorizes a canonical pin update.
+Hosted owner PR #2 run 37786282569 on c7209f27 passes the complete 46-module
+reactor, the new model regression and all 55 assertions; presentation also
+passes. No review was submitted at inspection. These passes do not merge source.
 
 ## Remaining source contracts
 

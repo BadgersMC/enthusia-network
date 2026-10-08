@@ -59,7 +59,16 @@ def pin(plugin):
         raise ValueError(f"Missing or conflicted gitlink: {plugin}")
     if git("-C", path, "rev-parse", "HEAD") != fields[1]:
         raise ValueError(f"{plugin} checkout differs from gitlink {fields[1]}")
-    if git("-C", path, "status", "--porcelain"):
+    dirty = git("-C", path, "status", "--porcelain")
+    # This repository stores a CRLF wrapper blob while .gitattributes marks it
+    # text. Git reports it modified even when checkout bytes equal HEAD. Accept
+    # only that exact single path and prove raw-byte identity, never a patch.
+    if plugin == "enthusia-autoclicker" and dirty == "M gradlew.bat":
+        raw = git("-C", path, "hash-object", "--no-filters", "gradlew.bat")
+        committed = git("-C", path, "rev-parse", "HEAD:gradlew.bat")
+        if raw == committed:
+            dirty = ""
+    if dirty:
         raise ValueError(f"{plugin} has local changes; use clean pinned source")
     return fields[1]
 

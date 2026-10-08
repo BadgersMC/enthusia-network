@@ -15,6 +15,17 @@ class StandaloneBuildTest(unittest.TestCase):
         self.assertEqual(standalone.project_path("enthusia-autoclicker"),
                          standalone.ROOT / "plugins/enthusia-autoclicker/server-plugin")
 
+    def test_autoclicker_wrapper_normalization_requires_exact_bytes(self):
+        prefix = ["160000 abc 0\tplugins/enthusia-autoclicker", "abc", "M gradlew.bat"]
+        with patch.object(standalone, "git", side_effect=prefix + ["raw", "raw"]):
+            self.assertEqual(standalone.pin("enthusia-autoclicker"), "abc")
+        with patch.object(standalone, "git", side_effect=prefix + ["edited", "raw"]):
+            with self.assertRaisesRegex(ValueError, "local changes"):
+                standalone.pin("enthusia-autoclicker")
+        with patch.object(standalone, "git", side_effect=prefix[:2] + ["M gradlew.bat\n M pom.xml"]):
+            with self.assertRaisesRegex(ValueError, "local changes"):
+                standalone.pin("enthusia-autoclicker")
+
     def test_autoclicker_requires_pmd_after_verify(self):
         with patch.object(standalone.shutil, "which", return_value="mvn"):
             self.assertEqual(standalone.followup_commands("enthusia-autoclicker"),
