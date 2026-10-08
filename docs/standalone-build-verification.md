@@ -47,6 +47,28 @@ passes. No review was submitted at inspection. These passes do not merge source.
 
 ## Remaining source contracts
 
+### Network helper repair verification, 2026-10-08
+
+Latest network run 37791405003 on 1767cf83 fails on the same duplicate Gson
+serializer coordinates in the old add-on pin, not a new source defect. Owner
+PR #2 c7209f27 remains unmerged; its complete reactor and presentation checks
+pass and no review comments/reviews were present at refresh.
+
+An isolated local candidate checkout tested c7209f27 using this network's actual
+`scripts/build-standalone.py`, Java 25 and Maven 3.9.11. Clean verify passed all
+46 modules and the helper captured 21 item-name, 24 plain-chat and 10 Staff
+visibility checks. All 16 helper regressions pass. Semantic XML comparison
+confirmed exactly 44 identical dependency removals, preserving every other
+model field including versions/scopes. Model uniqueness, EARS and whitespace
+checks pass. Candidate version 2026.1.2.0, local test artifact SHA-256
+`f21f2e6163130d6467b0d7b0339de8e282b20e689d1b17f97297def2bce84703`.
+
+This candidate pin is confined to the isolated local proof checkout and is not
+published here. Explicit owner-source merge authorization is pending. After
+source merge, update only the canonical merged add-on gitlink and rerun exact
+network-head CI. Network #169 stays open; full trusted/private verification and
+Paper/Discord/client acceptance remain distinct. No server operations occurred.
+
 - wsg138/EnthusiaKOTH main f80adebb10f5be991abe20de41e505ebceb3d5a5:
   Java 21 clean test/shadowJar passes 158 tests, zero failures/errors/skips.
   Canonical runtime dependency report resolves Nexus v2.1.1 without substituting
