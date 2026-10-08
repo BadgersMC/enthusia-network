@@ -47,6 +47,24 @@ passes. No review was submitted at inspection. These passes do not merge source.
 
 ## Remaining source contracts
 
+### Hosted dependency transport failure, 2026-10-08
+
+Network run 37796972150 on 3b7e3765 cleared the repaired duplicate Maven model
+and built add-on adapters through V1_16_2. V1_16_4 then failed resolving
+`org.bukkit:craftbukkit:1.16.4-R0.1-SNAPSHOT`: loohp-repo reported Connection
+reset, while the other repositories do not supply this legacy artifact. This
+is observed dependency transport failure, not proof of a new source regression.
+The canonical merged owner run 37796559490 on e04e2dbd passes the complete
+reactor and presentation jobs. Both local merged-source gates also passed.
+
+Direct retry of the network run was denied: the connector lacks integration
+access and the authenticated account lacks repository admin rights. This
+evidence update will trigger normal PR CI; no quality gates, modules, versions,
+source checks or dependency origins are removed or substituted. If transport
+failure repeats, dependency availability/reliability needs further evidence.
+Private Display remains skipped in fork CI; network release validation remains
+incomplete, and no server operation occurred.
+
 ### Authorized merged repair pin, 2026-10-08
 
 The user authorized owner PR #2 merge and network #169 update. PR #2 merged as

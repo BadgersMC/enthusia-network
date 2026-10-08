@@ -20,6 +20,11 @@
   merge remain gates; no unmerged KOTH/Trivia gitlinks were added.
 
 - [ ] INFRA-004: Add canonical standalone operational and Discord plugin builds.
+  Follow-up: add-on owner #2 merged by explicit authorization as e04e2dbd.
+  Its clean network-helper build passes all 46 modules and 55 proof checks;
+  canonical merged hosted run 37796559490 also passes. Network 37796972150
+  clears the duplicate model but fails a legacy CraftBukkit download with
+  Connection reset. Exact-head combined and trusted/private gates remain open.
   References: REQ-003; docs/implementation.md, Standalone operational and Discord builds.
   Evidence: network main 559bfabc2187ab796a3be889f032383a8041f819 lacks these modules. StartupGuardian main 97e5032489f6dfa03c8878a725f6025f121a87e3 is merged PR #8 and requires Java [21,22)/Maven >=3.9. Owner DiscordSRV master 318ced607368d34d9fde7c238afea7deb6ab654d and add-on master 746cf2e33de06dc9e0dd36ebc1668fea5ce6e42f each contain merged owner PR #1. Their canonical hosted workflows prescribe full Gradle verification and the complete 46-module Maven reactor respectively. The owner explicitly selected both forks for monorepo ownership.
   SPEAR: infrastructure routing skips plugin behavioral prove/engine because no plugin implementation changes. Verify helper failure paths, exact pins, orchestration, canonical quality gates and artifacts. Root has no independent EARS/state tools; reuse the existing Signature portable helpers. Full network/private hosted checks and live/client acceptance remain separate gates. No production access or deployment.
