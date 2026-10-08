@@ -1,6 +1,18 @@
 // Root build for enthusia-network monorepo.
 // This file only provides convenience tasks — each plugin builds independently.
 
+val standalonePlugins = listOf("startup-guardian", "discordsrv", "interactivechat-discord-addon")
+standalonePlugins.forEach { plugin ->
+    tasks.register<Exec>("verify-$plugin") {
+        group = "enthusia"
+        commandLine(System.getenv("PYTHON_BIN") ?: "python", "scripts/build-standalone.py", plugin)
+    }
+    tasks.register<Exec>("clean-$plugin") {
+        group = "enthusia"
+        commandLine(System.getenv("PYTHON_BIN") ?: "python", "scripts/build-standalone.py", plugin, "--clean-only")
+    }
+}
+
 val nestedGradle = if (System.getProperty("os.name").startsWith("Windows", ignoreCase = true)) {
     "gradlew.bat"
 } else {
@@ -44,6 +56,7 @@ tasks.register<Exec>("cleanDisplay") {
 tasks.register("buildAll") {
     description = "Build all Enthusia plugins (shadowJar where available)"
     group = "enthusia"
+    dependsOn(standalonePlugins.map { "verify-$it" })
 
     // Order matters: dependencies first, dependents last
     // enthusia-biomes excluded — requires Gradle 9.x (paperweight), build separately
@@ -62,6 +75,7 @@ tasks.register("buildAll") {
 tasks.register("cleanAll") {
     description = "Clean all Enthusia plugin builds"
     group = "enthusia"
+    dependsOn(standalonePlugins.map { "clean-$it" })
 
     dependsOn(
         "cleanDisplay",

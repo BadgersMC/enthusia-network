@@ -1,5 +1,11 @@
 # Integration tasks
 
+- [ ] INFRA-004: Add canonical standalone operational and Discord plugin builds.
+  References: REQ-003; docs/implementation.md, Standalone operational and Discord builds.
+  Evidence: network main 559bfabc2187ab796a3be889f032383a8041f819 lacks these modules. StartupGuardian main 97e5032489f6dfa03c8878a725f6025f121a87e3 is merged PR #8 and requires Java [21,22)/Maven >=3.9. Owner DiscordSRV master 318ced607368d34d9fde7c238afea7deb6ab654d and add-on master 746cf2e33de06dc9e0dd36ebc1668fea5ce6e42f each contain merged owner PR #1. Their canonical hosted workflows prescribe full Gradle verification and the complete 46-module Maven reactor respectively. The owner explicitly selected both forks for monorepo ownership.
+  SPEAR: infrastructure routing skips plugin behavioral prove/engine because no plugin implementation changes. Verify helper failure paths, exact pins, orchestration, canonical quality gates and artifacts. Root has no independent EARS/state tools; reuse the existing Signature portable helpers. Full network/private hosted checks and live/client acceptance remain separate gates. No production access or deployment.
+  Verification: all three clean pinned canonical builds passed locally. StartupGuardian 1.1.1: 77 tests, zero failures/errors/skips, complete Maven static-analysis gates. DiscordSRV 1.30.5: 14 tests, zero failures/errors/skips, clean test/shadowJar/spotlessCheck. Add-on 2026.1.2.0: all 46 Maven reactor modules passed, executing 21 item-name, 24 plain-chat and 10 Staff visibility checks. Helper regression, EARS and whitespace validation pass; source and artifact SHA-256 evidence is recorded in docs/standalone-build-verification.md. Exact-head network CI/review and trusted private combined build remain pending; this task is not marked completed or approved for production.
+
 - [x] INFRA-002: Pin merged Halloween asset tooling and verify it in network builds.
   References: REQ-002; docs/implementation.md, EnthusiaSignature.
   Evidence: FainNeito/ItemSignature PR #4, merged commit `2e60f42d29d67dc610d16d6564b2251e58731a13`; tools/resourcepack/test_prepare_halloween.py; resourcepack/halloween/requirements.txt; scripts/build-all.sh; scripts/build-all.bat; .github/workflows/build.yml.

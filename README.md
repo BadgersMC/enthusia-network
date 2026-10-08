@@ -26,6 +26,25 @@ Built on the work of **[BadgersMC](https://github.com/BadgersMC)**, **[wsg138 (p
 
 ## Server Plugins
 
+### Standalone operational and Discord builds
+
+The network also pins [StartupGuardian](https://github.com/wsg138/StartupGuardian),
+[the owner DiscordSRV fork](https://github.com/FainNeito/DiscordSRV), and
+[the owner InteractiveChat Discord add-on fork](https://github.com/FainNeito/InteractiveChat-DiscordSRV-Addon).
+`buildAll` and both build helpers run their full canonical verification outside
+the Gradle composite. Set `JAVA_HOME_21_X64` and `JAVA_HOME_25_X64`, and provide
+Maven and Python 3.11+ on PATH. Logs and source/version/SHA-256/test evidence go
+to ignored `build/standalone/`. A single build can be run with
+`python scripts/build-standalone.py discordsrv` (or either other module name).
+On Windows, use a short checkout path or enable Git's `core.longpaths` for the
+recursive checkout: the add-on contains long Java package/file names.
+
+These are backend artifacts, not proxy replacements, and are excluded from the
+automatic deployment helper. The add-on targets InteractiveChat 2026.1.2.0;
+backend/proxy compatibility and actual Discord/client visibility, item images
+and chat presentation require separate staging acceptance. Existing private
+build gates remain in force. See [architecture and delivery boundaries](docs/implementation.md).
+
 | Plugin | Description | Author |
 |--------|-------------|--------|
 | [enthusia-advancements](plugins/enthusia-advancements) | Config-driven custom advancement trees (guilds, economy, combat) | Badger |
