@@ -2,6 +2,8 @@
 
 ### REQ-003 — Standalone canonical plugin builds
 
+WHEN a network Gradle build resolves org.geysermc dependencies THE SYSTEM SHALL exclude JitPack from their lookup while retaining the plugin-declared OpenCollab repositories, dependency versions and other JitPack dependency lookups.
+
 WHEN hosted network verification runs THE SYSTEM SHALL select checksum-verified
 Apache Maven 3.9.11, matching the locally verified canonical quality gates,
 rather than inheriting an unversioned runner tool. All static checks and tests

@@ -154,7 +154,7 @@ if not defined ENTHUSIAMARKET_JAR (
 )
 
 echo ^>^> Building composite plugins...
-call gradlew.bat buildAll
+call gradlew.bat -I scripts/network-repositories.init.gradle buildAll
 if errorlevel 1 goto :fail
 
 echo ^>^> Building enthusia-biomes...

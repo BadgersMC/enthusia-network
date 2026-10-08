@@ -1,12 +1,29 @@
 # Integration tasks
 
+- [ ] INFRA-007: Route Geyser lookups away from unrelated JitPack metadata.
+  References: REQ-003; run 37804344757; scripts/network-repositories.init.gradle.
+  Spec/proof: Votes compileClasspath resolution fails on JitPack timing out for
+  org.geysermc.geyser:api:2.4.2-SNAPSHOT before task execution. Pinned Votes
+  already declares OpenCollab; preserve those origins and all versions/pins.
+  Engine: no gameplay change; network init-script content filter excludes only
+  org.geysermc groups from JitPack. CI and both platform helpers pass the script.
+  Architecture/refine: Gradle 8.10 standalone and network Gradle 9.1 included
+  resolution probes pass for unchanged Geyser/Floodgate/Cumulus dependencies.
+  Full Votes production classpath, compile and shadowJar pass in the Gradle 9.1
+  included probe. The broader test run fails compiling existing LayerRulesTest
+  against Konsist 0.17.3 (predicate/API misuse); it is not a test pass. Source
+  repair belongs in canonical Votes, separate from this unchanged network pin.
+  EARS/YAML/whitespace pass; fresh network CI remains pending.
+
 - [ ] INFRA-006: Reproduce the verified Maven toolchain in hosted builds.
   References: REQ-003; hosted run 37800713821; standalone-build-verification.md.
   Spec: select checksum-verified Maven 3.9.11 before any Maven invocation.
   Proof: the retry passes all add-on modules/proofs, then fails loading
   StartupGuardian SpotBugs with VelocityEngine.setProperties API incompatibility.
   Runner image 20261004.327.1 supplies Maven 3.10.0; the local clean gate uses
-  Maven 3.9.11. Tool-version causality remains an inference pending hosted proof.
+  Maven 3.9.11. Controlled local comparison reproduces the same API error on
+  Maven 3.10.0 and passes the identical SpotBugs goal on Maven 3.9.11; red/green
+  logs and portable SPEAR state record this result. Hosted proof remains.
   Engine: no gameplay change; infrastructure selects the previously verified
   Maven release without skipping or modifying static checks/tests.
   Architecture/refine: pinned official archive SHA-512 verified; YAML/order,

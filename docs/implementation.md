@@ -2,6 +2,12 @@
 
 ## Standalone operational and Discord builds
 
+The network's platform helpers and CI supply a Gradle init script that excludes
+only the org.geysermc namespace from JitPack. The plugin-declared OpenCollab
+origins and all dependency versions remain intact; unrelated Nexus/JitPack
+lookups remain enabled. The hook applies to included Gradle projects as well
+as the root. Plugin source and standalone canonical builds are not rewritten.
+
 Hosted CI installs Apache Maven 3.9.11 from Maven Central with a committed
 SHA-512 checksum before any Maven build. This reproduces the locally verified
 tool version instead of inheriting runner-image changes. StartupGuardian's

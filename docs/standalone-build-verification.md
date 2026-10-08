@@ -47,6 +47,30 @@ passes. No review was submitted at inspection. These passes do not merge source.
 
 ## Remaining source contracts
 
+### Gradle metadata routing follow-up
+
+Run 37804344757 on 6aa3f0cb installs verified Maven 3.9.11 successfully, then
+fails determining Votes compileClasspath because JitPack times out for
+org.geysermc.geyser:api:2.4.2-SNAPSHOT. This occurs before standalone tasks;
+the run neither confirms nor refutes the hosted SpotBugs remedy.
+
+Pinned Votes already declares OpenCollab main/snapshots. Network CI and both
+platform helpers now pass a repository-content init script that excludes only
+org.geysermc and its subgroups from JitPack, leaving the existing repositories,
+dependency versions, plugin gitlinks and unrelated JitPack lookups intact.
+Standalone Gradle 8.10 and an isolated included-build probe on network Gradle
+9.1 both resolve unchanged Geyser/Floodgate/Cumulus dependencies successfully.
+Votes production compile and shadowJar pass on the unchanged source in the
+Gradle 9.1 probe. The broader test invocation fails compiling LayerRulesTest's
+existing Konsist predicate/API usage; no Votes test pass is claimed. This
+source-test repair is a separate canonical repository task, not a changed
+network pin or lowered gate. EARS/YAML/whitespace pass; new network CI is pending.
+
+Controlled local toolchain comparison also now reproduces the exact
+VelocityEngine.setProperties failure with Maven 3.10.0 and passes the same
+SpotBugs 4.9.0.0 check on Maven 3.9.11. `.claude/spear-maven-toolchain.json`
+and ignored build logs record red/green evidence. Plugin source is unchanged.
+
 ### Retry passed add-on; StartupGuardian tooling failure
 
 Network run 37800713821 on 69e54ff0 passes the complete merged e04e2dbd add-on

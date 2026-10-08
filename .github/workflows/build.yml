@@ -19,6 +19,7 @@ on:
       - 'ci/enthusia-display/**'
       - 'scripts/build-display.py'
       - 'scripts/build-standalone.py'
+      - 'scripts/network-repositories.init.gradle'
       - 'scripts/test_build_standalone.py'
       - 'scripts/build-all.*'
       - 'scripts/build-tags.sh'
@@ -36,6 +37,7 @@ on:
       - 'ci/enthusia-display/**'
       - 'scripts/build-display.py'
       - 'scripts/build-standalone.py'
+      - 'scripts/network-repositories.init.gradle'
       - 'scripts/test_build_standalone.py'
       - 'scripts/build-all.*'
       - 'scripts/build-tags.sh'
@@ -291,7 +293,7 @@ jobs:
           java-version: '21'
 
       - name: Build composite plugins
-        run: ./gradlew buildAll -Dorg.gradle.java.installations.fromEnv=JAVA_HOME_21_X64,JAVA_HOME_25_X64
+        run: ./gradlew -I scripts/network-repositories.init.gradle buildAll -Dorg.gradle.java.installations.fromEnv=JAVA_HOME_21_X64,JAVA_HOME_25_X64
 
       - name: List built JARs
         run: |

@@ -1,0 +1,14 @@
+import org.gradle.api.artifacts.repositories.MavenArtifactRepository
+
+// Network build routing only. Plugin pins, versions and declared origins remain
+// unchanged. Geyser publishes through the already-declared OpenCollab repos;
+// JitPack timeouts must not block lookup of that unrelated Maven namespace.
+gradle.beforeProject { project ->
+    project.repositories.configureEach { repository ->
+        if (repository instanceof MavenArtifactRepository && repository.url.host == 'jitpack.io') {
+            repository.content {
+                excludeGroupByRegex('org\\.geysermc(\\..*)?')
+            }
+        }
+    }
+}
