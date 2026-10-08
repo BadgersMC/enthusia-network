@@ -2,6 +2,12 @@
 
 ## Standalone operational and Discord builds
 
+Hosted CI installs Apache Maven 3.9.11 from Maven Central with a committed
+SHA-512 checksum before any Maven build. This reproduces the locally verified
+tool version instead of inheriting runner-image changes. StartupGuardian's
+tests, Checkstyle, PMD/CPD and SpotBugs all remain enabled. No plugin dependency
+or implementation changes are made by this infrastructure selection.
+
 `plugins/enthusia-autoclicker` pins wsg138/EnthusiaAutoClicker, but verification
 selects only `server-plugin/`, not the root client-mod Gradle build. Java 21
 Maven clean verify, PMD 3.26.0 and the canonical public API/no-Bukkit-or-JUnit

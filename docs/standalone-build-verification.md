@@ -47,6 +47,28 @@ passes. No review was submitted at inspection. These passes do not merge source.
 
 ## Remaining source contracts
 
+### Retry passed add-on; StartupGuardian tooling failure
+
+Network run 37800713821 on 69e54ff0 passes the complete merged e04e2dbd add-on
+reactor and all 55 proof checks. The earlier CraftBukkit connection reset did
+not repeat. DiscordSRV and server AutoClicker also produce verified provenance.
+The next failure is StartupGuardian SpotBugs 4.9.0.0 loading:
+`VelocityEngine.setProperties(java.util.Properties)` is missing from its
+resolved plugin class realm (which contains Velocity 1.7 and engine-core 2.4).
+
+Runner image 20261004.327.1 documents Maven 3.10.0. Local clean Maven 3.9.11
+verification passes the same StartupGuardian source, including SpotBugs;
+tool-version causality is not yet proven on the hosted runner. CI now selects
+the already verified Maven 3.9.11 before all Maven builds, from Maven Central
+with committed SHA-512 checked before extraction. A downloaded copy's checksum
+was verified locally; workflow YAML/order, EARS and whitespace pass. No plugin
+dependency version, static check, test, module or quality gate is removed.
+The new exact-head hosted run must determine whether this environment selection
+clears the failure. Network #169 remains open and draft, with private/trusted
+and live/client acceptance still outstanding.
+
+Runner evidence: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+
 ### Hosted dependency transport failure, 2026-10-08
 
 Network run 37796972150 on 3b7e3765 cleared the repaired duplicate Maven model

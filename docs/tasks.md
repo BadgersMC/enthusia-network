@@ -1,5 +1,18 @@
 # Integration tasks
 
+- [ ] INFRA-006: Reproduce the verified Maven toolchain in hosted builds.
+  References: REQ-003; hosted run 37800713821; standalone-build-verification.md.
+  Spec: select checksum-verified Maven 3.9.11 before any Maven invocation.
+  Proof: the retry passes all add-on modules/proofs, then fails loading
+  StartupGuardian SpotBugs with VelocityEngine.setProperties API incompatibility.
+  Runner image 20261004.327.1 supplies Maven 3.10.0; the local clean gate uses
+  Maven 3.9.11. Tool-version causality remains an inference pending hosted proof.
+  Engine: no gameplay change; infrastructure selects the previously verified
+  Maven release without skipping or modifying static checks/tests.
+  Architecture/refine: pinned official archive SHA-512 verified; YAML/order,
+  EARS and whitespace pass. Clean Maven 3.9.11 StartupGuardian verification
+  passes locally, including SpotBugs. Hosted exact-head verification remains.
+
 - [ ] INFRA-005: Add canonical server AutoClicker build and verify remaining repository contracts.
   References: REQ-003; docs/standalone-build-verification.md.
   Source: wsg138/EnthusiaAutoClicker main a29dac939687ed9cac1004d1e76c80bfd2666357.

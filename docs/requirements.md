@@ -2,6 +2,11 @@
 
 ### REQ-003 — Standalone canonical plugin builds
 
+WHEN hosted network verification runs THE SYSTEM SHALL select checksum-verified
+Apache Maven 3.9.11, matching the locally verified canonical quality gates,
+rather than inheriting an unversioned runner tool. All static checks and tests
+remain mandatory; this requirement changes build infrastructure only.
+
 WHEN the network build runs THE SYSTEM SHALL verify and package clean pinned StartupGuardian, DiscordSRV, InteractiveChat Discord add-on and EnthusiaServerAutoClicker source using each repository's canonical quality gate and required Java version.
 
 IF a required toolchain, clean source pin, artifact, or executed regression evidence is unavailable THEN THE SYSTEM SHALL fail verification without skipping quality gates or substituting binary overlays.

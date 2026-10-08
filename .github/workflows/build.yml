@@ -120,6 +120,19 @@ jobs:
           done <<< "$paths"
           exit $missing
 
+      - name: Set up verified Maven 3.9.11
+        run: |
+          set -euo pipefail
+          archive="$RUNNER_TEMP/apache-maven-3.9.11-bin.tar.gz"
+          curl --fail --silent --show-error --location --retry 3 --proto '=https' --proto-redir '=https' \
+            https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.9.11/apache-maven-3.9.11-bin.tar.gz -o "$archive"
+          printf '%s  %s\n' \
+            bcfe4fe305c962ace56ac7b5fc7a08b87d5abd8b7e89027ab251069faebee516b0ded8961445d6d91ec1985dfe30f8153268843c89aa392733d1a3ec956c9978 \
+            "$archive" | sha512sum --check
+          tar -xzf "$archive" -C "$RUNNER_TEMP"
+          "$RUNNER_TEMP/apache-maven-3.9.11/bin/mvn" --version
+          echo "$RUNNER_TEMP/apache-maven-3.9.11/bin" >> "$GITHUB_PATH"
+
       - name: Build Maven plugin dependencies
         run: |
           set -euo pipefail
