@@ -77,7 +77,8 @@ The source-contract follow-up is implemented, but not merged or pinned here:
   maintainer workflow approval; no fork check run exists at inspection. Actual
   live guild-bank transactions remain an acceptance gate. Initial Codacy flagged
   four test maintainability issues; test classes/literals were refined without
-  dropping regressions, and all 167 tests pass again. Latest analysis is pending.
+  dropping regressions, and all 167 tests pass again. Latest-head Codacy check
+  113358815579 succeeds with no issues. Upstream Build still requires approval.
 - [Trivia upstream #56](https://github.com/BadgersMC/LumaTrivia/pull/56),
   [owner #1](https://github.com/FainNeito/LumaTrivia/pull/1), head
   `8b3be2bbc2c5f07fb6221681ead3633566b6ad98`: explicit property/environment
