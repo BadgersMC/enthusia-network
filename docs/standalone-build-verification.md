@@ -47,6 +47,21 @@ passes. No review was submitted at inspection. These passes do not merge source.
 
 ## Remaining source contracts
 
+### Authorized merged repair pin, 2026-10-08
+
+The user authorized owner PR #2 merge and network #169 update. PR #2 merged as
+`e04e2dbdddd8a8136c1572cf087ef89bbfc7c6c6`; fetched owner master confirms it.
+The merge tree equals the verified c7209f27 candidate tree. Network #169 now
+pins that merged commit. All other gitlinks and build/deploy helpers are intact.
+Clean merged-source Java 25/Maven 3.9.11 helper verification passed all 46
+modules and 55 presentation/privacy checks, with clean-source checks before
+and after. Version 2026.1.2.0; local artifact SHA-256
+`17e525e3e3a9cdc837496c66b4d238346df1259b3656d22385bf16d4a21bfac2`.
+All 16 helper regressions, model uniqueness, EARS and whitespace pass.
+New network-head CI is pending; candidate evidence below is historical.
+Network #169 remains open.
+No upload, deployment or activation was authorized or performed.
+
 ### Network helper repair verification, 2026-10-08
 
 Latest network run 37791405003 on 1767cf83 fails on the same duplicate Gson

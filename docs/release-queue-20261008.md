@@ -6,6 +6,11 @@ No upstream merges or server operations are authorized by this source task.
 
 ## Monorepo
 
+- Follow-up: user-authorized owner add-on #2 merged as
+  `e04e2dbdddd8a8136c1572cf087ef89bbfc7c6c6`. Network #169 updates only that
+  add-on pin; its fresh exact-head CI remains required. This supersedes the
+  unmerged add-on gate below. Network #169 stays open; no server action.
+
 - Canonical main remains `559bfabc2187ab796a3be889f032383a8041f819`.
 - [PR #168](https://github.com/BadgersMC/enthusia-network/pull/168) remains open,
   head `d60f4c9aa81e9bd143238d03337b07f373b66b14`. Hosted Build
