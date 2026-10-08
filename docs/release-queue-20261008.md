@@ -57,11 +57,16 @@ source/build reconciliation:
 - EnthusiaFrontier and EnthusiaLoreItems: public wsg138 sources found; inspect
   their independent build/asset/companion contracts before integration.
 - EnthusiaEvents: public wsg138 source found; preserve its test-only placement.
-- EnthusiaKOTH: wsg138 canonical main f80adebb; Java 21 canonical build passes
-  158 tests. Reconcile bank actor semantics with the pinned real LumaGuilds API.
-- LumaTrivia: BadgersMC canonical main a293dafb; Java 21 canonical build passes
-  41 tests. Compile against the exact built network RoseChat rather than relying
-  solely on the old checked-in binary. See standalone-build-verification.md.
+- EnthusiaKOTH: [upstream #11](https://github.com/wsg138/EnthusiaKOTH/pull/11)
+  repairs system guild-bank dispatch on head 65ed709c. All 167 local tests pass,
+  including nine adapter regressions. Hosted upstream Build awaits maintainer
+  approval; review, merge and live guild-bank acceptance remain separate gates.
+- LumaTrivia: [upstream #56](https://github.com/BadgersMC/LumaTrivia/pull/56)
+  adds exact companion input and hosted verification on head 8b3be2bb. Actual
+  pinned network RoseChat RC-4 compilation passes all 41 tests, as do default and
+  environment-selected builds. Owner CI and upstream Codacy pass; upstream
+  workflow execution still awaits approval.
+  No feature gitlink was added; see standalone-build-verification.md.
 - EnthusiaServerAutoClicker: found inside wsg138/EnthusiaAutoClicker/server-plugin;
   new merged a29dac93 pin verifies Maven/PMD/API packaging, with 39 tests.
 

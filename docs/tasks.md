@@ -13,6 +13,11 @@
   not the network's 2.3.0 substitution. KOTH uses a excluded compile shim and
   Trivia a checked-in legacy RoseChat API; real pinned companion contracts must
   be verified before integrating their builds. No server changes.
+  Follow-up delivered: KOTH upstream #11 fixes system-bank dispatch, with nine
+  new adapter regressions and 167 total passing local tests. Trivia upstream
+  #56 verifies the actual cf8a7b04 network RoseChat artifact; explicit property,
+  environment and default builds pass 41 tests. Review/hosted checks and source
+  merge remain gates; no unmerged KOTH/Trivia gitlinks were added.
 
 - [ ] INFRA-004: Add canonical standalone operational and Discord plugin builds.
   References: REQ-003; docs/implementation.md, Standalone operational and Discord builds.

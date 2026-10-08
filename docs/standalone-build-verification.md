@@ -63,6 +63,37 @@ passes. No review was submitted at inspection. These passes do not merge source.
   built-network companion compilation and actual chat/mute integration remain
   gates. No Trivia gitlink/build entry has been added.
 
+## Companion repairs delivered for review
+
+The source-contract follow-up is implemented, but not merged or pinned here:
+
+- [KOTH upstream #11](https://github.com/wsg138/EnthusiaKOTH/pull/11),
+  [owner #1](https://github.com/FainNeito/EnthusiaKOTH/pull/1), head
+  `65ed709c8b7800300ca5955d079cdeb2d13ce6c2`: system guild-bank calls replace
+  the guild-as-personal-actor dispatch. Seven regressions failed first; all nine
+  adapter regressions and 167 total tests now pass on Java 21. Invalid amounts
+  and missing system methods fail without personal-wallet fallback. ZIP checks
+  confirm excluded companion mirrors and no duplicates. Upstream Build needs
+  maintainer workflow approval; no fork check run exists at inspection. Actual
+  live guild-bank transactions remain an acceptance gate. Initial Codacy flagged
+  four test maintainability issues; test classes/literals were refined without
+  dropping regressions, and all 167 tests pass again. Latest analysis is pending.
+- [Trivia upstream #56](https://github.com/BadgersMC/LumaTrivia/pull/56),
+  [owner #1](https://github.com/FainNeito/LumaTrivia/pull/1), head
+  `8b3be2bbc2c5f07fb6221681ead3633566b6ad98`: explicit property/environment
+  compile-only API selection, preserved legacy default, and hosted immutable
+  companion build verification. Actual network RoseChat cf8a7b04 builds as RC-4
+  on Java 21; clean Trivia property, environment and default builds each pass
+  all 41 tests. Missing explicit input is rejected; RoseChat classes are not
+  bundled. Owner run [37790535380](https://github.com/FainNeito/LumaTrivia/actions/runs/37790535380)
+  passes both default tests and exact companion verification on 8b3be2bb;
+  logs confirm RC-4 source build, missing-path rejection and compile-only checks.
+  Upstream Codacy passes; upstream CI still needs maintainer approval. Local
+  compilation does not prove actual Paper chat/mute or client behavior.
+
+No KOTH/Trivia feature gitlinks, server uploads or activation were added. Source
+review/CI/merge precede clean merged-source artifacts and a network pin PR.
+
 The helper checks clean gitlink/source parity before and after a build, requires
 actual executed regression evidence, rejects wrong Java versions/missing tools,
 and invalidates old success provenance before any new attempt. Its regression
