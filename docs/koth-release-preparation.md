@@ -8,7 +8,7 @@ staged TEST archive remains inactive outside `plugins`.
 
 ## Source and build gate
 
-- KOTH: `2ad0b693caaaf2ce5011579152fd4b54b7b55f5b`.
+- KOTH: `b6f4a50716005f6c8cd88e778ef69dd1343d5ef2`.
 - Guilds: `352406f2498afc412a976289f43e158da92317e0`.
 - Advancements: `2736261976480891fcf298ad4305e7dc44910eca` (merged AxKoth retirement); TEST retains the pilot profile.
 - Network integration: https://github.com/BadgersMC/enthusia-network/pull/171.
@@ -101,10 +101,12 @@ old JAR/config set together; downgrading only the JAR is not a verified rollback
 
 ## Verification limits
 
-This preparation changes documentation and inactive fragments only; behavioral
-prove/engine steps do not apply. EARS, YAML parsing and whitespace checks validate
-the record. No server configuration was saved, no additional file was uploaded and
-no startup, multiplayer, resource-pack or reward acceptance was performed in this turn.
+The preparation fragments remain inactive. Later pin/build-helper updates are
+infrastructure orchestration: existing plugin suites, real-provider contracts,
+explicit missing-input failure, EARS and whitespace checks validate the change;
+no historical behavioral red/green evidence is claimed. No server configuration
+was saved, no additional file was uploaded and no startup, multiplayer,
+resource-pack or reward acceptance was performed in this turn.
 
 ## Match integrity pin update (2026-10-09)
 
@@ -113,3 +115,13 @@ KOTH [PR #8](https://github.com/FainNeito/EnthusiaKOTH/pull/8) merged at 2ad0b69
 The network pin now includes contest/control/combat evidence, bounded win-trading reports, audited restart-safe reward/challenge holds, UTC event currency/item ceilings, persisted arena identities and /ekoth results. All new enforcement defaults off/zero until TEST. Readiness fails closed for unverifiable definitions; LoreItems V1 needs a read-only definition query before enforced readiness with item rewards can pass. Combat remains MaceGuard's current rotation. Owning exact-head combined build is a separate gate and must be rechecked for this pin.
 
 The older staged archive above does not contain this integrity update and must not be represented as the new artifact. No archive was uploaded/replaced, no server changed, no activation/client testing occurred. Preserve isolated TEST databases and the existing real asset/configuration review requirements.
+
+## Read-only provider readiness pin (2026-10-09)
+
+KOTH [PR #9](https://github.com/FainNeito/EnthusiaKOTH/pull/9) merged at `b6f4a50716005f6c8cd88e778ef69dd1343d5ef2`. Exact head `d2ac6e08ec9cd8348be3e0ed9cfce4a27d74acd7` passed hosted Build [37898143016](https://github.com/FainNeito/EnthusiaKOTH/actions/runs/37898143016), including JAR API exclusions and duplicate checks. Manual source/adapter review completed; CodeRabbit skipped automatic review. Local verification passed 321 ordinary cases (two provider-only skips), 16 real Guilds cases and eight real LoreItems contract cases.
+
+The bounded asynchronous query creates no probe item or claim. Missing/failed/unsupported definitions block enforced rewarded starts before charge/flare acceptance; snapshots expire after five seconds and queries time out after three. Provider replacement/reload clears readiness; delivery still revalidates definitions. All enforcement stays off/zero until TEST.
+
+[LoreItems PR #40](https://github.com/wsg138/EnthusiaLoreItems/pull/40), candidate `f89d153e2280d998d5b6225f308ae71c3a907ce1`, adds the optional read-only V1 method and separates plain/shaded JAR paths. Its local `clean check :plugin:shadowJar` passed 481 cases with four existing environment skips. Hosted workflows require upstream approval, and this account cannot merge upstream. The local provider JAR is an unmerged contract-test input only. Canonical provider merge/build and later real definition/signature/texture acceptance remain gates.
+
+Previous network head `2708f8fe9aef8ca79d15da6479bce0e6dfedefd0` passed public hosted Build 37892096786 and local `buildAll` including private Display. Recheck the new head for this pin/helper update; public fork CI omits private Display and has no supplied LoreItems artifact. No production acceptance is inferred.

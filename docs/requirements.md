@@ -17,3 +17,9 @@ Acceptance: Unix and Windows helpers and CI run the nine importer checks from th
 WHEN the network build runs THE SYSTEM SHALL test and package the merged KOTH pin against the real merged LumaGuilds artifact, stage the pinned Staff moderation API required by Guilds, and retain the compatible EnthusiaAdvancements pilot provider.
 
 Acceptance: KOTH runs its Java 21 wrapper, unit tests and Java 25 actualGuildApiTest; missing JDK 21 or provider JAR fails explicitly. The network updates only the KOTH, Guilds and Advancements gitlinks. Source pins, artifact hashes, hosted results and TEST acceptance remain separate evidence.
+
+### REQ-004 — Optional LoreItems provider verification
+
+WHEN a real LoreItems provider JAR is supplied THE SYSTEM SHALL run the pinned KOTH read-only definition contract suite against that artifact and reject a missing supplied file.
+
+Acceptance: `ENTHUSIA_LORE_API_JAR` enables `actualLoreApiTest`; absence is explicitly reported as omitted verification, never as passing provider acceptance. An unmerged companion test artifact is not a canonical release dependency. Existing Guilds checks and plugin pins remain required.

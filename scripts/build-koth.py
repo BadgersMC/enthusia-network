@@ -28,7 +28,17 @@ def main():
         if not guild.is_file():
             raise ValueError("Build the pinned LumaGuilds shaded JAR before KOTH")
         environment["ENTHUSIA_GUILD_API_JAR"] = str(guild.resolve())
-        tasks += ["test", "actualGuildApiTest", "shadowJar"]
+        tasks += ["test", "actualGuildApiTest"]
+        lore = os.environ.get("ENTHUSIA_LORE_API_JAR")
+        if lore:
+            provider = Path(lore)
+            if not provider.is_file():
+                raise ValueError("ENTHUSIA_LORE_API_JAR must identify a real LoreItems provider JAR")
+            environment["ENTHUSIA_LORE_API_JAR"] = str(provider.resolve())
+            tasks.append("actualLoreApiTest")
+        else:
+            print("Real LoreItems contract verification omitted: no ENTHUSIA_LORE_API_JAR supplied", flush=True)
+        tasks.append("shadowJar")
     wrapper = KOTH / ("gradlew.bat" if os.name == "nt" else "gradlew")
     command = [str(wrapper), *tasks, "--no-daemon", "--console=plain",
                "-Dorg.gradle.java.installations.fromEnv=KOTH_JAVA_HOME,JAVA_HOME_21_X64,JAVA_HOME_25_X64"]
