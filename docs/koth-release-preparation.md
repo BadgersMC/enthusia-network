@@ -10,9 +10,17 @@ staged TEST archive remains inactive outside `plugins`.
 
 - KOTH: `d0552119f3a5ea01fdb094189c9a32df290e6081`.
 - Guilds: `352406f2498afc412a976289f43e158da92317e0`.
-- Advancements: `d3d7168137bb21e3fe8c75e4bc13fd9047ed83db`; TEST retains the pilot profile.
+- Advancements: `2736261976480891fcf298ad4305e7dc44910eca` (merged AxKoth retirement); TEST retains the pilot profile.
 - Network integration: https://github.com/BadgersMC/enthusia-network/pull/171.
   A maintainer must merge after required checks pass; the current account has no merge control.
+- Hosted Build [37882730858](https://github.com/BadgersMC/enthusia-network/actions/runs/37882730858)
+  passed for PR head `843cfbbe280b0717a5ea4206e2a8e61595669259`, including the
+  public composite, KOTH real-provider suite, Tags/pilot, Signature and importer.
+  Private Display checkout/build was explicitly skipped for the fork PR; its prior
+  local verification remains separate. GitHub rejected the connected integration's
+  merge attempt with access denied. Maintainer merge and a trusted build including
+  Display remain release gates. Subsequent documentation edits do not change the
+  verified plugin pins or build inputs; check their new PR head separately.
 - The earlier local root `buildAll` passed. Hosted run `37878739616` failed while
   downloading AxKothAPI 4 and axapi 1.4.8; direct official downloads reproduced
   truncated bodies with bounded retries. The owner subsequently requested removing
