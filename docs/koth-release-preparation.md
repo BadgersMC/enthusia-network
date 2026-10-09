@@ -8,7 +8,7 @@ staged TEST archive remains inactive outside `plugins`.
 
 ## Source and build gate
 
-- KOTH: `b6f4a50716005f6c8cd88e778ef69dd1343d5ef2`.
+- KOTH: `fea6ebdc5f7982e73d3181260a8b22e4a0524207`.
 - Guilds: `352406f2498afc412a976289f43e158da92317e0`.
 - Advancements: `2736261976480891fcf298ad4305e7dc44910eca` (merged AxKoth retirement); TEST retains the pilot profile.
 - Network integration: https://github.com/BadgersMC/enthusia-network/pull/171.
@@ -125,3 +125,9 @@ The bounded asynchronous query creates no probe item or claim. Missing/failed/un
 [LoreItems PR #40](https://github.com/wsg138/EnthusiaLoreItems/pull/40), candidate `f89d153e2280d998d5b6225f308ae71c3a907ce1`, adds the optional read-only V1 method and separates plain/shaded JAR paths. Its local `clean check :plugin:shadowJar` passed 481 cases with four existing environment skips. Hosted workflows require upstream approval, and this account cannot merge upstream. The local provider JAR is an unmerged contract-test input only. Canonical provider merge/build and later real definition/signature/texture acceptance remain gates.
 
 Previous network head `2708f8fe9aef8ca79d15da6479bce0e6dfedefd0` passed public hosted Build 37892096786 and local `buildAll` including private Display. Recheck the new head for this pin/helper update; public fork CI omits private Display and has no supplied LoreItems artifact. No production acceptance is inferred.
+
+## Automatic wand outline pin (2026-10-09)
+
+KOTH [PR #10](https://github.com/FainNeito/EnthusiaKOTH/pull/10) merged at `fea6ebdc5f7982e73d3181260a8b22e4a0524207`. Exact source head `562c2bf460661a090697957e3289661e6ac0aa2b` passed hosted [Build 38001085464](https://github.com/FainNeito/EnthusiaKOTH/actions/runs/38001085464), including JAR checks; 325 local ordinary tests passed with two provider-only skips. Manual source/lifecycle review found no blocking findings; CodeRabbit skipped automatic review.
+
+The wand now shows private yellow first-corner markers, an orange live aimed cuboid and a cyan completed boundary. Point counts and view distance are bounded. Selection tasks stop on save, cancel, disconnect, world change and shutdown. The interactive illustration is a simulation; Java/Bedrock particle visibility remains a deferred TEST gate. The network pin follows merged source only. This infrastructure pin update uses the existing plugin regressions and combined build instead of invented historical red/green evidence. No server files or running plugins changed. Exact-head network checks remain separate from the standalone result.
