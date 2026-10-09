@@ -8,7 +8,7 @@ staged TEST archive remains inactive outside `plugins`.
 
 ## Source and build gate
 
-- KOTH: `d0552119f3a5ea01fdb094189c9a32df290e6081`.
+- KOTH: `2ad0b693caaaf2ce5011579152fd4b54b7b55f5b`.
 - Guilds: `352406f2498afc412a976289f43e158da92317e0`.
 - Advancements: `2736261976480891fcf298ad4305e7dc44910eca` (merged AxKoth retirement); TEST retains the pilot profile.
 - Network integration: https://github.com/BadgersMC/enthusia-network/pull/171.
@@ -105,3 +105,11 @@ This preparation changes documentation and inactive fragments only; behavioral
 prove/engine steps do not apply. EARS, YAML parsing and whitespace checks validate
 the record. No server configuration was saved, no additional file was uploaded and
 no startup, multiplayer, resource-pack or reward acceptance was performed in this turn.
+
+## Match integrity pin update (2026-10-09)
+
+KOTH [PR #8](https://github.com/FainNeito/EnthusiaKOTH/pull/8) merged at 2ad0b693caaaf2ce5011579152fd4b54b7b55f5b. Its final source head 4e3cddd754cf9a29e4aa100314d2aeee58592bf8 passed hosted Build 37891803581; only the Ubuntu runner migration notice was annotated. Local tests passed 314 cases plus 16 real Guilds API cases (one ordinary provider-only skip). Manual source review completed; CodeRabbit skipped automatic review, not independent approval.
+
+The network pin now includes contest/control/combat evidence, bounded win-trading reports, audited restart-safe reward/challenge holds, UTC event currency/item ceilings, persisted arena identities and /ekoth results. All new enforcement defaults off/zero until TEST. Readiness fails closed for unverifiable definitions; LoreItems V1 needs a read-only definition query before enforced readiness with item rewards can pass. Combat remains MaceGuard's current rotation. Owning exact-head combined build is a separate gate and must be rechecked for this pin.
+
+The older staged archive above does not contain this integrity update and must not be represented as the new artifact. No archive was uploaded/replaced, no server changed, no activation/client testing occurred. Preserve isolated TEST databases and the existing real asset/configuration review requirements.
