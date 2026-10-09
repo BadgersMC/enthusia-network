@@ -111,6 +111,8 @@ copy /Y "%ROSECHAT_JAR%" "plugins\luma-guilds\libs\RoseChat-RC-2.jar" >nul
 set "ENTHUSIADISPLAY_ROSECHAT_BUILT=true"
 
 echo ^>^> Building LumaGuilds 3 core artifact...
+python scripts/build-staff-api.py
+if errorlevel 1 goto :fail
 pushd "plugins\luma-guilds"
 call gradlew.bat shadowJar --no-daemon
 set "STEP_ERROR=!ERRORLEVEL!"

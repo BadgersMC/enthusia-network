@@ -88,6 +88,7 @@ cp "$rosechat_jar" plugins/luma-guilds/libs/RoseChat-RC-2.jar
 export ENTHUSIADISPLAY_ROSECHAT_BUILT=true
 
 echo ">> Building LumaGuilds 3 core artifact..."
+python scripts/build-staff-api.py
 (
     cd plugins/luma-guilds
     chmod +x gradlew

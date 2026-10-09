@@ -39,6 +39,10 @@ jobs:
             repo: FainNeito/ItemSignature
             branch: main
             label: 'upstream:enthusia-signature'
+          - name: enthusia-koth
+            repo: FainNeito/EnthusiaKOTH
+            branch: main
+            label: 'upstream:enthusia-koth'
           - name: luma-guilds
             repo: BadgersMC/LumaGuilds
             branch: main

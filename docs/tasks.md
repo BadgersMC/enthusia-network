@@ -1,5 +1,11 @@
 # Integration tasks
 
+- [ ] INFRA-004: Pin and verify the merged KOTH dependency set.
+  References: REQ-003; docs/implementation.md, EnthusiaKOTH.
+  Evidence: KOTH PRs #3-6 and its actualGuildApiTest build contract; LumaGuilds PR #220 and .github/workflows/unit-test.yml Staff API pin; Advancements PR #21 and pilot/pom.xml; network build.gradle.kts, scripts/build-all.*, .github/workflows/build.yml; Python stdlib argparse, os, pathlib, subprocess, sys and shutil follow existing scripts/build-display.py orchestration.
+  SPEAR: Infrastructure orchestration and immutable pins introduce no plugin domain/application changes. The DOC/INFRA route skips behavioral prove/engine; actual builds, missing-input checks, provider contract tests and hosted CI establish verification. Use the existing pinned Signature tools/spear EARS and state helpers from the network root.
+  Verification: Pending clean canonical build, exact-head combined CI and TEST readiness. No deployment or player acceptance is implied by source checks.
+
 - [x] INFRA-002: Pin merged Halloween asset tooling and verify it in network builds.
   References: REQ-002; docs/implementation.md, EnthusiaSignature.
   Evidence: FainNeito/ItemSignature PR #4, merged commit `2e60f42d29d67dc610d16d6564b2251e58731a13`; tools/resourcepack/test_prepare_halloween.py; resourcepack/halloween/requirements.txt; scripts/build-all.sh; scripts/build-all.bat; .github/workflows/build.yml.

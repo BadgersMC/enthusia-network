@@ -18,6 +18,8 @@ on:
       - 'ci/rosechat/**'
       - 'ci/enthusia-display/**'
       - 'scripts/build-display.py'
+      - 'scripts/build-koth.py'
+      - 'scripts/build-staff-api.py'
       - 'scripts/build-all.*'
       - 'scripts/build-tags.sh'
       - 'gradle/wrapper/**'
@@ -33,6 +35,8 @@ on:
       - 'ci/rosechat/**'
       - 'ci/enthusia-display/**'
       - 'scripts/build-display.py'
+      - 'scripts/build-koth.py'
+      - 'scripts/build-staff-api.py'
       - 'scripts/build-all.*'
       - 'scripts/build-tags.sh'
       - 'gradle/wrapper/**'
@@ -197,6 +201,9 @@ jobs:
         with:
           distribution: temurin
           java-version: '25'
+
+      - name: Stage pinned EnthusiaStaff moderation API for LumaGuilds
+        run: python scripts/build-staff-api.py
 
       - name: Verify Tags with the pinned network pilot renderer
         run: bash scripts/build-tags.sh
