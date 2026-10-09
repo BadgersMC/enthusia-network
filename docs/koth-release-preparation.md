@@ -13,11 +13,14 @@ staged TEST archive remains inactive outside `plugins`.
 - Advancements: `d3d7168137bb21e3fe8c75e4bc13fd9047ed83db`; TEST retains the pilot profile.
 - Network integration: https://github.com/BadgersMC/enthusia-network/pull/171.
   A maintainer must merge after required checks pass; the current account has no merge control.
-- The local root `buildAll` passed. Hosted run `37878739616` failed while downloading
-  AxKothAPI 4 and axapi 1.4.8. Direct official downloads reproduced truncated bodies,
-  including bounded curl retries. This is an unresolved external build dependency,
-  not a passing hosted build. Do not install partial downloads, change API versions,
-  remove legacy compatibility or publish an unverified mirror to force a green check.
+- The earlier local root `buildAll` passed. Hosted run `37878739616` failed while
+  downloading AxKothAPI 4 and axapi 1.4.8; direct official downloads reproduced
+  truncated bodies with bounded retries. The owner subsequently requested removing
+  AxKoth. Advancements PR #22 removes that repository/API and capture listener,
+  while retaining saved configuration parsing and blocking retired progression,
+  administrative grants and rewards. Verified eKOTH remains authoritative.
+  Verify the canonical merged pin and new combined CI before release; the earlier
+  failure is historical evidence, not passing verification. No mirror is needed.
 - The staged archive SHA-256 is
   `e97a876448d608f11c344eecb2173f0acf3b8f112488441bd077f60343c8fb64`.
   Its manifest records per-plugin commits, versions and hashes. It remains a TEST
