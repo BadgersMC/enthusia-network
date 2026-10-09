@@ -16,6 +16,8 @@ The Git pins are KOTH `d0552119f3a5ea01fdb094189c9a32df290e6081`, Guilds `352406
 
 The full Advancements renderer and pilot remain distinct build profiles. TEST currently runs the pilot; KOTH verified display notifications are compatible with that provider. Do not replace it with the full renderer or install both without a separate runtime migration. Thresholds, reward pools, tag grants and exclusive templates remain inactive until TEST calibration. TEST ownership records must never be imported into the lifetime production registry.
 
+The platform helpers and CI copy the freshly built Guilds and Market artifacts into `build/compile-api` before running the composite. These compile inputs remain stable while included builds rewrite their own shaded outputs. This prevents dependent compilers from reading an incomplete provider JAR; the copies contain the real pinned providers rather than API fixtures.
+
 ## EnthusiaSignature
 
 `plugins/enthusia-signature` references `FainNeito/ItemSignature`. Its independent Maven build targets Java 21 and produces `target/EnthusiaSignature-1.3.0.jar`; do not register it as a Gradle composite build. Existing network Java 25 builders also support its Java 21 bytecode. The optional native spear listener is capability-gated by the plugin.

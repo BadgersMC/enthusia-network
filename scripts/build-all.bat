@@ -125,6 +125,12 @@ if not defined LUMAGUILDS_JAR (
     goto :fail
 )
 
+rem Keep dependent compiler input stable while the composite rewrites its output.
+if not exist "build\compile-api" mkdir "build\compile-api"
+copy /Y "%LUMAGUILDS_JAR%" "build\compile-api\LumaGuilds.jar" >nul
+if errorlevel 1 goto :fail
+set "LUMAGUILDS_JAR=%CD%\build\compile-api\LumaGuilds.jar"
+
 echo ^>^> Publishing Nexus 2.3.0 dependency locally...
 if not exist "%DEPS_DIR%\nexus\.git" (
     if exist "%DEPS_DIR%\nexus" rmdir /S /Q "%DEPS_DIR%\nexus"
@@ -154,6 +160,10 @@ if not defined ENTHUSIAMARKET_JAR (
     echo EnthusiaMarket build produced no shaded jar
     goto :fail
 )
+
+copy /Y "%ENTHUSIAMARKET_JAR%" "build\compile-api\EnthusiaMarket.jar" >nul
+if errorlevel 1 goto :fail
+set "ENTHUSIAMARKET_JAR=%CD%\build\compile-api\EnthusiaMarket.jar"
 
 echo ^>^> Building composite plugins...
 call gradlew.bat buildAll
