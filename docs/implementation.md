@@ -12,7 +12,9 @@ forbidden: [org.springframework.*, jakarta.persistence.*, javax.persistence.*, c
 
 KOTH stays outside the Gradle 9 composite: `buildKoth` uses its Gradle 8 wrapper with explicit `KOTH_JAVA_HOME` or `JAVA_HOME_21_X64`. Its real Guilds contract suite uses the discoverable Java 25 launcher. `buildAll` depends on this task and its freshly built Guilds artifact; `cleanAll` also cleans KOTH. Missing providers or a wrong runner fail instead of skipping verification.
 
-The Git pins are KOTH `fea6ebdc5f7982e73d3181260a8b22e4a0524207`, Guilds `352406f2498afc412a976289f43e158da92317e0`, and Advancements `2736261976480891fcf298ad4305e7dc44910eca`. Guilds requires the moderation API built from EnthusiaStaff `8539bb8c77d7ecaf083546dda7ca8ccbfa8064e6`, matching Guilds CI. A shared Python helper stages that compile dependency for both platform helpers and hosted builds. It refuses dirty dependency source and cleans the API output before selecting exactly one JAR.
+The Git pins are KOTH `23dba1b7ed71315c8ff32e786707a4bb0d68e0a4`, Guilds `352406f2498afc412a976289f43e158da92317e0`, and Advancements `2736261976480891fcf298ad4305e7dc44910eca`. Guilds requires the moderation API built from EnthusiaStaff `8539bb8c77d7ecaf083546dda7ca8ccbfa8064e6`, matching Guilds CI. A shared Python helper stages that compile dependency for both platform helpers and hosted builds. It refuses dirty dependency source and cleans the API output before selecting exactly one JAR.
+
+KOTH's menu V1 service is navigation only. EnthusiaTags PR #30 adds `/rewards` entry points; until its canonical merge and pin update, the network retains the existing Tags provider and KOTH's own commands. No rewards or eligibility state are copied into Tags.
 
 Supplying `ENTHUSIA_LORE_API_JAR` additionally verifies KOTH's read-only readiness contract against the real provider artifact. Without it, the helper explicitly reports omitted LoreItems contract verification. The optional V1 query fails closed on older runtimes while preserving delivery compatibility; companion LoreItems PR #40 must pass upstream checks and merge before release use. The network does not pin an unmerged companion candidate.
 

@@ -8,7 +8,7 @@ staged TEST archive remains inactive outside `plugins`.
 
 ## Source and build gate
 
-- KOTH: `fea6ebdc5f7982e73d3181260a8b22e4a0524207`.
+- KOTH: `23dba1b7ed71315c8ff32e786707a4bb0d68e0a4`.
 - Guilds: `352406f2498afc412a976289f43e158da92317e0`.
 - Advancements: `2736261976480891fcf298ad4305e7dc44910eca` (merged AxKoth retirement); TEST retains the pilot profile.
 - Network integration: https://github.com/BadgersMC/enthusia-network/pull/171.
@@ -131,3 +131,12 @@ Previous network head `2708f8fe9aef8ca79d15da6479bce0e6dfedefd0` passed public h
 KOTH [PR #10](https://github.com/FainNeito/EnthusiaKOTH/pull/10) merged at `fea6ebdc5f7982e73d3181260a8b22e4a0524207`. Exact source head `562c2bf460661a090697957e3289661e6ac0aa2b` passed hosted [Build 38001085464](https://github.com/FainNeito/EnthusiaKOTH/actions/runs/38001085464), including JAR checks; 325 local ordinary tests passed with two provider-only skips. Manual source/lifecycle review found no blocking findings; CodeRabbit skipped automatic review.
 
 The wand now shows private yellow first-corner markers, an orange live aimed cuboid and a cyan completed boundary. Point counts and view distance are bounded. Selection tasks stop on save, cancel, disconnect, world change and shutdown. The interactive illustration is a simulation; Java/Bedrock particle visibility remains a deferred TEST gate. The network pin follows merged source only. This infrastructure pin update uses the existing plugin regressions and combined build instead of invented historical red/green evidence. No server files or running plugins changed. Exact-head network checks remain separate from the standalone result.
+
+## Setup and rewards navigation pin (2026-10-10)
+
+KOTH [PR #11](https://github.com/FainNeito/EnthusiaKOTH/pull/11) merged as `23dba1b7ed71315c8ff32e786707a4bb0d68e0a4`; reviewed source `03142a0231ae142173293fad1efa170a9e595968` passed [Build 38068563963](https://github.com/FainNeito/EnthusiaKOTH/actions/runs/38068563963), 329 ordinary local cases with two provider-only skips, and the actual built Tags/KOTH menu contract. The source trees of head and merge are identical. Manual presentation/lifecycle review passed; CodeRabbit skipped automatic review.
+
+The compact hub links arena setup and progression. Setup follows Area -> Rules -> Review, using an enchanted wooden axe and guarded unsaved edits. Advanced schedules, payouts and displays remain available. [Tags PR #30](https://github.com/wsg138/EnthusiaTags/pull/30) adds /rewards -> KOTH and return navigation without duplicating eligibility or payout authority. Exact head `a94be809a7dfa402c6ce142ef9103eeda00ec4eb` passed hosted verification 38068920218, Sentinel artifact 38068920246 and Codacy (zero issues), plus 256 local tests and the shaded SQLite probe. This account's merge attempt was denied by the GitHub integration; its canonical merge and a later network Tags pin remain gates. Existing Tags remains pinned until then.
+
+Combined local `buildAll` stopped during Market configuration because JitPack could not resolve `com.github.BadgersMC.Nexus:nexus-permissions-gradle:057836b`. No combined success is claimed for this pin. Infrastructure-only changes retain the existing canonical helper and all other gitlinks. Source provider checks, owning network CI/merge and combined release verification remain separate gates. No server upload/restart or player/client acceptance occurred. The owner-private interactive schematic is https://enthusia-koth-setup-preview.awareyak.chatgpt.site/cleanup.html; mobile layout was checked, authenticated mobile access remains unverified.
+Merged-source network KOTH helper verification passed: 329 ordinary tests (two provider-only skips), 16 real Guilds cases, clean shadowJar; artifact SHA-256 `d1a1941a64b993d13ff6c8ba9a344e0d92a612f1d95aa3ef6e39615ae2cc4ad1`. Optional LoreItems suite omitted with explicit helper notice. This does not clear the combined build or server acceptance gates.
