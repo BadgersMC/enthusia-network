@@ -64,3 +64,12 @@
 [submodule "plugins/enthusia-toilet-flush"]
 	path = plugins/enthusia-toilet-flush
 	url = https://github.com/BadgersMC/EnthusiaToiletFlush.git
+[submodule "plugins/enthusia-holidays"]
+	path = plugins/enthusia-holidays
+	url = https://github.com/FainNeito/EnthusiaHolidays.git
+[submodule "plugins/enthusia-friends"]
+	path = plugins/enthusia-friends
+	url = https://github.com/FainNeito/EnthusiaFriends.git
+[submodule "plugins/enthusia-express"]
+	path = plugins/enthusia-express
+	url = https://github.com/FainNeito/Enthusia-Express.git

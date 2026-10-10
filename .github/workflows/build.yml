@@ -1,7 +1,8 @@
 name: Build
 
 # Builds the monorepo composite (luma-guilds, market, advancements, luma-sg,
-# giveaway, votes) plus standalone artifacts such as EnthusiaToiletFlush on
+# giveaway, votes) plus standalone artifacts such as EnthusiaToiletFlush,
+# EnthusiaHolidays, EnthusiaFriends and EnthusiaExpress on
 # every push/PR. Verifies submodule pins are present and the build graph resolves.
 # Mirrors the Fuji build workflow.
 
@@ -56,6 +57,8 @@ jobs:
       # Fork PRs cannot receive the private Display read token. Build the public
       # monorepo there and reserve full Display validation for trusted runs.
       ENTHUSIADISPLAY_SKIP: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
+      # EnthusiaHolidays and EnthusiaFriends are private for the same reason.
+      ENTHUSIA_PRIVATE_PLUGINS_SKIP: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
     steps:
       - name: Checkout monorepo
         # v4 — pinned to commit SHA
@@ -68,9 +71,9 @@ jobs:
         run: |
           set -euo pipefail
           while read -r _ path; do
-            if [ "$path" = "plugins/enthusia-display" ]; then
-              continue
-            fi
+            case "$path" in
+              plugins/enthusia-display|plugins/enthusia-holidays|plugins/enthusia-friends) continue ;;
+            esac
             git submodule update --init --recursive -- "$path"
           done < <(git config --file .gitmodules --get-regexp '^submodule\..*\.path$')
 
@@ -88,6 +91,21 @@ jobs:
           git config --local "$auth_key" https://github.com/
           trap 'git config --local --unset-all "$auth_key" || true' EXIT
           git submodule update --init --recursive -- plugins/enthusia-display
+
+      - name: Checkout private EnthusiaHolidays and EnthusiaFriends submodules
+        if: env.ENTHUSIA_PRIVATE_PLUGINS_SKIP != 'true'
+        env:
+          PRIVATE_READ_TOKEN: ${{ secrets.ENTHUSIA_PRIVATE_PLUGINS_READ_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$PRIVATE_READ_TOKEN" ]; then
+            echo "::error::ENTHUSIA_PRIVATE_PLUGINS_READ_TOKEN is required for trusted Holidays/Friends validation"
+            exit 1
+          fi
+          auth_key="url.https://x-access-token:${PRIVATE_READ_TOKEN}@github.com/.insteadOf"
+          git config --local "$auth_key" https://github.com/
+          trap 'git config --local --unset-all "$auth_key" || true' EXIT
+          git submodule update --init --recursive -- plugins/enthusia-holidays plugins/enthusia-friends
 
       - name: Set up JDK 21
         # v4 — pinned to commit SHA
@@ -107,6 +125,10 @@ jobs:
             fi
             if [ "$ENTHUSIADISPLAY_SKIP" = "true" ] && [ "$path" = "plugins/enthusia-display" ]; then
               echo "::warning::Skipping private EnthusiaDisplay checkout/build for fork PR"
+              continue
+            fi
+            if [ "$ENTHUSIA_PRIVATE_PLUGINS_SKIP" = "true" ] && { [ "$path" = "plugins/enthusia-holidays" ] || [ "$path" = "plugins/enthusia-friends" ]; }; then
+              echo "::warning::Skipping private $path checkout/build for fork PR"
               continue
             fi
             if [ ! -f "$path/build.gradle.kts" ] && [ ! -f "$path/build.gradle" ] && [ ! -f "$path/pom.xml" ]; then
