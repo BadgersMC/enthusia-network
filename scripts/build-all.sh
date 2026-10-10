@@ -88,6 +88,7 @@ cp "$rosechat_jar" plugins/luma-guilds/libs/RoseChat-RC-2.jar
 export ENTHUSIADISPLAY_ROSECHAT_BUILT=true
 
 echo ">> Building LumaGuilds 3 core artifact..."
+python scripts/build-staff-api.py
 (
     cd plugins/luma-guilds
     chmod +x gradlew
@@ -99,7 +100,10 @@ if [ -z "$lumaguilds_jar" ]; then
     echo "LumaGuilds build produced no shaded jar" >&2
     exit 1
 fi
-export LUMAGUILDS_JAR="$PWD/$lumaguilds_jar"
+# Dependent compilers must not read the output while the composite rewrites it.
+mkdir -p build/compile-api
+cp "$lumaguilds_jar" build/compile-api/LumaGuilds.jar
+export LUMAGUILDS_JAR="$PWD/build/compile-api/LumaGuilds.jar"
 
 echo ">> Publishing Nexus 2.3.0 dependency locally..."
 if [ ! -d "$DEPS_DIR/nexus/.git" ]; then
@@ -126,7 +130,8 @@ if [ -z "$enthusiamarket_jar" ]; then
     echo "EnthusiaMarket build produced no shaded jar" >&2
     exit 1
 fi
-export ENTHUSIAMARKET_JAR="$PWD/$enthusiamarket_jar"
+cp "$enthusiamarket_jar" build/compile-api/EnthusiaMarket.jar
+export ENTHUSIAMARKET_JAR="$PWD/build/compile-api/EnthusiaMarket.jar"
 
 echo ">> Building composite plugins..."
 ./gradlew buildAll

@@ -1,0 +1,4 @@
+# Merge into TEST's existing Guilds config; never replace the complete file.
+discord:
+  guild_roles:
+    enabled: false

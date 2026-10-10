@@ -1,0 +1,22 @@
+# Merge into TEST's existing KOTH config. This is not a complete configuration.
+# Also disable all arenas, clear their rewards/chanced-rewards/schedules,
+# and zero every reward-family money value; see docs/koth-release-preparation.md.
+reward-protection:
+  enabled: false
+combat:
+  follow-warzone-rotation: true
+fairness:
+  contributor-minimum-percent: 10.0
+  starter-cooldown-seconds: 0
+  minimum-online-teams: 0
+  minimum-participating-teams: 0
+notifications:
+  capture-regions: [spawn, warzone, market]
+manual-start:
+  enabled: false
+schedule:
+  enabled: false
+flares:
+  enabled: false
+discord:
+  enabled: false

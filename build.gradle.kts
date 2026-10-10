@@ -41,6 +41,18 @@ tasks.register<Exec>("cleanDisplay") {
     commandLine(System.getenv("PYTHON_BIN") ?: "python", "scripts/build-display.py", "--clean-only")
 }
 
+tasks.register<Exec>("buildKoth") {
+    description = "Test pinned KOTH against the real network LumaGuilds artifact and package it"
+    group = "enthusia"
+    dependsOn(gradle.includedBuild("luma-guilds").task(":shadowJar"))
+    commandLine(System.getenv("PYTHON_BIN") ?: "python", "scripts/build-koth.py")
+}
+
+tasks.register<Exec>("cleanKoth") {
+    group = "enthusia"
+    commandLine(System.getenv("PYTHON_BIN") ?: "python", "scripts/build-koth.py", "--clean-only")
+}
+
 tasks.register("buildAll") {
     description = "Build all Enthusia plugins (shadowJar where available)"
     group = "enthusia"
@@ -50,6 +62,7 @@ tasks.register("buildAll") {
     dependsOn(
         "buildDisplay",
         "buildToiletFlush",
+        "buildKoth",
         gradle.includedBuild("luma-guilds").task(":shadowJar"),
         gradle.includedBuild("enthusia-market").task(":shadowJar"),
         gradle.includedBuild("enthusia-advancements").task(":shadowJar"),
@@ -66,6 +79,7 @@ tasks.register("cleanAll") {
     dependsOn(
         "cleanDisplay",
         "cleanToiletFlush",
+        "cleanKoth",
         gradle.includedBuild("luma-guilds").task(":clean"),
         gradle.includedBuild("enthusia-market").task(":clean"),
         gradle.includedBuild("enthusia-advancements").task(":clean"),

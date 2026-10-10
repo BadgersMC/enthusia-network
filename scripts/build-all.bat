@@ -111,6 +111,8 @@ copy /Y "%ROSECHAT_JAR%" "plugins\luma-guilds\libs\RoseChat-RC-2.jar" >nul
 set "ENTHUSIADISPLAY_ROSECHAT_BUILT=true"
 
 echo ^>^> Building LumaGuilds 3 core artifact...
+python scripts/build-staff-api.py
+if errorlevel 1 goto :fail
 pushd "plugins\luma-guilds"
 call gradlew.bat shadowJar --no-daemon
 set "STEP_ERROR=!ERRORLEVEL!"
@@ -122,6 +124,12 @@ if not defined LUMAGUILDS_JAR (
     echo LumaGuilds build produced no shaded jar
     goto :fail
 )
+
+rem Keep dependent compiler input stable while the composite rewrites its output.
+if not exist "build\compile-api" mkdir "build\compile-api"
+copy /Y "%LUMAGUILDS_JAR%" "build\compile-api\LumaGuilds.jar" >nul
+if errorlevel 1 goto :fail
+set "LUMAGUILDS_JAR=%CD%\build\compile-api\LumaGuilds.jar"
 
 echo ^>^> Publishing Nexus 2.3.0 dependency locally...
 if not exist "%DEPS_DIR%\nexus\.git" (
@@ -152,6 +160,10 @@ if not defined ENTHUSIAMARKET_JAR (
     echo EnthusiaMarket build produced no shaded jar
     goto :fail
 )
+
+copy /Y "%ENTHUSIAMARKET_JAR%" "build\compile-api\EnthusiaMarket.jar" >nul
+if errorlevel 1 goto :fail
+set "ENTHUSIAMARKET_JAR=%CD%\build\compile-api\EnthusiaMarket.jar"
 
 echo ^>^> Building composite plugins...
 call gradlew.bat buildAll

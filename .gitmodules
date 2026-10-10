@@ -64,3 +64,6 @@
 [submodule "plugins/enthusia-toilet-flush"]
 	path = plugins/enthusia-toilet-flush
 	url = https://github.com/BadgersMC/EnthusiaToiletFlush.git
+[submodule "plugins/enthusia-koth"]
+	path = plugins/enthusia-koth
+	url = https://github.com/FainNeito/EnthusiaKOTH.git
