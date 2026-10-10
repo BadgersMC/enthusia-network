@@ -8,7 +8,7 @@ staged TEST archive remains inactive outside `plugins`.
 
 ## Source and build gate
 
-- KOTH: `23dba1b7ed71315c8ff32e786707a4bb0d68e0a4`.
+- KOTH: `e2e720cc1d108260e05b768a4d4275c430d8ce74`.
 - Guilds: `352406f2498afc412a976289f43e158da92317e0`.
 - Advancements: `2736261976480891fcf298ad4305e7dc44910eca` (merged AxKoth retirement); TEST retains the pilot profile.
 - Network integration: https://github.com/BadgersMC/enthusia-network/pull/171.
