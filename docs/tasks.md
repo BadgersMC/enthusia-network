@@ -1,5 +1,11 @@
 # Integration tasks
 
+- [x] INFRA-004: Reconcile the Express main pin with the authorized production upload evidence.
+  References: REQ-003; docs/express-main-upload-evidence-20261010.md.
+  Evidence: Fetched canonical network main `559bfabc2187ab796a3be889f032383a8041f819` and PR #168 head `d60f4c9aa81e9bd143238d03337b07f373b66b14`; Express gitlink already equals refreshed canonical main `a650216c6e795f900988b05d788de68b9d4a9866`. Preserve the existing pin and add the upload record.
+  SPEAR: Infrastructure documentation skips behavioral prove/engine because no plugin code, build orchestration, runtime imports, or gitlinks change. Use the existing ItemSignature EARS/state helpers with ignored root state. Architecture preserves authoritative source ownership and separates standalone artifact upload from combined-build and activation gates.
+  Verification: EARS and whitespace checks pass; the local uploaded JAR SHA-256 and byte count match the receipt; all gitlinks remain unchanged. Prior PR-head public combined build passed, skipping private Display/Holidays/Friends. New-head hosted verification and trusted private-plugin coverage remain separate gates. No production operations are performed by this update.
+
 - [x] INFRA-002: Pin merged Halloween asset tooling and verify it in network builds.
   References: REQ-002; docs/implementation.md, EnthusiaSignature.
   Evidence: FainNeito/ItemSignature PR #4, merged commit `2e60f42d29d67dc610d16d6564b2251e58731a13`; tools/resourcepack/test_prepare_halloween.py; resourcepack/halloween/requirements.txt; scripts/build-all.sh; scripts/build-all.bat; .github/workflows/build.yml.
