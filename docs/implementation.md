@@ -1,5 +1,16 @@
 # Integration architecture
 
+## EnthusiaCommend
+
+The Commend gitlink follows authoritative `wsg138/EnthusiaCommend` main at
+`580eed61b8639c40ba07252cd1377b5c0dfea501` (2.14.0-test9). The old BadgersMC
+fork pin was `2083061b8aeaa7fb3adaf89746f91a45e3a03e59` (2.13.1). The upstream
+watcher already follows wsg138, so checkout and monitoring now agree.
+EnthusiaAdvancements discovers `EnthusiaCommend-*.jar` through its existing
+fileTree contract; a version-specific alias or binary overlay is unnecessary.
+Plugin implementation stays in its source repository. The merged Policy v2
+foundations remain unwired, and this infrastructure update activates nothing.
+
 ## Layer Dependency Rules
 
 The monorepo owns infrastructure orchestration and immutable Git submodule pins. Plugin domain/application/platform code remains in each authoritative repository. This change introduces no application imports or runtime adapters.
