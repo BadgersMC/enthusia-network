@@ -8,7 +8,7 @@ name: Upstream watch
 #
 # IMPORTANT: "true upstream" is NOT always the .gitmodules URL. Several
 # submodules point at BadgersMC forks of wsg138 repos (diary-keeper,
-# enthusia-commend, enthusia-currency). The matrix below is the authoritative
+# enthusia-currency). The matrix below is the authoritative
 # upstream mapping; update it when repos move.
 
 on:

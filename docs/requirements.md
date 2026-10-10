@@ -1,5 +1,11 @@
 # Monorepo integration requirements
 
+### REQ-004 — Canonical Commend main pin
+
+WHEN a fresh network checkout initializes EnthusiaCommend THE SYSTEM SHALL fetch wsg138/EnthusiaCommend and select merged main commit 580eed61b8639c40ba07252cd1377b5c0dfea501.
+
+Acceptance: build version 2.14.0-test9, preserve every other gitlink and the existing EnthusiaAdvancements artifact discovery contract, and record canonical verification evidence. This pin update performs no deployment, restart, reload, or Policy v2 runtime activation.
+
 ### REQ-001 — EnthusiaSignature build pin
 
 WHEN the network build runs THE SYSTEM SHALL verify and package the reviewed EnthusiaSignature submodule with its tests enabled, retain all existing plugin pins, and report its shaded artifact.

@@ -1,5 +1,19 @@
 # Integration tasks
 
+- [x] INFRA-008: Pin the requested canonical Commend main source.
+  References: REQ-004; docs/commend-main-pin-verification.md.
+  SPEAR: spec selects the exact merged source and canonical repository; prove
+  checks the old pin and fresh checkout behavior. Behavioral red/green and
+  engine changes do not apply to an immutable infrastructure pin. Architecture
+  retains the wildcard companion JAR contract and every other plugin pin.
+  Refine: canonical source checks and pin/requirements validation are recorded
+  in the verification document; combined hosted CI remains a separate gate.
+  Local Maven clean verify passes: 248 discovered, 241 executed, zero failures
+  or errors; seven Linux-only filesystem cases are disabled on Windows.
+  Canonical PMD generation, EARS validation and whitespace checks pass.
+  The portable state helper records infrastructure spec -> arch -> refine;
+  no artificial behavioral red/green result was recorded.
+
 - [x] INFRA-002: Pin merged Halloween asset tooling and verify it in network builds.
   References: REQ-002; docs/implementation.md, EnthusiaSignature.
   Evidence: FainNeito/ItemSignature PR #4, merged commit `2e60f42d29d67dc610d16d6564b2251e58731a13`; tools/resourcepack/test_prepare_halloween.py; resourcepack/halloween/requirements.txt; scripts/build-all.sh; scripts/build-all.bat; .github/workflows/build.yml.

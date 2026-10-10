@@ -30,7 +30,7 @@
 	url = https://github.com/wsg138/EnthusiaTags.git
 [submodule "plugins/enthusia-commend"]
 	path = plugins/enthusia-commend
-	url = https://github.com/BadgersMC/EnthusiaCommend.git
+	url = https://github.com/wsg138/EnthusiaCommend.git
 [submodule "plugins/diary-keeper"]
 	path = plugins/diary-keeper
 	url = https://github.com/BadgersMC/DiaryKeeper.git
