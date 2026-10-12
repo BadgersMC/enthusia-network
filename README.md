@@ -102,7 +102,7 @@ This repo uses **Gradle composite builds**. The root `settings.gradle.kts` inclu
 
 ### Separate builds: EnthusiaSignature, RoseChat, EnthusiaDisplay, EnthusiaToiletFlush and enthusia-biomes
 
-`plugins/enthusia-signature` is pinned to the reviewed `FainNeito/ItemSignature` repository. Both build helpers and CI run `mvn -B -ntp clean verify`, including its tracker regression suite. The shaded artifact is `plugins/enthusia-signature/target/EnthusiaSignature-1.3.0.jar`. Its Maven build stays outside the Gradle composite; `./gradlew buildAll` alone does not build Maven plugins. [Integration requirements and evidence](docs/tasks.md) document the pin and verification boundaries.
+`plugins/enthusia-signature` is pinned to the reviewed `FainNeito/ItemSignature` repository. Both build helpers and CI run `mvn -B -ntp clean verify`, including its tracker regression suite. The shaded artifact is `plugins/enthusia-signature/target/EnthusiaSignature-1.3.5.jar`. Its Maven build stays outside the Gradle composite; `./gradlew buildAll` alone does not build Maven plugins. [Integration requirements and evidence](docs/tasks.md) document the pin and verification boundaries.
 
 Tracker removal remains disabled by default. Item data, MiniMessage signing, DiaryKeeper protection, and optional Nexo integration retain the upstream defaults. Native spear lunge support is capability-gated; live player acceptance is tracked in the plugin's `TESTING.md`.
 
@@ -172,7 +172,7 @@ enthusia-network/
 │   ├── enthusia-teleport/
 │   ├── enthusia-tags/
 │   ├── enthusia-commend/
-│   ├── enthusia-signature/ # Maven build: target/EnthusiaSignature-1.3.0.jar
+│   ├── enthusia-signature/ # Maven build: target/EnthusiaSignature-1.3.5.jar
 │   ├── diary-keeper/
 │   ├── warzone-duels/
 │   ├── enthusia-toilet-flush/ # Velocity restart coordinator + Paper companion
