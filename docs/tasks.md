@@ -1,5 +1,12 @@
 # Integration tasks
 
+- [ ] INFRA-004: Integrate merged EnthusiaArmorStands without changing existing pins.
+  References: REQ-003; docs/implementation.md, EnthusiaArmorStands.
+  Evidence: FainNeito/EnthusiaArmorStands PR #1 merged as `bb03231483b007375f792de660cc4f959c1c2300`; network main `559bfab`; .gitmodules; scripts/build-all.sh; scripts/build-all.bat; .github/workflows/build.yml; .github/workflows/upstream-watch.yml. See ci/enthusia-armorstands/README.md for verification and CI access gates.
+  SPEAR: Infrastructure-only pin/build orchestration. No plugin behavior changes, so behavioral prove/engine phases do not apply; verification consists of clean pinned build, descriptor/pin checks, EARS, YAML and exact-head CI. Use the existing pinned Signature SPEAR helper from the network root; do not modify that submodule. No automatic deploy, production permissions or restart.
+  Verification: pinned submodule Maven clean verify passed 22 tests on Java 25; Windows network helper also passed its new ArmorStands step. EARS and YAML parse passed. Existing 22 pins are unchanged. Task stays open pending exact-head and trusted whole-network checks with private credentials.
+  Combined-build limit: Windows helper continued through legacy Maven dependencies, Signature's 77 tests and nine importer checks, then failed in the unchanged Playtime artifact PowerShell query (literal caret argument). Upstream PR #190 carries the integration and remaining private credential/combined-build gates.
+
 - [x] INFRA-002: Pin merged Halloween asset tooling and verify it in network builds.
   References: REQ-002; docs/implementation.md, EnthusiaSignature.
   Evidence: FainNeito/ItemSignature PR #4, merged commit `2e60f42d29d67dc610d16d6564b2251e58731a13`; tools/resourcepack/test_prepare_halloween.py; resourcepack/halloween/requirements.txt; scripts/build-all.sh; scripts/build-all.bat; .github/workflows/build.yml.

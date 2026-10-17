@@ -27,6 +27,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - name: enthusia-armorstands
+            repo: FainNeito/EnthusiaArmorStands
+            branch: main
+            label: 'upstream:enthusia-armorstands'
           - name: enthusia-display
             repo: FainNeito/EnthusiaDisplay
             branch: main
@@ -125,6 +129,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           DISPLAY_READ_TOKEN: ${{ secrets.ENTHUSIADISPLAY_READ_TOKEN }}
+          ARMORSTANDS_READ_TOKEN: ${{ secrets.ENTHUSIAARMORSTANDS_READ_TOKEN }}
           REPO: ${{ matrix.repo }}
           BRANCH: ${{ matrix.branch }}
           LABEL: ${{ matrix.label }}
@@ -141,7 +146,13 @@ jobs:
           pshort=${pinned:0:7}
 
           # Latest commit on the upstream branch
-          if [ "$NAME" = "enthusia-display" ]; then
+          if [ "$NAME" = "enthusia-armorstands" ]; then
+            if [ -z "$ARMORSTANDS_READ_TOKEN" ]; then
+              echo "::error::ENTHUSIAARMORSTANDS_READ_TOKEN is required to inspect the private ArmorStands upstream"
+              exit 1
+            fi
+            commit=$(GH_TOKEN="$ARMORSTANDS_READ_TOKEN" gh api "repos/$REPO/commits/$BRANCH")
+          elif [ "$NAME" = "enthusia-display" ]; then
             if [ -z "$DISPLAY_READ_TOKEN" ]; then
               echo "::error::ENTHUSIADISPLAY_READ_TOKEN is required to inspect the private Display upstream"
               exit 1
@@ -205,7 +216,9 @@ jobs:
           filelist=""
           if [ "$pshort" != "$short" ]; then
             compare="https://github.com/$REPO/compare/$pinned...$sha"
-            if [ "$NAME" = "enthusia-display" ]; then
+            if [ "$NAME" = "enthusia-armorstands" ]; then
+              cmp=$(GH_TOKEN="$ARMORSTANDS_READ_TOKEN" gh api "repos/$REPO/compare/$pinned...$sha" 2>/dev/null || echo '{}')
+            elif [ "$NAME" = "enthusia-display" ]; then
               cmp=$(GH_TOKEN="$DISPLAY_READ_TOKEN" gh api "repos/$REPO/compare/$pinned...$sha" 2>/dev/null || echo '{}')
             else
               cmp=$(gh api "repos/$REPO/compare/$pinned...$sha" 2>/dev/null || echo '{}')

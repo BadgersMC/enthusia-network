@@ -13,6 +13,14 @@ set "DEPS_DIR=%CD%\build\deps"
 
 echo === Enthusia Network Build ===
 
+echo ^>^> Verifying EnthusiaArmorStands (including permission and protection regressions)...
+pushd "plugins\enthusia-armorstands"
+if errorlevel 1 goto :fail
+call mvn -B -ntp clean verify
+set "STEP_ERROR=!ERRORLEVEL!"
+popd
+if not "!STEP_ERROR!"=="0" goto :fail
+
 if "%1"=="--clean" (
     echo ^>^> Cleaning composite builds...
     call gradlew.bat cleanAll

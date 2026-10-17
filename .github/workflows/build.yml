@@ -17,6 +17,7 @@ on:
       - 'plugins/**'
       - 'ci/rosechat/**'
       - 'ci/enthusia-display/**'
+      - 'ci/enthusia-armorstands/**'
       - 'scripts/build-display.py'
       - 'scripts/build-all.*'
       - 'scripts/build-tags.sh'
@@ -32,6 +33,7 @@ on:
       - 'plugins/**'
       - 'ci/rosechat/**'
       - 'ci/enthusia-display/**'
+      - 'ci/enthusia-armorstands/**'
       - 'scripts/build-display.py'
       - 'scripts/build-all.*'
       - 'scripts/build-tags.sh'
@@ -56,6 +58,7 @@ jobs:
       # Fork PRs cannot receive the private Display read token. Build the public
       # monorepo there and reserve full Display validation for trusted runs.
       ENTHUSIADISPLAY_SKIP: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
+      ENTHUSIAARMORSTANDS_SKIP: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
     steps:
       - name: Checkout monorepo
         # v4 — pinned to commit SHA
@@ -68,11 +71,37 @@ jobs:
         run: |
           set -euo pipefail
           while read -r _ path; do
-            if [ "$path" = "plugins/enthusia-display" ]; then
+            if [ "$path" = "plugins/enthusia-display" ] || [ "$path" = "plugins/enthusia-armorstands" ]; then
               continue
             fi
             git submodule update --init --recursive -- "$path"
           done < <(git config --file .gitmodules --get-regexp '^submodule\..*\.path$')
+
+      - name: Checkout private EnthusiaArmorStands submodule
+        if: env.ENTHUSIAARMORSTANDS_SKIP != 'true'
+        env:
+          ARMORSTANDS_READ_TOKEN: ${{ secrets.ENTHUSIAARMORSTANDS_READ_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$ARMORSTANDS_READ_TOKEN" ]; then
+            echo "::error::ENTHUSIAARMORSTANDS_READ_TOKEN is required for trusted ArmorStands verification"
+            exit 1
+          fi
+          auth="$(printf 'x-access-token:%s' "$ARMORSTANDS_READ_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" \
+            submodule update --init --recursive -- plugins/enthusia-armorstands
+
+      - name: Set up JDK 25 for EnthusiaArmorStands
+        if: env.ENTHUSIAARMORSTANDS_SKIP != 'true'
+        uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - name: Verify EnthusiaArmorStands and its permission regressions
+        if: env.ENTHUSIAARMORSTANDS_SKIP != 'true'
+        working-directory: plugins/enthusia-armorstands
+        run: mvn -B -ntp clean verify
 
       - name: Checkout private EnthusiaDisplay submodule
         if: env.ENTHUSIADISPLAY_SKIP != 'true'
@@ -107,6 +136,10 @@ jobs:
             fi
             if [ "$ENTHUSIADISPLAY_SKIP" = "true" ] && [ "$path" = "plugins/enthusia-display" ]; then
               echo "::warning::Skipping private EnthusiaDisplay checkout/build for fork PR"
+              continue
+            fi
+            if [ "$ENTHUSIAARMORSTANDS_SKIP" = "true" ] && [ "$path" = "plugins/enthusia-armorstands" ]; then
+              echo "::warning::Skipping private EnthusiaArmorStands checkout/build for fork PR; trusted verification is still required"
               continue
             fi
             if [ ! -f "$path/build.gradle.kts" ] && [ ! -f "$path/build.gradle" ] && [ ! -f "$path/pom.xml" ]; then

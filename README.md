@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="https://github.com/BadgersMC/enthusia-network/actions/workflows/upstream-watch.yml"><img src="https://github.com/BadgersMC/enthusia-network/actions/workflows/upstream-watch.yml/badge.svg" alt="Upstream watch"></a>
-  <img src="https://img.shields.io/badge/plugins-22-C2410C" alt="22 plugins">
+  <img src="https://img.shields.io/badge/plugins-23-C2410C" alt="23 plugins">
   <img src="https://img.shields.io/badge/core-Paper_26.2-F5B841" alt="Core: Paper 26.2">
   <img src="https://img.shields.io/badge/core-Java_25-DC2626" alt="Core: Java 25">
   <img src="https://img.shields.io/badge/status-active-0A0A0A" alt="Active">
@@ -42,6 +42,7 @@ Built on the work of **[BadgersMC](https://github.com/BadgersMC)**, **[wsg138 (p
 | [enthusia-tags](plugins/enthusia-tags) | Player tags / prefixes | p2wn |
 | [enthusia-commend](plugins/enthusia-commend) | Player commendation system | p2wn |
 | [enthusia-signature](plugins/enthusia-signature) | Permanent item signatures and item-bound stat trackers | FainNeito |
+| [enthusia-armorstands](plugins/enthusia-armorstands) | Thirteen Bedrock-style poses with independent pose/arms permissions and protection-event handling | Enthusia |
 | [diary-keeper](plugins/diary-keeper) | Player diary / journal system | p2wn |
 | [warzone-duels](plugins/warzone-duels) | 1v1 duels with WarzoneRotator integration | p2wn |
 | [enthusia-toilet-flush](plugins/enthusia-toilet-flush) | Graceful scheduled backend, proxy, and full-network restarts with drain/rejoin queue | BadgersMC + p2wn |
@@ -100,7 +101,11 @@ This repo uses **Gradle composite builds**. The root `settings.gradle.kts` inclu
 - `./gradlew buildAll` builds the included Gradle projects; the build helpers also verify standalone Maven plugins
 - Each plugin retains its own `build.gradle.kts` and can still be built standalone
 
-### Separate builds: EnthusiaSignature, RoseChat, EnthusiaDisplay, EnthusiaToiletFlush and enthusia-biomes
+### Separate builds: EnthusiaArmorStands, EnthusiaSignature, RoseChat, EnthusiaDisplay, EnthusiaToiletFlush and enthusia-biomes
+
+`plugins/enthusia-armorstands` pins merged `FainNeito/EnthusiaArmorStands` source at `bb03231483b007375f792de660cc4f959c1c2300`. Both build helpers and trusted CI run `mvn -B -ntp clean verify` on Java 25, producing `target/EnthusiaArmorStands-0.1.0-SNAPSHOT.jar`. It remains outside Gradle's composite, as does the existing Signature Maven build. Private source access requires `ENTHUSIAARMORSTANDS_READ_TOKEN` in CI; fork CI cannot replace trusted private verification. See [the integration contract](ci/enthusia-armorstands/README.md).
+
+ArmorStands is not automatically copied by the generic backend deploy helper: remove the old active BedrockArmorstands JAR only during a separately authorized, backed-up replacement and restart. Both permissions default true in source, so apply the approved Devotee/Glorious/Media/Founder allow/deny policy in the production LuckPerms server context before activation; existing `server=test` rules do not apply there.
 
 `plugins/enthusia-signature` is pinned to the reviewed `FainNeito/ItemSignature` repository. Both build helpers and CI run `mvn -B -ntp clean verify`, including its tracker regression suite. The shaded artifact is `plugins/enthusia-signature/target/EnthusiaSignature-1.3.0.jar`. Its Maven build stays outside the Gradle composite; `./gradlew buildAll` alone does not build Maven plugins. [Integration requirements and evidence](docs/tasks.md) document the pin and verification boundaries.
 

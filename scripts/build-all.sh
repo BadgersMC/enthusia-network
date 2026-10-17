@@ -15,6 +15,9 @@ DEPS_DIR="$PWD/build/deps"
 
 echo "=== Enthusia Network Build ==="
 
+echo ">> Verifying EnthusiaArmorStands (including permission and protection regressions)..."
+(cd plugins/enthusia-armorstands && mvn -B -ntp clean verify)
+
 if $CLEAN; then
     echo ">> Cleaning composite builds..."
     ./gradlew cleanAll

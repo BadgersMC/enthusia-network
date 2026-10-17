@@ -11,3 +11,9 @@ Acceptance: Unix and Windows helpers and GitHub Build invoke `mvn -B -ntp clean 
 WHEN the network build verifies EnthusiaSignature THE SYSTEM SHALL run its Halloween importer regression checks using the pinned Python dependencies.
 
 Acceptance: Unix and Windows helpers and CI run the nine importer checks from the pinned source. Licensed images remain outside Git, all other plugin pins remain unchanged, and live asset placement does not replace a plugin JAR or authorize activation.
+
+### REQ-003 — EnthusiaArmorStands integration
+
+WHEN the network build runs THE SYSTEM SHALL verify and package the merged EnthusiaArmorStands submodule with its regression tests enabled and preserve all existing plugin pins.
+
+Acceptance: `plugins/enthusia-armorstands` pins private `FainNeito/EnthusiaArmorStands` commit `bb03231483b007375f792de660cc4f959c1c2300`. Unix and Windows helpers and trusted CI invoke `mvn -B -ntp clean verify` on Java 25. Trusted CI fails explicitly if private source access is unavailable; fork CI reports its incomplete private coverage. Upstream watch follows the same repository and private-read credential. This build integration neither deploys nor grants production permissions.
