@@ -79,6 +79,10 @@ def main():
               "org/alexdev/unlimitednametags/api/UntNametagDisplayCore.class")
     papi = api("ENTHUSIADISPLAY_PAPI_JAR", "PlaceholderAPI-2.12.3.jar",
                "me/clip/placeholderapi/expansion/PlaceholderExpansion.class")
+    tab = api("ENTHUSIADISPLAY_TAB_JAR", "TAB-6.2.0.jar",
+              "me/neznamy/tab/api/scoreboard/ScoreboardManager.class")
+    luckperms = api("ENTHUSIADISPLAY_LUCKPERMS_JAR", "LuckPerms.jar",
+                    "net/luckperms/api/LuckPermsProvider.class")
     if not args.rosechat_built:
         gradle(ROSECHAT, "clean", "shadowJar")
     rose_jars = list((ROSECHAT / "build/libs").glob("RoseChat-*.jar"))
@@ -88,7 +92,8 @@ def main():
     rose = rose_jars[0].resolve()
     tasks = (["clean", ":proxy:clean"] if args.clean else []) + ["test", ":proxy:test", "jar", ":proxy:jar"]
     gradle(DISPLAY, *tasks, "--init-script", ROOT / "ci/enthusia-display/repositories.init.gradle",
-           f"-PuntJar={unt}", f"-PpapiJar={papi}", f"-ProseChatJar={rose}")
+           f"-PuntJar={unt}", f"-PpapiJar={papi}", f"-ProseChatJar={rose}",
+           f"-PscoreboardTabJar={tab}", f"-PluckPermsJar={luckperms}")
     backend = DISPLAY / "build/libs/EnthusiaDisplay.jar"
     proxy = DISPLAY / "proxy/build/libs/EnthusiaDisplayProxy-0.1.5-test.jar"
     with zipfile.ZipFile(backend) as jar:
@@ -113,7 +118,7 @@ def main():
     evidence = {"networkCommit": git("rev-parse", "HEAD"), "networkDirty": bool(git("status", "--porcelain")),
                 "javaVersion": subprocess.check_output([str(Path(os.environ["JAVA_HOME"]) / "bin" / "java") if os.environ.get("JAVA_HOME") else "java", "--version"], text=True).strip(),
                 "displayCommit": display_pin, "roseChatCommit": rosechat_pin,
-                "tests": totals, "dependencies": [digest(p) for p in (unt, papi, rose)],
+                "tests": totals, "dependencies": [digest(p) for p in (unt, papi, rose, tab, luckperms)],
                 "artifacts": [dict(digest(backend), version=backend_version), dict(digest(proxy), version=proxy_version)],
                 "productionUpload": False, "activation": False, "restart": False,
                 "mariaDbAcceptance": "Not run by this helper; default test task excludes mariadb tag"}

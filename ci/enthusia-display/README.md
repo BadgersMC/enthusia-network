@@ -2,7 +2,7 @@
 
 ## Requirements and scope (SPEAR spec)
 
-- ED-NET-001: WHEN the network is checked out recursively, THE BUILD SHALL obtain `plugins/enthusia-display` from `FainNeito/EnthusiaDisplay`, pinned to reviewed merged commit `1734f4329ecb8cd10203fed162e4c0bc3ae27a72`.
+- ED-NET-001: WHEN the network is checked out recursively, THE BUILD SHALL obtain `plugins/enthusia-display` from `FainNeito/EnthusiaDisplay`, pinned to reviewed merged commit `4bd759d9bc17653b42446a7a2df3341f039e98f4`.
 - ED-NET-002: WHEN `buildAll` or either platform's build helper runs, THE BUILD SHALL test and package both the Paper backend and Velocity companion with Java 25, using the network's pinned RoseChat build.
 - ED-NET-003: IF required compile APIs are unavailable or checked-out source differs from its gitlink, THEN THE BUILD SHALL fail with an actionable error rather than publish an incomplete artifact.
 - ED-NET-004: WHEN a build succeeds, THE BUILD SHALL record source pins, dependency and artifact SHA-256 hashes, versions, and test counts. Server placement and activation remain separate operations.
@@ -46,3 +46,15 @@ Initial local baseline: RoseChat build stopped because JDK 21 was not installed/
 Local verification on 4 October 2026: network base `876d401431b548b8ecdf559169b1e2f3f7c72f1d`; Display pin `1734f4329ecb8cd10203fed162e4c0bc3ae27a72`; RoseChat pin `cf8a7b040f7194a0bf26d98096493bbb7e53efa9`. Clean pinned RoseChat `shadowJar` succeeded using JDK 21. Display's clean backend/proxy test and jar build against that exact RoseChat artifact succeeded on JDK 25: 77 tests, zero failures/errors/skips. Backend version `0.1.8-test`, SHA-256 `0580897457291b7d6f9dd0176b2604a090e07c321632bfdc4d5345c5c349f0d9`; proxy version `0.1.5-test`, SHA-256 `fdddb24254e81ee894afe443ee34bcde35b44ed80dd23e377de4b09dbea86b22`. Dependency hashes are in the helper's ignored provenance file. Workflow YAML parses; helper Python compiles; `git diff --check` passes.
 
 Whole-network `buildAll --dry-run --offline` stopped while configuring the existing EnthusiaMarket build: `com.github.BadgersMC.Nexus:nexus-permissions-gradle:057836b` is not in the local cache. This does not establish a network build pass or a Display regression. The normal network helpers first publish the pinned Nexus dependency; that whole preparation/build path and hosted checks remain required before merge. No server files, databases, permissions, activation or restarts changed.
+
+## Scoreboard integration and release ordering
+
+Standalone FainNeito/EnthusiaDisplay PR #2 is now merged at `4bd759d9bc17653b42446a7a2df3341f039e98f4`. This network PR pins that exact merged source. Complete exact-head combined validation, CI/review and merge this network PR before a release; no production action follows from a source merge alone.
+
+Additional compile-only inputs: `ENTHUSIADISPLAY_TAB_JAR` (inspected TAB 6.2.0, required API `ScoreboardManager`) and `ENTHUSIADISPLAY_LUCKPERMS_JAR` (LuckPerms API JAR). Both accept absolute paths; defaults under Display's ignored libs/ are `TAB-6.2.0.jar` and `LuckPerms.jar`. CI uses approved HTTPS URL and SHA-256 variables `ENTHUSIADISPLAY_TAB_JAR_URL`/`ENTHUSIADISPLAY_TAB_JAR_SHA256` and `ENTHUSIADISPLAY_LUCKPERMS_JAR_URL`/`ENTHUSIADISPLAY_LUCKPERMS_JAR_SHA256`. They are not bundled in the plugin. Fork runs continue to explicitly skip private Display validation; skipped validation is not a Display pass.
+
+SPEAR spec: ED-NET-SB-001 requires these compile APIs to be validated and supplied through the canonical helper; ED-NET-SB-002 requires both hashes in its provenance record and trusted CI download verification. Behavior/engine changes live solely in the standalone plugin PR. This repository change is build infrastructure; no new domain engine or server operations apply. Existing EARS/state tooling remains absent.
+
+Candidate source after manual refinement: 3229e9caf2c2f163ee9eb4c646a9355630d4965f (standalone PR #2, not merged). Local canonical RoseChat cf8a7b040f7194a0bf26d98096493bbb7e53efa9 clean build succeeded; the extended canonical Display helper passed 85 tests for the first candidate. The refined candidate adds date-provider detection and menu cleanup; final exact-candidate helper results are recorded in the PR. These are scoped Display/RoseChat integration tests, not a complete buildAll or live client pass. Python syntax, workflow YAML and whitespace validation pass. No production write or restart.
+
+Review/merge update: standalone PR #2 merged at 4bd759d9bc17653b42446a7a2df3341f039e98f4 after two additional boundary regressions were reproduced and fixed; clean source tests pass 88. The previous 3229e9c candidate and 85/86-test entries above are historical checkpoints, not the current release pin. The final merged-source canonical helper result is recorded in PR #193. No production upload, activation or restart. Theme permissions remain documented, not applied.

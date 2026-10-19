@@ -208,19 +208,29 @@ jobs:
           UNT_SHA256: ${{ vars.ENTHUSIADISPLAY_UNT_JAR_SHA256 }}
           PAPI_URL: ${{ vars.ENTHUSIADISPLAY_PAPI_JAR_URL }}
           PAPI_SHA256: ${{ vars.ENTHUSIADISPLAY_PAPI_JAR_SHA256 }}
+          TAB_URL: ${{ vars.ENTHUSIADISPLAY_TAB_JAR_URL }}
+          TAB_SHA256: ${{ vars.ENTHUSIADISPLAY_TAB_JAR_SHA256 }}
+          LUCKPERMS_URL: ${{ vars.ENTHUSIADISPLAY_LUCKPERMS_JAR_URL }}
+          LUCKPERMS_SHA256: ${{ vars.ENTHUSIADISPLAY_LUCKPERMS_JAR_SHA256 }}
         run: |
           set -euo pipefail
-          if [ -z "$UNT_URL" ] || [ -z "$UNT_SHA256" ] || [ -z "$PAPI_URL" ] || [ -z "$PAPI_SHA256" ]; then
+          if [ -z "$UNT_URL" ] || [ -z "$UNT_SHA256" ] || [ -z "$PAPI_URL" ] || [ -z "$PAPI_SHA256" ] || [ -z "$TAB_URL" ] || [ -z "$TAB_SHA256" ] || [ -z "$LUCKPERMS_URL" ] || [ -z "$LUCKPERMS_SHA256" ]; then
             echo "::error::Configure approved EnthusiaDisplay API URLs and SHA-256 repository variables; see ci/enthusia-display/README.md"
             exit 1
           fi
           mkdir -p "$RUNNER_TEMP/display-api"
           curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' "$UNT_URL" -o "$RUNNER_TEMP/display-api/UnlimitedNametags.jar"
           curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' "$PAPI_URL" -o "$RUNNER_TEMP/display-api/PlaceholderAPI.jar"
+          curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' "$TAB_URL" -o "$RUNNER_TEMP/display-api/TAB-6.2.0.jar"
+          curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' "$LUCKPERMS_URL" -o "$RUNNER_TEMP/display-api/LuckPerms.jar"
           printf '%s  %s\n' "$UNT_SHA256" "$RUNNER_TEMP/display-api/UnlimitedNametags.jar" | sha256sum --check
           printf '%s  %s\n' "$PAPI_SHA256" "$RUNNER_TEMP/display-api/PlaceholderAPI.jar" | sha256sum --check
+          printf '%s  %s\n' "$TAB_SHA256" "$RUNNER_TEMP/display-api/TAB-6.2.0.jar" | sha256sum --check
+          printf '%s  %s\n' "$LUCKPERMS_SHA256" "$RUNNER_TEMP/display-api/LuckPerms.jar" | sha256sum --check
           echo "ENTHUSIADISPLAY_UNT_JAR=$RUNNER_TEMP/display-api/UnlimitedNametags.jar" >> "$GITHUB_ENV"
           echo "ENTHUSIADISPLAY_PAPI_JAR=$RUNNER_TEMP/display-api/PlaceholderAPI.jar" >> "$GITHUB_ENV"
+          echo "ENTHUSIADISPLAY_TAB_JAR=$RUNNER_TEMP/display-api/TAB-6.2.0.jar" >> "$GITHUB_ENV"
+          echo "ENTHUSIADISPLAY_LUCKPERMS_JAR=$RUNNER_TEMP/display-api/LuckPerms.jar" >> "$GITHUB_ENV"
           echo "ENTHUSIADISPLAY_ROSECHAT_BUILT=true" >> "$GITHUB_ENV"
 
       - name: Publish Nexus 2.3.0 dependency locally
