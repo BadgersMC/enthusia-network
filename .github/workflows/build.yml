@@ -17,9 +17,11 @@ on:
       - 'plugins/**'
       - 'ci/rosechat/**'
       - 'ci/enthusia-display/**'
+      - 'docs/holiday-release-20261017.md'
       - 'scripts/build-display.py'
       - 'scripts/build-all.*'
       - 'scripts/build-tags.sh'
+      - 'scripts/build-guild-staff-api.py'
       - 'gradle/wrapper/**'
       - 'gradlew'
   pull_request:
@@ -32,9 +34,11 @@ on:
       - 'plugins/**'
       - 'ci/rosechat/**'
       - 'ci/enthusia-display/**'
+      - 'docs/holiday-release-20261017.md'
       - 'scripts/build-display.py'
       - 'scripts/build-all.*'
       - 'scripts/build-tags.sh'
+      - 'scripts/build-guild-staff-api.py'
       - 'gradle/wrapper/**'
       - 'gradlew'
   workflow_dispatch: {}
@@ -53,9 +57,9 @@ jobs:
       NEXUS_REF: 057836befb9e35aa252cf90104030ec86f28b33f
       USE_MAVEN_LOCAL_NEXUS: 'true'
       COMBATLOGX_API_REF: 4812e85af1264ebb27da481b9d9cbf8de0956e53
-      # Fork PRs cannot receive the private Display read token. Build the public
-      # monorepo there and reserve full Display validation for trusted runs.
-      ENTHUSIADISPLAY_SKIP: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
+      # Fork repositories and cross-repository PRs cannot receive the canonical
+      # private Display token. Keep canonical trusted runs subject to that gate.
+      ENTHUSIADISPLAY_SKIP: ${{ github.event.repository.fork || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) }}
     steps:
       - name: Checkout monorepo
         # v4 — pinned to commit SHA
@@ -233,6 +237,9 @@ jobs:
             chmod +x gradlew
             ./gradlew publishToMavenLocal --no-daemon --console=plain
           )
+
+      - name: Build pinned Staff lifecycle API for LumaGuilds
+        run: python scripts/build-guild-staff-api.py
 
       - name: Build LumaGuilds 3.0 core artifact
         run: |

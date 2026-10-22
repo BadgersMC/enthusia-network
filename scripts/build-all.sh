@@ -87,6 +87,9 @@ fi
 cp "$rosechat_jar" plugins/luma-guilds/libs/RoseChat-RC-2.jar
 export ENTHUSIADISPLAY_ROSECHAT_BUILT=true
 
+echo ">> Building pinned Staff lifecycle API for LumaGuilds..."
+python3 scripts/build-guild-staff-api.py
+
 echo ">> Building LumaGuilds 3 core artifact..."
 (
     cd plugins/luma-guilds

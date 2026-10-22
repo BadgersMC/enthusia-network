@@ -110,6 +110,10 @@ if not defined ROSECHAT_JAR (
 copy /Y "%ROSECHAT_JAR%" "plugins\luma-guilds\libs\RoseChat-RC-2.jar" >nul
 set "ENTHUSIADISPLAY_ROSECHAT_BUILT=true"
 
+echo ^>^> Building pinned Staff lifecycle API for LumaGuilds...
+python scripts\build-guild-staff-api.py
+if errorlevel 1 goto :fail
+
 echo ^>^> Building LumaGuilds 3 core artifact...
 pushd "plugins\luma-guilds"
 call gradlew.bat shadowJar --no-daemon
